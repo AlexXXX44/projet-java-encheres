@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Connexion</title>
+</head>
+<body>
+<header>
+    <h1>
+        <a href="/">ENI-Enchères</a>
+    </h1>
+</header>
+
+<main>
+    <form method="post" th:action="@{/login}" >
+        <div th:if="${param.error}">Vous n'êtes pas incrit</div>
+        <div>
+            <label for="inputUsername">Identifiant :</label>
+            <input type="text" id="inputUsername" name="username" title="Saisissez votre identifiant">
+        </div>
+        <div>
+            <label for="inputPwd">Mot de passe :</label>
+            <input type="password" id="inputPwd" name="password" title="Saisissez votre mot de passe">
+        </div>
+        <div>
+            <button type="submit">Connexion</button>
+        </div>
+    </form>
+    <div>
+        <label for="souvenir">Se souvenir de moi</label>
+        <input type="checkbox" name="souvenir" id="souvenir">
+        <a href="">Mot de passe oublié</a>
+    </div>
+    <div>
+        <a href="/creer_compte">
+            <button type="submit">Créer un compte</button></a>
+    </div>
+
+</main>
+<footer>
+    <p>&copy; ENI - Tous droits réservés</p>
+</footer>
+</body>
+</html>

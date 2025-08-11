@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nouvelle Vente</title>
+
+</head>
+<body>
+<header>
+    <h1>
+        <a href="/accueil_connecte">ENI-Enchères</a>
+    </h1>
+</header>
+<main>
+    <h2>Nouvelle vente</h2>
+    <div>
+        <img src="">
+    </div>
+    <div>
+        <form>
+            <div>
+                <label for="article">Article :</label>
+                <input type="text" id="article" name="article">
+            </div>
+            <div>
+                <label for="description">Description :</label>
+                <input type="text" id="description" name="description">
+            </div>
+            <div>
+                <label for="categorie" >Catégorie</label>
+                <select name="categorie" id="categorie" >
+                    <option value="toutes">Toutes</option>
+                    <option th:each="categorie : ${categories}" th:text="${categorie.libelle}"></option>
+                </select>
+            </div>
+            <div>
+                <label for="photo">Photo de l'article</label>
+                <button id="photo">Télécharger</button>
+            </div>
+            <div>
+                <label for="debut">Début de l'enchère :</label>
+                <input type="date" id="debut" name="debut">
+            </div>
+            <div>
+                <label for="fin">Fin de l'enchère :</label>
+                <input type="date" id="fin" name="fin">
+            </div>
+            <div>
+                Retrait
+            </div>
+            <div>
+                <label for="rue">Rue :</label>
+                <input type="text" id="rue" name="rue">
+            </div>
+            <div>
+                <label for="codePostal">Code Postal :</label>
+                <input type="text" id="codePostal" name="codePostal">
+            </div>
+            <div>
+                <label for="ville">Ville :</label>
+                <input type="text" id="ville" name="ville">
+            </div>
+            <div>
+                <button type="submit">Enregister</button>
+            </div>
+            <div>
+                <button type="submit">Annuler</button>
+            </div>
+            <div>
+                <button type="submit">Annuler la vente</button>
+            </div>
+
+        </form>
+    </div>
+    <script src="/js/nouvelleVente.js"></script>
+</main>
+<footer>
+    <p>&copy; ENI - Tous droits réservés</p>
+</footer>
+</body>
+</html>

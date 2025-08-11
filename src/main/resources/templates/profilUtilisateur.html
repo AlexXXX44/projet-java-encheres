@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Profil utilisateur</title>
+</head>
+<body>
+<header>
+    <h1>
+        <a href="/accueil_connecte">ENI-Enchères</a>
+    </h1>
+</header>
+<main th:object="${utilisateur}">
+    <p >Pseudo : <span th:text="*{pseudo}"></span></p>
+    <p>Nom : <span th:text="*{nom}"></span></p>
+    <p>Prénom : <span th:text="*{prenom}"></span></p>
+    <p>Email : <span th:text="*{email}"></span></p>
+    <p>Téléphone : <span th:text="*{telephone}"></span></p>
+    <p>Rue : <span th:text="*{rue}"></span></p>
+    <p>Code Postal : <span th:text="*{codePostal}"></span></p>
+    <p>Ville : <span th:text="*{ville}"></span></p>
+</main>
+<footer>
+    <p>&copy; ENI - Tous droits réservés</p>
+</footer>
+</body>
+</html>

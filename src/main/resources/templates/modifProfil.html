@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modifier compte</title>
+    <style>
+        .error{
+            color: red;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>
+        <a href="/accueil_connecte">ENI-Enchères</a>
+    </h1>
+</header>
+
+<main>
+    <h2>Mon profil</h2>
+    <p class="error" th:text = "${erreur}"></p>
+    <form id="inscription-form" th:object="${utilisateur}" method="post" action="/enregistrer_profil">
+        <span>
+            <div>
+                <label for="pseudo">Pseudo :</label>
+                <input type="text" id="pseudo" name="pseudo" th:value="*{pseudo}">
+                <p id="pseudoInfo"  class="commentaire">Le pseudo ne doit contenir que des caractères alphanumérique</p>
+                <span class="error" th:if="${#fields.hasErrors('pseudo')}" th:errors="*{pseudo}"></span>
+            </div>
+            <div>
+                <label for="prenom">Prénom :</label>
+                <input type="text" id="prenom" name="prenom" th:value="*{prenom}">
+                <p id="prenomInfo"  class="commentaire">Saisissez votre prénom</p>
+                <span class="error" th:if="${#fields.hasErrors('prenom')}" th:errors="*{prenom}"></span>
+            </div>
+            <div>
+                <label for="telephone">Téléphone :</label>
+                <input type="text" id="telephone" name="telephone" th:value="*{telephone}">
+                <p id="telephoneInfo"  class="commentaire">Saisissez votre numéro de téléphone sous la forme XX.XX.XX.XX.XX</p>
+                <span class="error" th:if="${#fields.hasErrors('telephone')}" th:errors="*{telephone}"></span>
+            </div>
+            <div>
+                <label for="cp">Code postal :</label>
+                <input type="number" id="cp" name="codePostal" th:value="*{codePostal}">
+                <p id="codePostalInfo"  class="commentaire">Saisissez votre code postal</p>
+                <span class="error" th:if="${#fields.hasErrors('codePostal')}" th:errors="*{codePostal}"></span>
+            </div>
+            <div>
+                <label for="password">Mot de passe actuel :</label>
+                <input type="password" id="password" name="motDePasse" required>
+                <p id="mdpInfo"  class="commentaire">Saisissez votre mot de passe</p>
+                <span class="error" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></span>
+            </div>
+            <div>
+                <label for="newPassword">Nouveau mot de passe :</label>
+                <input type="password" id="newPassword" name="nouvMotDePasse">
+                <p id="newPasswordInfo"  class="commentaire">Saisissez votre nouveau mot de passe si vous désirez changer</p>
+                <span class="error" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></span>
+            </div>
+            <div>
+                <p>Crédit : <input disabled type="number" th:value="*{credit}"></p>
+            </div>
+        </span>
+
+        <span>
+            <div>
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" th:value="*{nom}">
+                <p id="nomInfo"  class="commentaire">Saisissez votre nom</p>
+                 <span class="error" th:if="${#fields.hasErrors('nom')}" th:errors="*{nom}"></span>
+            </div>
+            <div>
+                <label for="email">Email :</label>
+                <input type="text" id="email" name="email" th:value="*{email}">
+                <p id="emailInfo"  class="commentaire">Saisissez votre email</p>
+                <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+            </div>
+            <div>
+                <label for="rue">Rue :</label>
+                <input type="text" id="rue" name="rue" th:value="*{rue}">
+                <p id="rueInfo"  class="commentaire">Saisissez votre rue</p>
+                <span class="error" th:if="${#fields.hasErrors('rue')}" th:errors="*{rue}"></span>
+            </div>
+            <div>
+                <label for="ville">Ville :</label>
+                <input type="text" id="ville" name="ville" th:value="*{ville}">
+                <p id="villeInfo"  class="commentaire">Saisissez votre ville</p>
+                <span class="error" th:if="${#fields.hasErrors('ville')}" th:errors="*{ville}"></span>
+            </div>
+            <div>
+            </div>
+            <div>
+                <label for="confirmMdp">Confirmation du mot de passe :</label>
+                <input type="password" id="confirmMdp" name="confirmMdp" >
+                <p id="cmdpInfo"  class="commentaire">Saisissez à nouveau votre mot de passe(ancien ou nouveau)</p>
+                <span class="error" th:if="${#fields.hasErrors('motDePasse')}" th:errors="*{motDePasse}"></span>
+            </div>
+        </span>
+
+        <div>
+            <button type="submit">Enregister</button>
+        </div>
+    </form>
+    <div>
+        <a href="/supprimer"><button type="button">Supprimer mon compte</button></a>
+    </div>
+    <script src="/js/modifProfil.js"></script>
+</main>
+<footer>
+    <p>&copy; ENI - Tous droits réservés</p>
+</footer>
+</body>
+</html>

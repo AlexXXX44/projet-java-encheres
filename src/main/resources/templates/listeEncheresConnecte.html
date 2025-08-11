@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Enchères</title>
+</head>
+<body>
+<header>
+    <h1>
+        <a href="/accueil_connecte">ENI-Enchères</a>
+    </h1>
+    <nav>
+        <a href="">Enchères</a>
+        <a href="/nouvelle_vente">Vendre un article</a>
+        <a href="/mon_profil">Mon profil</a>
+        <div sec:authorize="isAuthenticated()">
+            <div sec:authentication="name"></div>
+            <div sec:authentication="principal.authorities"></div>
+            <a href="/logout">Se déconnecter</a>
+        </div>
+        <p sec:authorize="!isAuthenticated()">
+            <a href="/login">Se connecter</a>
+        </p>
+
+    </nav>
+</header>
+<main>
+    <h2>Liste des enchères</h2>
+    <form>
+        <span>
+        <div>
+            <p> Filtres :</p>
+            <input type="search" name="recherche" placeholder="Le nom de l'article contient" title="Saisissez votre recherche">
+        </div>
+        <div>
+            <label for="categorie" >Catégorie :</label>
+        <select name="categorie" id="categorie" >
+            <option value="toutes">Toutes</option>
+            <option th:each="categorie : ${categories}" th:text="${categorie.libelle}"></option>
+        </select>
+        </div>
+        <div>
+            <ul>
+                <li>
+                    <input type="radio" id="achats" name="achats">
+                    <label for="achats">Achats</label>
+                </li>
+                 <li>
+                    <input type="checkbox" id="aouvert" name="aouvert">
+                    <label for="aouvert">Enchères ouvertes</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="aencours" name="aencours">
+                    <label for="aencours">Mes enchères en cours</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="aremporte" name="aremporte">
+                    <label for="aremporte">Mes enchères remportées</label>
+                </li>
+            </ul>
+
+            <ul>
+                <li>
+                    <input type="radio" id="ventes" name="ventes">
+                    <label for="ventes">Mes ventes</label>
+                </li>
+                 <li>
+                    <input type="checkbox" id="vencours" name="vencours">
+                    <label for="vencours">Mes ventes en cours</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="vndebute" name="vndebute">
+                    <label for="vndebute">Ventes non débutées</label>
+                </li>
+                <li>
+                    <input type="checkbox" id="vtermine" name="vtermine">
+                    <label for="vtermine">Ventes terminées</label>
+                </li>
+            </ul>
+        </div>
+        </span>
+        <span>
+        <div>
+            <button type="submit">Rechercher</button>
+        </div>
+        </span>
+    </form>
+    <span>
+        <img src="/img/logo_site.jpg"></br>
+        <div th:object="${articleVendu}"></div>
+        <div>
+				<span><u th:text="${'articleVendu.nomArticle'}">Nom de l'article</u></span>
+				<p th:text="${'Prix'}">Prix de l'article</p>
+				<p th:text="${'DateFinEnchère'}">Date fin enchère</p>
+				<p>nomVendeur :<a href="/profil">AA</a></p>
+        </div>
+    </span>
+</main>
+<footer>
+    <p>&copy; ENI - Tous droits réservés</p>
+</footer>
+</body>
+</html>
