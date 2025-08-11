@@ -28,19 +28,18 @@ public class EncheresController {
 	@Autowired
 	private ArticleVenduService articleVenduService;
 
-	@GetMapping("/")
+	@GetMapping("/encheres")
 	public String accueil(Model model) {
 		List<ArticleVendu> lstArticles = articleVenduService.lstArticlesVendus();
 		List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
 		List<Categorie> lstCategories = articleVenduService.lstCategories();
 		model.addAttribute("categories", lstCategories);
-		for (int i = 0; i < lstUtilisateurs.size(); i++) {
-			Utilisateur u = lstUtilisateurs.get(i);
-			for (int j = 0; j < lstArticles.size(); j++) {
+        for (Utilisateur u : lstUtilisateurs) {
+            for (int j = 0; j < lstArticles.size(); j++) {
 //				System.out.println(u.getPseudo());
-				ArticleVendu a = articleVenduService.lstArticlesVendus().get(j);
+                ArticleVendu a = articleVenduService.lstArticlesVendus().get(j);
 //				System.out.println(articleVenduService.trouvePseudoParNo(a.getNoArticle()));
-				a.setUtilisateur(u);
+                a.setUtilisateur(u);
 //				System.out.println(articleVenduService.trouveCategorieParNo(a.getNoArticle()));
                 for (Categorie c : lstCategories) {
                     if (articleVenduService.trouveCategorieParNo((Integer) a.getNoArticle()).equals(c.getLibelle())
@@ -51,8 +50,8 @@ public class EncheresController {
                         model.addAttribute("articleVendu", a);
                     }
                 }
-			}
-		}
+            }
+        }
 
 		List<ArticleVendu> articles = articleVenduService.trouveParCat("Informatique");
 // Affiche tous les articles
@@ -81,11 +80,11 @@ public class EncheresController {
 	}
 
 	@GetMapping("/profil")
-	public String profil(Model model, Utilisateur u) {
+	public String profil(Model model) {
 
 		List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
 		for (int index = 0; index < lstUtilisateurs.size(); index++) {
-			u = utilisateurService.findAll().get(index);
+			Utilisateur u = utilisateurService.findAll().get(index);
 			if ((u.getPseudo()).equals("AA")) {
 				System.out.println(u.getPseudo());
 				model.addAttribute("utilisateur", u);

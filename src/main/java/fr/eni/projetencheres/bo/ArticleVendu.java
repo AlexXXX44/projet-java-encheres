@@ -1,6 +1,6 @@
 package fr.eni.projetencheres.bo;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class ArticleVendu {
 
@@ -8,8 +8,8 @@ public class ArticleVendu {
 	private String nomArticle;
 	private String description;
 	private String etatVente;
-	private Date dateDebutEncheres;
-	private Date dateFinEncheres;
+	private LocalDate dateDebutEncheres;
+	private LocalDate dateFinEncheres;
 	private int miseaPrix;
 	private int prixVente;
 
@@ -23,7 +23,7 @@ public class ArticleVendu {
 	}
 
 	public ArticleVendu(int noArticle, String nomArticle, String description, String etatVente,
-						Date dateDebutEncheres, Date dateFinEncheres, int miseaPrix, int prixVente,
+						LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseaPrix, int prixVente,
 			Utilisateur utilisateur, Categorie categorie) {
 
 		this.noArticle = noArticle;
@@ -41,12 +41,18 @@ public class ArticleVendu {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("ArticleVendu [noArticle=").append(noArticle).append(", nomArticle=").append(nomArticle)
-				.append(", dateFinEncheres=").append(dateFinEncheres).append(", prixInitial=").append(miseaPrix)
-				.append(", prixVente=").append(prixVente).append(", libelle=").append(categorie.getLibelle())
-				.append("]");
-		return builder.toString();
+        return "ArticleVendu [noArticle=" + noArticle + ", nomArticle=" + nomArticle +
+                ", dateFinEncheres=" + dateFinEncheres + ", prixInitial=" + miseaPrix +
+                ", prixVente=" + prixVente + ", libelle=" + categorie.getLibelle() +
+                "]";
+	}
+
+	public String getEtatVente() {
+		return etatVente;
+	}
+
+	public void setEtatVente(String etatVente) {
+		this.etatVente = etatVente;
 	}
 
 	public Object getNoArticle() {
@@ -69,24 +75,20 @@ public class ArticleVendu {
 		return description;
 	}
 
-	public Date getDateDebutEncheres() {
+	public LocalDate getDateDebutEncheres() {
 		return dateDebutEncheres;
 	}
 
-	public Date getDateFinEncheres() {
+	public LocalDate getDateFinEncheres() {
 		return dateFinEncheres;
 	}
 
-	public void setDateFinEncheres(Date dateFinEncheres) {
+	public void setDateFinEncheres(LocalDate dateFinEncheres) {
 		this.dateFinEncheres = dateFinEncheres;
 	}
 
 	public int getMiseaPrix() {
 		return miseaPrix;
-	}
-
-	public void setMiseaPrix(int miseAPRix) {
-		this.miseaPrix = miseAPRix;
 	}
 
 	public int getPrixVente() {

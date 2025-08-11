@@ -107,8 +107,8 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 
     @Override
     public void modifier(ArticleVendu a) {
-        jdbcTemplate.update(MODIFIER_ARTICLE, a.getNoArticle(), (Object) a.getNomArticle(), (Object) a.getDescription(),
-                (Object) a.getDateDebutEncheres(), (Object) a.getDateFinEncheres(), (Object) a.getMiseaPrix(), (Object) a.getPrixVente(),
+        jdbcTemplate.update(MODIFIER_ARTICLE, a.getNoArticle(), a.getNomArticle(), a.getDescription(),
+                a.getDateDebutEncheres(), a.getDateFinEncheres(), a.getMiseaPrix(), a.getPrixVente(),
                 a.getUtilisateur(), a.getCategorie());
     }
 
@@ -128,7 +128,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
             a.setNomArticle(rs.getString("nom_article"));
             // a.setDescription(rs.getString("description"));
             // a.setDateDebutEncheres(rs.getDate("date_debut_encheres"));
-            a.setDateFinEncheres(rs.getDate("date_fin_encheres"));
+            a.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
             // a.setPrixInitial(rs.getInt("prix_initial"));
             a.setPrixVente(rs.getInt("prix_vente"));
 
