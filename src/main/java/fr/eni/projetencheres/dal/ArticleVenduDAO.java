@@ -27,6 +27,7 @@ public interface ArticleVenduDAO {
 
 	List<Categorie> findAllCategories();
 
+	List<ArticleVendu> findArticles(int page, int size, String sortBy, String sortDir);
 }
 
 

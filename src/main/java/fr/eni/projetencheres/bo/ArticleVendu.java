@@ -114,4 +114,16 @@ public class ArticleVendu {
 	public void setCategorie(Categorie libelle) {
 		this.categorie = libelle;
 	}
+
+	public void setMiseaPrix(int prixInitial) {
+	this.miseaPrix = prixInitial;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setDateDebutEncheres(LocalDate dateDebutEncheres) {
+		this.dateDebutEncheres = dateDebutEncheres;
+	}
 }

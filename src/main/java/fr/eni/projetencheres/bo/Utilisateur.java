@@ -3,8 +3,13 @@ package fr.eni.projetencheres.bo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-public class Utilisateur {
+import java.util.Collection;
+import java.util.List;
+
+public class Utilisateur implements UserDetails {
 
 	private int noUtilisateur;
 	@Pattern(regexp = "[A-Za-z0-9]+", message = "Pseudo non valide")
@@ -164,4 +169,38 @@ public class Utilisateur {
 		return false;
 	}
 
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return List.of();
+	}
+
+	@Override
+	public String getPassword() {
+		return "";
+	}
+
+	@Override
+	public String getUsername() {
+		return "";
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return false;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return false;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return false;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return false;
+	}
 }

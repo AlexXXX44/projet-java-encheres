@@ -6,6 +6,7 @@ import fr.eni.projetencheres.bo.Utilisateur;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -13,10 +14,10 @@ import java.util.List;
 
 @Controller
 public class AccueilController {
-    @GetMapping("/")
+    @GetMapping("/accueil")
     public String index(Model model) {
 
-        // ✅ 1. Catégories fictives
+    // ✅ 1. Catégories fictives
         List<Categorie> categories = new ArrayList<>();
         categories.add(new Categorie(1, "Informatique"));
         categories.add(new Categorie(2, "Ameublement"));

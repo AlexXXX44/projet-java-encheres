@@ -3,6 +3,7 @@ package fr.eni.projetencheres.ihm;
 import java.security.Principal;
 import java.util.List;
 
+import fr.eni.projetencheres.bll.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import fr.eni.projetencheres.bll.ArticleVenduService;
-import fr.eni.projetencheres.bll.UtilisateurService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Utilisateur;
@@ -46,7 +46,7 @@ public class EncheresController {
                             && articleVenduService.trouvePseudoParNo((Integer) a.getNoArticle()).equals(u.getPseudo())) {
                         a.setCategorie(c);
                         System.out.println(a);
-                        System.out.println(c);
+//                        System.out.println(c);
                         model.addAttribute("articleVendu", a);
                     }
                 }
@@ -55,9 +55,9 @@ public class EncheresController {
 
 		List<ArticleVendu> articles = articleVenduService.trouveParCat("Informatique");
 // Affiche tous les articles
-		for (ArticleVendu article : articles) {
-			System.out.println(article);
-		}
+//		for (ArticleVendu article : articles) {
+//			System.out.println(article);
+//		}
 		return "index";
 	}
 
@@ -68,8 +68,8 @@ public class EncheresController {
 
 	@GetMapping("/accueil_connecte")
 	public String connecter(Model model) {
-		List<Categorie> lstCategories = articleVenduService.lstCategories();
-		model.addAttribute("categories", lstCategories);
+//		List<Categorie> lstCategories = articleVenduService.lstCategories();
+//		model.addAttribute("categories", lstCategories);
 		return "listeEncheresConnecte";
 	}
 

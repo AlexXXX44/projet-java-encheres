@@ -68,6 +68,18 @@
         <div th:if="${#lists.isEmpty(articles)}" class="col-12">
             <div class="alert alert-info">Aucun article trouvé.</div>
         </div>
+        <form method="get" action="/" class="mb-4">
+            <label for="categorie">Filtrer par catégorie :</label>
+            <select id="categorie" name="categorie" class="form-select w-auto d-inline-block">
+                <option value="">Toutes</option>
+                <option th:each="cat : ${categories}"
+                        th:value="${cat.libelle}"
+                        th:text="${cat.libelle}"
+                        th:selected="${param.categorie == cat.libelle}">
+                </option>
+            </select>
+            <button type="submit" class="btn btn-primary">Filtrer</button>
+        </form>
 
         <div th:each="article : ${articles}" class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
@@ -93,6 +105,19 @@
             </div>
         </div>
     </div>
+<!--    <div class="pagination">-->
+<!--        <a th:href="@{/(page=${currentPage - 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir})}"-->
+<!--           th:if="${currentPage > 1}">Précédent</a>-->
+<!--        <span>Page <span th:text="${currentPage}"></span></span>-->
+<!--        <a th:href="@{/(page=${currentPage + 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir})}"-->
+<!--           th:if="${articles.size() == pageSize}">Suivant</a>-->
+<!--    </div>-->
+    <div>
+        <a th:href="@{/(page=${currentPage - 1}, size=${size})}" th:if="${currentPage > 1}">Précédent</a>
+        <span>Page [[${currentPage}]]</span>
+        <a th:href="@{/(page=${currentPage + 1}, size=${size})}">Suivant</a>
+    </div>
+
 </main>
 
 <footer class="bg-dark text-white text-center py-3 mt-4">

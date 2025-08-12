@@ -1,19 +1,22 @@
 package fr.eni.projetencheres.bll;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ArticleVenduService {
 
     @Autowired
     private ArticleVenduDAO articleVenduDAO;
+
+    public List<ArticleVendu> getArticles(int page, int size, String sortBy, String sortDir) {
+        return articleVenduDAO.findArticles(page, size, sortBy, sortDir);
+    }
 
 	public String trouveCategorieParNo(int noArticle) {
         return articleVenduDAO.trouveCategorieParNo(noArticle);
@@ -31,11 +34,7 @@ public class ArticleVenduService {
 		return articleVenduDAO.findByCat(libelle);
 	}
 
-	public void ajouterArticleVendu(ArticleVendu a) {
-		articleVenduDAO.add(a);
-    }
-
-	public void supprimerArticleVendu(ArticleVendu nomArticle) {
+    public void supprimerArticleVendu(ArticleVendu nomArticle) {
 		articleVenduDAO.delete(nomArticle);
     }
 
