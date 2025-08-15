@@ -5,7 +5,6 @@ import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,41 +14,55 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-@Controller("ArticleController")
+@Controller
 public class ArticleController {
+	private	final ArticleVenduService articleVenduService;
+	private final ArticleVenduDAO articleVenduDAO;
 
-		private final ArticleVenduDAO articleVenduDAO;
+	@GetMapping("/articles")
+	public String index(
+			@RequestParam(defaultValue = "1") int page,
+			@RequestParam(defaultValue = "5") int size,
+			@RequestParam(required = false) String categorie, Model model) {
 
-		@Autowired
-		private final ArticleVenduService articleVenduService;
+		model.addAttribute("currentPage", page);
+		model.addAttribute("size", size);
+		model.addAttribute("articles", articleVenduDAO.lstArticles());
+		model.addAttribute("categories", List.of(
+				new Categorie(1, "Informatique"),
+				new Categorie(2, "Ameublement"),
+				new Categorie(3, "Vêtements"),
+				new Categorie(4, "Sport & Loisirs")
+		));
+		return "index";
+	}
 
 		public ArticleController(ArticleVenduDAO articleVenduDAO, ArticleVenduService articleVenduService) {
 			this.articleVenduDAO = articleVenduDAO;
 			this.articleVenduService = articleVenduService;
 		}
 
-		@GetMapping("/")
-		public String index(
-				@RequestParam(defaultValue = "1") int page,
-				@RequestParam(defaultValue = "5") int size,
-				@RequestParam(required = false) String categorie, Model model) {
-			// Récupère toutes les catégories
-			List<Categorie> categories = articleVenduDAO.findAllCategories();
-			model.addAttribute("categories", categories);
+//	public String index(
+//			@RequestParam(defaultValue = "1") int page,
+//			@RequestParam(defaultValue = "5") int size,
+//			@RequestParam(required = false) String categorie, Model model) {
+//			 Récupère toutes les catégories
+//			List<Categorie> categories = articleVenduDAO.findAllCategories();
+//			model.addAttribute("categories", categories);
 
 			// Si catégorie choisie, on filtre
-			List<ArticleVendu> articles;
-			if (categorie != null && !categorie.isEmpty()) {
-				articles = articleVenduDAO.findByCat(categorie);
-			} else {
-				articles = articleVenduDAO.lstArticles();
-			}
-			model.addAttribute("articles", articles);
-			model.addAttribute("currentPage", page);
-			model.addAttribute("size", size);
-
-			return "index";
-		}
+//			List<ArticleVendu> articles;
+//			if (categorie != null && !categorie.isEmpty()) {
+//				articles = articleVenduDAO.findByCat(categorie);
+//			} else {
+//				articles = articleVenduDAO.lstArticles();
+//			}
+//			model.addAttribute("articles", articles);
+//			model.addAttribute("currentPage", page);
+//			model.addAttribute("size", size);
+//
+//			return "index";
+//		}
 
 
 	@GetMapping("/test")

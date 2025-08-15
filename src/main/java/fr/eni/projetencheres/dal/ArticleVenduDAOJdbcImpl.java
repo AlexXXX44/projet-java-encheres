@@ -192,75 +192,166 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 }*/
 //package fr.eni.projetencheres.dal.jdbc;
 package fr.eni.projetencheres.dal;
-//package fr.eni.projetencheres.dal.jdbc;
 
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Utilisateur;
-import fr.eni.projetencheres.dal.ArticleVenduDAO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+
+    public ArticleVenduDAOJdbcImpl(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
-    public List<ArticleVendu> findByCat(String libelle) {
-        List<ArticleVendu> articles = new ArrayList<>();
+    public List<ArticleVendu> lstArticles() {
         String sql = """
-        SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres, 
-               a.prix_initial, a.prix_vente, a.etat_vente,
-               c.no_categorie, c.libelle AS categorie_libelle,
-               u.no_utilisateur, u.pseudo
-        FROM articles_vendus a
-        JOIN categories c ON a.no_categorie = c.no_categorie
-        JOIN utilisateurs u ON a.no_utilisateur = u.no_utilisateur
-        WHERE c.libelle = ?
-    """;
+        SELECT a.no_article, a.nom_article, a.description, a.etat_vente,
+               a.date_debut_encheres, a.date_fin_encheres,
+               a.mise_a_prix, a.prix_vente,
+               u.no_utilisateur, u.pseudo AS pseudo_vendeur,
+               c.no_categorie, c.libelle AS libelle_categorie
+        FROM article_vendu a
+        JOIN utilisateur u ON a.no_utilisateur = u.no_utilisateur
+        JOIN categorie c ON a.no_categorie = c.no_categorie
+        """;
 
-        try {
-            articles = jdbcTemplate.query(sql, new Object[]{libelle}, (rs, rowNum) -> {
-                ArticleVendu article = new ArticleVendu();
-                article.setNoArticle(rs.getInt("no_article"));
-                article.setNomArticle(rs.getString("nom_article"));
-                article.setDescription(rs.getString("description"));
-                article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
-                article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
-                article.setMiseaPrix(rs.getInt("prix_initial"));
-                article.setPrixVente(rs.getInt("prix_vente"));
-                article.setEtatVente(rs.getString("etat_vente"));
-
-                // Catégorie
-                Categorie cat = new Categorie();
-                cat.setNoCategorie(rs.getInt("no_categorie"));
-                cat.setLibelle(rs.getString("categorie_libelle"));
-                article.setCategorie(cat);
-
-                // Utilisateur
-                Utilisateur u = new Utilisateur();
-                u.setNoUtilisateur(rs.getInt("no_utilisateur"));
-                u.setPseudo(rs.getString("pseudo"));
-                article.setUtilisateur(u);
-
-                return article;
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return articles;
+        return jdbcTemplate.query(sql, new ArticleVenduRowMapper());
     }
+
+
+    @Override
+    public List<Categorie> findAllCategories() {
+        String sql = "SELECT no_categorie, libelle FROM categorie";
+        return jdbcTemplate.query(sql, new CategorieRowMapper());
+    }
+
+    // Mapper Categorie
+    public static class CategorieRowMapper implements RowMapper<Categorie> {
+
+        @Override
+        public Categorie mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Categorie c = new Categorie();
+            c.setNoCategorie(rs.getInt("no_categorie"));
+            c.setLibelle(rs.getString("libelle"));
+            return c;
+        }
+    }
+
+    // MapperArticle
+    public static class ArticleVenduRowMapper implements RowMapper<ArticleVendu> {
+
+        @Override
+        public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
+            ArticleVendu a = new ArticleVendu();
+
+            a.setNoArticle(rs.getInt("no_article"));
+            a.setNomArticle(rs.getString("nom_article"));
+            a.setDescription(rs.getString("description"));
+            a.setEtatVente(rs.getString("etat_vente"));
+
+            // ✅ Dates
+            a.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+            a.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+
+            a.setMiseaPrix(rs.getInt("mise_a_prix"));
+            a.setPrixVente(rs.getInt("prix_vente"));
+
+            // ✅ Associer utilisateur
+            Utilisateur u = new Utilisateur();
+            u.setNoUtilisateur(rs.getInt("no_utilisateur"));
+            u.setPseudo(rs.getString("pseudo_vendeur")); // alias SQL
+            a.setUtilisateur(u);
+
+            // ✅ Associer catégorie
+            Categorie c = new Categorie();
+            c.setNoCategorie(rs.getInt("no_categorie"));
+            c.setLibelle(rs.getString("libelle_categorie")); // alias SQL
+            a.setCategorie(c);
+
+            return a;
+        }
+    }
+
+//    @Override
+//    public List<ArticleVendu> findByCat(String libelle) {
+//        String sql = """
+//            SELECT a.*, u.pseudo, c.libelle
+//            FROM article_vendu a
+//            JOIN utilisateur u ON a.vendeur_no_utilisateur = u.no_utilisateur
+//            JOIN categorie c ON a.categorie_no_categorie = c.no_categorie
+//            WHERE c.libelle = ?
+//        """;
+//        return jdbcTemplate.query(sql, ArticleVenduRowMapper, libelle);
+//    }
+
+//    @Override
+//    public List<ArticleVendu> lstArticles() {
+//        String sql = """
+//            SELECT a.*, u.pseudo, c.libelle
+//            FROM article_vendu a
+//            JOIN utilisateur u ON a.vendeur_no_utilisateur = u.no_utilisateur
+//            JOIN categorie c ON a.categorie_no_categorie = c.no_categorie
+//        """;
+//        return jdbcTemplate.query(sql, articleMapper);
+//    }
+
+//    @Override
+//    public List<ArticleVendu> findByCat(String libelle) {
+//        List<ArticleVendu> articles = new ArrayList<>();
+//        String sql = """
+//        SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres, a.date_fin_encheres,
+//               a.miseaprix, a.prix_vente, a.etat_vente,
+//               c.no_categorie, c.libelle AS categorie_libelle,
+//               u.no_utilisateur, u.pseudo
+//        FROM articles_vendus a
+//        JOIN categories c ON a.no_categorie = c.no_categorie
+//        JOIN utilisateurs u ON a.no_utilisateur = u.no_utilisateur
+//        WHERE c.libelle = ?
+//    """;
+//
+//        try {
+//            articles = jdbcTemplate.query(sql, new Object[]{libelle}, (rs, rowNum) -> {
+//                ArticleVendu article = new ArticleVendu();
+//                article.setNoArticle(rs.getInt("no_article"));
+//                article.setNomArticle(rs.getString("nom_article"));
+//                article.setDescription(rs.getString("description"));
+//                article.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
+//                article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+//                article.setMiseaPrix(rs.getInt("prix_initial"));
+//                article.setPrixVente(rs.getInt("prix_vente"));
+//                article.setEtatVente(rs.getString("etat_vente"));
+//
+//                 Catégorie
+//                Categorie cat = new Categorie();
+//                cat.setNoCategorie(rs.getInt("no_categorie"));
+//                cat.setLibelle(rs.getString("categorie_libelle"));
+//                article.setCategorie(cat);
+//
+                // Utilisateur
+//                Utilisateur u = new Utilisateur();
+//                u.setNoUtilisateur(rs.getInt("no_utilisateur"));
+//                u.setPseudo(rs.getString("pseudo"));
+//                article.setUtilisateur(u);
+//
+//                return article;
+//            });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return articles;
+//    }
 
     @Override
     public List<ArticleVendu> findArticles(int page, int size, String sortBy, String sortDir) {
@@ -297,6 +388,11 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
     }
 
     @Override
+    public List<ArticleVendu> findByCat(String libelle) {
+        return List.of();
+    }
+
+    @Override
     public String trouvePseudoParNo(int no) {
         return "";
     }
@@ -306,29 +402,24 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
         return "";
     }
 
-    @Override
-    public List<ArticleVendu> lstArticles() {
-        return List.of();
-    }
-
     private final static String FIND_ALL_CATEGORIES = "SELECT no_categorie, libelle FROM categorie";
 
-    @Override
-    public List<Categorie> findAllCategories() {
-        return jdbcTemplate.query(FIND_ALL_CATEGORIES, new BeanPropertyRowMapper<>(Categorie.class));
-    }
+//    @Override
+//    public List<Categorie> findAllCategories() {
+//        return jdbcTemplate.query(FIND_ALL_CATEGORIES, new BeanPropertyRowMapper<>(Categorie.class));
+//    }
 
-    public class ArticleVenduRowMapper implements RowMapper<ArticleVendu> {
+//    public class ArticleVenduRowMapper implements RowMapper<ArticleVendu> {
 
-        @Override
-        public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
-            ArticleVendu a = new ArticleVendu();
-            a.setNoArticle(rs.getInt("no_article"));
-            a.setNomArticle(rs.getString("nom_article"));
-            a.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
-            a.setMiseaPrix(rs.getInt("prix_initial"));
-            a.setPrixVente(rs.getInt("prix_vente"));
-            return a;
-        }
-    }
+//        @Override
+//        public ArticleVendu mapRow(ResultSet rs, int rowNum) throws SQLException {
+//            ArticleVendu a = new ArticleVendu();
+//            a.setNoArticle(rs.getInt("no_article"));
+//            a.setNomArticle(rs.getString("nom_article"));
+//            a.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+//            a.setMiseaPrix(rs.getInt("prix_initial"));
+//            a.setPrixVente(rs.getInt("prix_vente"));
+//            return a;
+//        }
+//    }
 }
