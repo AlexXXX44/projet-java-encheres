@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Détails de l'article</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<h1 th:text="${article.nomArticle}">Nom de l'article</h1>
+<p><strong>Description :</strong> <span th:text="${article.description}"></span></p>
+<p><strong>Catégorie :</strong> <span th:text="${article.categorie.libelle}"></span></p>
+<p><strong>Prix initial :</strong> <span th:text="${article.miseAPrix}"></span> €</p>
+<p><strong>Vendeur :</strong> <span th:text="${article.vendeur.pseudo}"></span></p>
+
+<a th:href="@{/}">Retour à l'accueil</a>
+</body>
+</html>

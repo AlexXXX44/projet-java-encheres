@@ -10,52 +10,19 @@ public class ArticleVendu {
 	private String etatVente;
 	private LocalDate dateDebutEncheres;
 	private LocalDate dateFinEncheres;
-	private int miseaPrix;
+	private int miseAPrix;
 	private int prixVente;
 
 	// relations d'association
 	private Utilisateur utilisateur;
 	private Categorie categorie;
-	/**
-	 * constructeurs
-	 */
+
 	public ArticleVendu() {
 	}
 
-	public ArticleVendu(int noArticle, String nomArticle, String description, String etatVente,
-						LocalDate dateDebutEncheres, LocalDate dateFinEncheres, int miseaPrix, int prixVente,
-			Utilisateur utilisateur, Categorie categorie) {
+	// Getters / Setters requis par Thymeleaf (JavaBean)
 
-		this.noArticle = noArticle;
-		this.nomArticle = nomArticle;
-		this.description = description;
-		this.etatVente = etatVente;
-		this.dateDebutEncheres = dateDebutEncheres;
-		this.dateFinEncheres = dateFinEncheres;
-		this.miseaPrix = miseaPrix;
-		this.prixVente = prixVente;
-		this.utilisateur = utilisateur;
-		this.categorie = categorie;
-	}
-
-
-	@Override
-	public String toString() {
-        return "ArticleVendu [noArticle=" + noArticle + ", nomArticle=" + nomArticle +
-                ", dateFinEncheres=" + dateFinEncheres + ", prixInitial=" + miseaPrix +
-                ", prixVente=" + prixVente + ", libelle=" + categorie.getLibelle() +
-                "]";
-	}
-
-	public String getEtatVente() {
-		return etatVente;
-	}
-
-	public void setEtatVente(String etatVente) {
-		this.etatVente = etatVente;
-	}
-
-	public Object getNoArticle() {
+	public int getNoArticle() {
 		return noArticle;
 	}
 
@@ -75,8 +42,24 @@ public class ArticleVendu {
 		return description;
 	}
 
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getEtatVente() {
+		return etatVente;
+	}
+
+	public void setEtatVente(String etatVente) {
+		this.etatVente = etatVente;
+	}
+
 	public LocalDate getDateDebutEncheres() {
 		return dateDebutEncheres;
+	}
+
+	public void setDateDebutEncheres(LocalDate dateDebutEncheres) {
+		this.dateDebutEncheres = dateDebutEncheres;
 	}
 
 	public LocalDate getDateFinEncheres() {
@@ -87,8 +70,12 @@ public class ArticleVendu {
 		this.dateFinEncheres = dateFinEncheres;
 	}
 
-	public int getMiseaPrix() {
-		return miseaPrix;
+	public int getMiseAPrix() {
+		return miseAPrix;
+	}
+
+	public void setMiseAPrix(int miseAPrix) {
+		this.miseAPrix = miseAPrix;
 	}
 
 	public int getPrixVente() {
@@ -111,19 +98,7 @@ public class ArticleVendu {
 		return categorie;
 	}
 
-	public void setCategorie(Categorie libelle) {
-		this.categorie = libelle;
-	}
-
-	public void setMiseaPrix(int prixInitial) {
-	this.miseaPrix = prixInitial;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setDateDebutEncheres(LocalDate dateDebutEncheres) {
-		this.dateDebutEncheres = dateDebutEncheres;
+	public void setCategorie(Categorie categorie) {
+		this.categorie = categorie;
 	}
 }

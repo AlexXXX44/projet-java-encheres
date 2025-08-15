@@ -214,6 +214,29 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
     }
 
     @Override
+    public ArticleVendu findById(int noArticle) {
+        String sql = "SELECT a.no_article, a.nom_article, a.description, a.date_fin_encheres, " +
+                "a.prix_initial, c.libelle AS categorie, u.pseudo " +
+                "FROM article_vendu a " +
+                "JOIN categorie c ON a.no_categorie = c.no_categorie " +
+                "JOIN utilisateur u ON a.no_utilisateur = u.no_utilisateur " +
+                "WHERE a.no_article = ?";
+
+        return jdbcTemplate.queryForObject(sql, new Object[]{noArticle}, (rs, _) -> {
+            ArticleVendu article = new ArticleVendu();
+            article.setNoArticle(rs.getInt("no_article"));
+            article.setNomArticle(rs.getString("nom_article"));
+            article.setDescription(rs.getString("description"));
+            article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
+            article.setMiseAPrix(rs.getInt("mise_a_prix"));
+            article.getCategorie().setLibelle(rs.getString("categorie")); // il faut avoir cet attribut ou un setter
+            article.getUtilisateur().setPseudo(rs.getString("pseudo")); // idem, à prévoir dans ton BO
+            return article;
+        });
+    }
+
+
+    @Override
     public List<ArticleVendu> lstArticles() {
         String sql = """
         SELECT a.no_article, a.nom_article, a.description, a.etat_vente,
@@ -264,7 +287,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
             a.setDateDebutEncheres(rs.getDate("date_debut_encheres").toLocalDate());
             a.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
 
-            a.setMiseaPrix(rs.getInt("mise_a_prix"));
+            a.setMiseAPrix(rs.getInt("mise_a_prix"));
             a.setPrixVente(rs.getInt("prix_vente"));
 
             // ✅ Associer utilisateur
@@ -381,11 +404,6 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 
     @Override
     public void delete(ArticleVendu a) {}
-
-    @Override
-    public ArticleVendu findById(int noArticle) {
-        return null;
-    }
 
     @Override
     public List<ArticleVendu> findByCat(String libelle) {

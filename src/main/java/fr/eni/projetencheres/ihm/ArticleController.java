@@ -5,10 +5,12 @@ import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,8 +18,29 @@ import java.util.List;
 
 @Controller
 public class ArticleController {
-	private	final ArticleVenduService articleVenduService;
+
+	@Autowired
 	private final ArticleVenduDAO articleVenduDAO;
+	@Autowired
+	private ArticleVenduService articleVenduService;
+
+	@GetMapping("/article/{id}")
+	public String afficherDetails(@PathVariable("id") int id, Model model) {
+		ArticleVendu article = articleVenduService.findById(id);
+		if (article == null) {
+			// redirection si article introuvable
+			return "redirect:/";
+		}
+		model.addAttribute("article", article);
+		return "article-details"; // nom du fichier HTML dans templates
+	}
+
+//	@GetMapping("/article/{id}")
+//	public String afficherDetails(@PathVariable("id") int id, Model model) {
+//		ArticleVendu article = articleVenduService.getArticleById(id);
+//		model.addAttribute("article", article);
+//		return "details"; // Thymeleaf view
+//	}
 
 	@GetMapping("/articles")
 	public String index(

@@ -12,43 +12,53 @@ import java.util.List;
 public class ArticleVenduService {
 
     @Autowired
-    private ArticleVenduDAO articleVenduDAO;
+    private final ArticleVenduDAO articleVenduDAO;
 
-    public List<ArticleVendu> getArticles(int page, int size, String sortBy, String sortDir) {
-        return articleVenduDAO.findArticles(page, size, sortBy, sortDir);
-    }
-
-	public String trouveCategorieParNo(int noArticle) {
-        return articleVenduDAO.trouveCategorieParNo(noArticle);
+    public ArticleVenduService(ArticleVenduDAO articleVenduDAO) {
+        this.articleVenduDAO = articleVenduDAO;
     }
 
     public List<ArticleVendu> lstArticlesVendus() {
         return articleVenduDAO.lstArticles();
     }
 
+    public List<Categorie> findAllCategories() {
+        return articleVenduDAO.findAllCategories();
+    }
+
+    public List<Categorie> lstCategories() {
+        return articleVenduDAO.findAllCategories();
+    }
+
+    public String trouveCategorieParNo(int noArticle) {
+        return articleVenduDAO.trouveCategorieParNo(noArticle);
+    }
+
+    public ArticleVendu findById(int id) {
+        return articleVenduDAO.findById(id);
+    }
+
     public ArticleVendu trouveParNo(int noArticle) {
         return articleVenduDAO.findById(noArticle);
     }
 
-	public List<ArticleVendu> trouveParCat(String libelle) {
-		return articleVenduDAO.findByCat(libelle);
-	}
+    public List<ArticleVendu> trouveParCat(String libelle) {
+        return articleVenduDAO.findByCat(libelle);
+    }
 
     public void supprimerArticleVendu(ArticleVendu nomArticle) {
-		articleVenduDAO.delete(nomArticle);
+        articleVenduDAO.delete(nomArticle);
     }
 
-	public void modifierArticleVendu(ArticleVendu a) {
-		articleVenduDAO.modifier(a);
+    public void modifierArticleVendu(ArticleVendu a) {
+        articleVenduDAO.modifier(a);
     }
 
-	public String trouvePseudoParNo(int noArticle) {
-		return articleVenduDAO.trouvePseudoParNo(noArticle);
+    public String trouvePseudoParNo(int noArticle) {
+        return articleVenduDAO.trouvePseudoParNo(noArticle);
     }
 
-	public List<Categorie> lstCategories() {
-		return articleVenduDAO.findAllCategories();
+    public List<ArticleVendu> getArticles(int page, int size, String sortBy, String sortDir) {
+        return List.of();
     }
-
-
 }
