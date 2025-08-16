@@ -2,7 +2,6 @@ package fr.eni.projetencheres.dal;
 
 import java.util.List;
 
-import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,27 +29,27 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 
     private final static String FIND_BY_PSEUDO= "SELECT u.no_Utilisateur, u.pseudo, u.nom, u.prenom, u.email, u.telephone, " +
             "u.rue, u.code_postal, u.ville, u.mot_de_passe, u.credit, u.administrateur" +
-            " FROM utilisateur u " +
+            " FROM UTILISATEURS u " +
             "WHERE u.pseudo=?";
     private final static String FIND_ALL= "SELECT u.no_utilisateur, u.pseudo, u.nom, u.prenom, u.email, u.telephone, " +
             "u.rue, u.code_postal, u.ville, u.mot_de_passe, u.credit, u.administrateur" +
-            " FROM utilisateur u ";
-    private final static String INSERT = "INSERT INTO utilisateur (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe,credit,administrateur) "
+            " FROM UTILISATEURS u ";
+    private final static String INSERT = "INSERT INTO UTILISATEURS (pseudo, nom, prenom, email, telephone, rue, code_postal, ville, mot_de_passe,credit,administrateur) "
             +"VALUES (:pseudo, :nom, :prenom, :email, :telephone, :rue, :codePostal, :ville, :motDePasse, :credit, :administrateur) ";
 
 //    private final static String INSERT_ROLE = "INSERT INTO ROLES(pseudo, role, nu_utilisateur) VALUES(?,?,?)";
 
-    private final static String FIND_PSEUDO_NUMBER = "SELECT COUNT(*) FROM utilisateur WHERE pseudo = ?";
+    private final static String FIND_PSEUDO_NUMBER = "SELECT COUNT(*) FROM UTILISATEURS WHERE pseudo = ?";
 
-    private final static String FIND_EMAIL_NUMBER = "SELECT COUNT(*) FROM utilisateur WHERE email = ?";
+    private final static String FIND_EMAIL_NUMBER = "SELECT COUNT(*) FROM UTILISATEURS WHERE email = ?";
 
 
-    private final static String MODIFIER_PROFIL = "UPDATE utilisateur SET pseudo=?, " +
+    private final static String MODIFIER_PROFIL = "UPDATE UTILISATEURS SET pseudo=?, " +
             "nom=?, prenom=?, email=?, telephone=?, rue=?, code_postal=?, ville=?, mot_de_passe=? " +
             "WHERE no_utilisateur = ?";
 //    private final static String MODIFIER_ROLE = "UPDATE ROLES SET pseudo=? WHERE nu_utilisateur = ?";
 
-    private final static String SUPPRIMER_UTILISATEUR = "DELETE FROM utilisateur WHERE pseudo = ?";
+    private final static String SUPPRIMER_UTILISATEUR = "DELETE FROM UTILISATEURS WHERE pseudo = ?";
 //    private final static String SUPPRIMER_ROLE = "DELETE FROM ROLES WHERE pseudo = ?";
 
     @Override

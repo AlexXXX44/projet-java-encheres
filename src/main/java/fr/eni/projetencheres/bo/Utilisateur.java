@@ -1,17 +1,22 @@
 package fr.eni.projetencheres.bo;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.Collection;
-import java.util.List;
-
-public class Utilisateur implements UserDetails {
-
+@Entity
+@Table(name = "UTILISATEURS")
+public class Utilisateur {
+	@jakarta.persistence.Id
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int noUtilisateur;
+
 	@Pattern(regexp = "[A-Za-z0-9]+", message = "Pseudo non valide")
 	private String pseudo;
 	@NotBlank(message = "Le nom obligatoire")
@@ -69,9 +74,6 @@ public class Utilisateur implements UserDetails {
 		return builder.toString();
 	}
 
-	public int getNoUtilisateur() {
-		return noUtilisateur;
-	}
 
 	public void setNoUtilisateur(int noUtilisateur) {
 		this.noUtilisateur = noUtilisateur;
@@ -169,38 +171,7 @@ public class Utilisateur implements UserDetails {
 		return false;
 	}
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of();
-	}
-
-	@Override
-	public String getPassword() {
-		return "";
-	}
-
-	@Override
-	public String getUsername() {
-		return "";
-	}
-
-	@Override
-	public boolean isAccountNonExpired() {
-		return false;
-	}
-
-	@Override
-	public boolean isAccountNonLocked() {
-		return false;
-	}
-
-	@Override
-	public boolean isCredentialsNonExpired() {
-		return false;
-	}
-
-	@Override
-	public boolean isEnabled() {
-		return false;
-	}
+	public int getNoUtilisateur() {
+        return noUtilisateur;
+    }
 }

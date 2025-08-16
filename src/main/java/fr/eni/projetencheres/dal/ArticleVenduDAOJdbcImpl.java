@@ -35,25 +35,25 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 
     private final static String FIND_ALL = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres,"
             + " a.date_fin_encheres, a.miseaprix, a.prix_vente, a.vendeur_no_utilisateur, a.categorie_no_categorie"
-            + " FROM article_vendu a INNER JOIN utilisateur u ON a.vendeur_no_utilisateur = u.no_utilisateur";
+            + " FROM article_vendu a INNER JOIN utilisateurs u ON a.vendeur_no_utilisateur = u.no_utilisateur";
 
     private final static String FIND_BY_ID = "SELECT a.no_article, a.nom_article, a.description, a.date_debut_encheres,"
             + " a.date_fin_encheres, a.prix_initial, a.prix_vente, a.no_utilisateur, a.categorie_no_categorie"
-            + " FROM article_vendu a INNER JOIN utilisateur u ON a.no_utilisateur = u.no_utilisateur WHERE no_article = ?";
+            + " FROM article_vendu a INNER JOIN utilisateurs u ON a.no_utilisateur = u.no_utilisateur WHERE no_article = ?";
 
     private final static String FIND_BY_CAT = "SELECT a.no_article, a.nom_article, a.description,"
             + " a.date_debut_encheres, a.date_fin_encheres,"
             + " a.miseaprix, a.prix_vente,"
             + " a.vendeur_no_utilisateur, a.categorie_no_categorie"
             + " FROM article_vendu a"
-            + " INNER JOIN utilisateur u"
+            + " INNER JOIN utilisateurs u"
             + " ON a.vendeur_no_utilisateur = u.no_utilisateur"
             + " WHERE a.categorie_no_categorie = ?";
 
     private final static String FIND_CATEGORIE_BY_ID = "SELECT c.libelle FROM categorie c INNER JOIN article_vendu a"
             + " ON c.no_categorie = a.categorie_no_categorie WHERE no_article = ?";
 
-    private final static String FIND_PSEUDO_BY_ID = "SELECT u.pseudo FROM utilisateur u INNER JOIN article_vendu a"
+    private final static String FIND_PSEUDO_BY_ID = "SELECT u.pseudo FROM utilisateurs u INNER JOIN article_vendu a"
             + " ON a.vendeur_no_utilisateur = u.no_utilisateur WHERE no_article = ?";
 
     private final static String FIND_ALL_CATEGORIES = "SELECT no_categorie, libelle FROM categorie";
@@ -219,10 +219,10 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
                 "a.prix_initial, c.libelle AS categorie, u.pseudo " +
                 "FROM article_vendu a " +
                 "JOIN categorie c ON a.no_categorie = c.no_categorie " +
-                "JOIN utilisateur u ON a.no_utilisateur = u.no_utilisateur " +
+                "JOIN utilisateurs u ON a.no_utilisateur = u.no_utilisateur " +
                 "WHERE a.no_article = ?";
 
-        return jdbcTemplate.queryForObject(sql, new Object[]{noArticle}, (rs, _) -> {
+        return jdbcTemplate.queryForObject(sql, new Object[]{noArticle}, (rs, rowNum) -> {
             ArticleVendu article = new ArticleVendu();
             article.setNoArticle(rs.getInt("no_article"));
             article.setNomArticle(rs.getString("nom_article"));
@@ -245,7 +245,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
                u.no_utilisateur, u.pseudo AS pseudo_vendeur,
                c.no_categorie, c.libelle AS libelle_categorie
         FROM article_vendu a
-        JOIN utilisateur u ON a.no_utilisateur = u.no_utilisateur
+        JOIN utilisateurs u ON a.no_utilisateur = u.no_utilisateur
         JOIN categorie c ON a.no_categorie = c.no_categorie
         """;
 
