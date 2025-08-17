@@ -1,12 +1,13 @@
 package fr.eni.projetencheres.dal;
 
+import fr.eni.projetencheres.bo.Utilisateur;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
-public class UtilisateurRepository {
-    public Optional<Object> findByPseudo(String username) {
-        return Optional.empty();
-    }
+//@Repository
+public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
+    Optional<Utilisateur> findByPseudo(String pseudo);
 }
+

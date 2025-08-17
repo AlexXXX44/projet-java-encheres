@@ -1,7 +1,8 @@
-package fr.eni.projetencheres.dal;
+package fr.eni.projetencheres.dal.jdbc;
 
 import java.util.List;
 
+import fr.eni.projetencheres.dal.UtilisateurDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -54,7 +55,7 @@ public class UtilisateurDaoJdbcImpl implements UtilisateurDao {
 
     @Override
     public Utilisateur findByPseudo(String pseudo) {
-        return (Utilisateur) jdbcTemplate.queryForObject(FIND_BY_PSEUDO, new BeanPropertyRowMapper<>(Utilisateur.class),
+        return jdbcTemplate.queryForObject(FIND_BY_PSEUDO, new BeanPropertyRowMapper<>(Utilisateur.class),
                 pseudo);
     }
 

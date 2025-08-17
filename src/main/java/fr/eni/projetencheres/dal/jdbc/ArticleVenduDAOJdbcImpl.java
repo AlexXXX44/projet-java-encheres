@@ -191,11 +191,12 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 
 }*/
 //package fr.eni.projetencheres.dal.jdbc;
-package fr.eni.projetencheres.dal;
+package fr.eni.projetencheres.dal.jdbc;
 
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Utilisateur;
+import fr.eni.projetencheres.dal.ArticleVenduDAO;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;

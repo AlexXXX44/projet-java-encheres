@@ -1,14 +1,12 @@
 package fr.eni.projetencheres.ihm;
 
+import fr.eni.projetencheres.bll.UtilisateurService;
+import fr.eni.projetencheres.bo.Utilisateur;
 import fr.eni.projetencheres.dal.UtilisateurDto;
-import jakarta.servlet.http.HttpServletRequest;
+import fr.eni.projetencheres.exception.MetierException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,35 +16,36 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class InscriptionController {
 
-    private final UserDetailsManager userDetailsManager;
-    private final PasswordEncoder passwordEncoder;
+    private final UtilisateurService utilisateurService;
 
-    public InscriptionController(UserDetailsManager userDetailsManager){
-        this.userDetailsManager = userDetailsManager;
-        this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public InscriptionController(UtilisateurService utilisateurService) {
+        this.utilisateurService = utilisateurService;
     }
 
     @GetMapping("/inscription")
     public String showForm(Model model) {
         model.addAttribute("utilisateur", new UtilisateurDto());
-        return "inscription"; // Thymeleaf view
+        return "inscription";
     }
 
     @PostMapping("/inscription")
-    public String register(@ModelAttribute("utilisateur") UtilisateurDto dto, HttpServletRequest request) {
-        UserDetails user = User.withUsername(dto.getPseudo()) // 👈 pas ton entity, mais org.springframework.security.core.userdetails.User
-                .password(passwordEncoder.encode(dto.getMotDePasse()))
+    public String register(@ModelAttribute("utilisateur") UtilisateurDto dto
+//                                                            String confirmMdP
+    ) throws MetierException {
+//        Utilisateur u = utilisateurService.ajouter(dto, confirmMdP);
+        Utilisateur u = utilisateurService.registerNewUser(dto);
+
+        // 🔑 connexion auto
+        UserDetails user = org.springframework.security.core.userdetails.User
+                .withUsername(u.getPseudo())
+                .password(u.getMotDePasse())
                 .roles("USER")
                 .build();
 
-        userDetailsManager.createUser(user);
-
-        // 🔑 Connexion automatique
         UsernamePasswordAuthenticationToken auth =
                 new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        return "redirect:/"; // redirige vers la page d'accueil
+        return "redirect:/";
     }
 }
-
