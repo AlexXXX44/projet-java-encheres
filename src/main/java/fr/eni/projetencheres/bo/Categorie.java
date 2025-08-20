@@ -1,7 +1,13 @@
 package fr.eni.projetencheres.bo;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "CATEGORIES")
 public class Categorie {
 
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int noCategorie;
 	private String libelle;
 

@@ -39,7 +39,7 @@ public class EncheresController {
 //				System.out.println(u.getPseudo());
                 ArticleVendu a = articleVenduService.lstArticlesVendus().get(j);
 //				System.out.println(articleVenduService.trouvePseudoParNo(a.getNoArticle()));
-                a.setUtilisateur(u);
+                a.setNoUtilisateur(u);
 //				System.out.println(articleVenduService.trouveCategorieParNo(a.getNoArticle()));
                 for (Categorie c : lstCategories) {
                     if (articleVenduService.trouveCategorieParNo((Integer) a.getNoArticle()).equals(c.getLibelle())
@@ -61,11 +61,6 @@ public class EncheresController {
 		return "index";
 	}
 
-	@GetMapping("/login")
-	public String connexion() {
-		return "login";
-	}
-
 	@GetMapping("/accueil_connecte")
 	public String connecter(Model model) {
 //		List<Categorie> lstCategories = articleVenduService.lstCategories();
@@ -76,7 +71,7 @@ public class EncheresController {
 	@GetMapping("/creer_compte")
 	public String creerCompte(Model model) {
 		model.addAttribute("utilisateur", new Utilisateur());
-		return "creerCompte";
+		return "inscription";
 	}
 
 	@GetMapping("/profil")
@@ -113,14 +108,14 @@ public class EncheresController {
 			String confirmMdp) {
 		String retour = "redirect:/";
 		if (br.hasErrors()) {
-			retour = "creerCompte";
+			retour = "inscription";
 			model.addAttribute("utilisateur", utilisateur);
 		} else {
 			try {
 				utilisateurService.ajouter(utilisateur, confirmMdp);
 			} catch (MetierException e) {
 				model.addAttribute("erreur", e.getMessage());
-				retour = "creerCompte";
+				retour = "inscription";
 				model.addAttribute("utilisateur", utilisateur);
 			}
 		}

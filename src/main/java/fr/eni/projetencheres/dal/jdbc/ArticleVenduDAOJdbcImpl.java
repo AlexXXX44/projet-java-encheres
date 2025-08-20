@@ -50,13 +50,11 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
             + " ON a.vendeur_no_utilisateur = u.no_utilisateur"
             + " WHERE a.categorie_no_categorie = ?";
 
-    private final static String FIND_CATEGORIE_BY_ID = "SELECT c.libelle FROM categorie c INNER JOIN article_vendu a"
+    private final static String FIND_CATEGORIE_BY_ID = "SELECT c.libelle FROM categories c INNER JOIN article_vendu a"
             + " ON c.no_categorie = a.categorie_no_categorie WHERE no_article = ?";
 
     private final static String FIND_PSEUDO_BY_ID = "SELECT u.pseudo FROM utilisateurs u INNER JOIN article_vendu a"
             + " ON a.vendeur_no_utilisateur = u.no_utilisateur WHERE no_article = ?";
-
-    private final static String FIND_ALL_CATEGORIES = "SELECT no_categorie, libelle FROM categorie";
 
     @Override
     public List<ArticleVendu> findArticles(int page, int size, String sortBy, String sortDir) {
@@ -218,8 +216,8 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
     public ArticleVendu findById(int noArticle) {
         String sql = "SELECT a.no_article, a.nom_article, a.description, a.date_fin_encheres, " +
                 "a.prix_initial, c.libelle AS categorie, u.pseudo " +
-                "FROM article_vendu a " +
-                "JOIN categorie c ON a.no_categorie = c.no_categorie " +
+                "FROM ARTICLES_VENDUS a " +
+                "JOIN categories c ON a.no_categorie = c.no_categorie " +
                 "JOIN utilisateurs u ON a.no_utilisateur = u.no_utilisateur " +
                 "WHERE a.no_article = ?";
 
@@ -230,8 +228,8 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
             article.setDescription(rs.getString("description"));
             article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
             article.setMiseAPrix(rs.getInt("mise_a_prix"));
-            article.getCategorie().setLibelle(rs.getString("categorie")); // il faut avoir cet attribut ou un setter
-            article.getUtilisateur().setPseudo(rs.getString("pseudo")); // idem, à prévoir dans ton BO
+            article.getCategorie().setLibelle(rs.getString("no_categorie")); // il faut avoir cet attribut ou un setter
+            article.getNoUtilisateur().setPseudo(rs.getString("pseudo")); // idem, à prévoir dans ton BO
             return article;
         });
     }
@@ -245,9 +243,9 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
                a.mise_a_prix, a.prix_vente,
                u.no_utilisateur, u.pseudo AS pseudo_vendeur,
                c.no_categorie, c.libelle AS libelle_categorie
-        FROM article_vendu a
+        FROM ARTICLES_VENDUS a
         JOIN utilisateurs u ON a.no_utilisateur = u.no_utilisateur
-        JOIN categorie c ON a.no_categorie = c.no_categorie
+        JOIN categories c ON a.no_categorie = c.no_categorie
         """;
 
         return jdbcTemplate.query(sql, new ArticleVenduRowMapper());
@@ -256,7 +254,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 
     @Override
     public List<Categorie> findAllCategories() {
-        String sql = "SELECT no_categorie, libelle FROM categorie";
+        String sql = "SELECT no_categorie, libelle FROM categories";
         return jdbcTemplate.query(sql, new CategorieRowMapper());
     }
 
@@ -295,12 +293,12 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
             Utilisateur u = new Utilisateur();
             u.setNoUtilisateur(rs.getInt("no_utilisateur"));
             u.setPseudo(rs.getString("pseudo_vendeur")); // alias SQL
-            a.setUtilisateur(u);
+            a.setNoUtilisateur(u);
 
             // ✅ Associer catégorie
             Categorie c = new Categorie();
             c.setNoCategorie(rs.getInt("no_categorie"));
-            c.setLibelle(rs.getString("libelle_categorie")); // alias SQL
+            c.setLibelle(rs.getString("libelle")); // alias SQL
             a.setCategorie(c);
 
             return a;
@@ -313,7 +311,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 //            SELECT a.*, u.pseudo, c.libelle
 //            FROM article_vendu a
 //            JOIN utilisateur u ON a.vendeur_no_utilisateur = u.no_utilisateur
-//            JOIN categorie c ON a.categorie_no_categorie = c.no_categorie
+//            JOIN categories c ON a.categorie_no_categorie = c.no_categorie
 //            WHERE c.libelle = ?
 //        """;
 //        return jdbcTemplate.query(sql, ArticleVenduRowMapper, libelle);
@@ -325,7 +323,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 //            SELECT a.*, u.pseudo, c.libelle
 //            FROM article_vendu a
 //            JOIN utilisateur u ON a.vendeur_no_utilisateur = u.no_utilisateur
-//            JOIN categorie c ON a.categorie_no_categorie = c.no_categorie
+//            JOIN categories c ON a.categorie_no_categorie = c.no_categorie
 //        """;
 //        return jdbcTemplate.query(sql, articleMapper);
 //    }
@@ -387,7 +385,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
             sortDir = "asc";
         }
 
-        String sql = "SELECT * FROM article_vendu " +
+        String sql = "SELECT * FROM ARTICLES_VENDUS " +
                 "ORDER BY " + sortBy + " " + sortDir +
                 " LIMIT ? OFFSET ?";
 
@@ -421,7 +419,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
         return "";
     }
 
-    private final static String FIND_ALL_CATEGORIES = "SELECT no_categorie, libelle FROM categorie";
+    private final static String FIND_ALL_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
 
 //    @Override
 //    public List<Categorie> findAllCategories() {

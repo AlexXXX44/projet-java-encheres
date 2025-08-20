@@ -3,7 +3,10 @@ package fr.eni.projetencheres.bll;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
+import fr.eni.projetencheres.dal.ArticleVenduRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,15 +14,32 @@ import java.util.List;
 @Service
 public class ArticleVenduService {
 
+    private final ArticleVenduRepository repository;
     @Autowired
-    private final ArticleVenduDAO articleVenduDAO;
+    private ArticleVenduDAO articleVenduDAO;
 
-    public ArticleVenduService(ArticleVenduDAO articleVenduDAO) {
-        this.articleVenduDAO = articleVenduDAO;
+    public ArticleVenduService(ArticleVenduRepository repository) {
+        this.repository = repository;
     }
 
-    public List<ArticleVendu> lstArticlesVendus() {
-        return articleVenduDAO.lstArticles();
+    // Si vous gardez cette méthode, faites-la vraiment remonter des données
+    public List<ArticleVendu> getArticles(int page, int size, String sortBy, String sortDir) {
+        Pageable pageable = PageRequest.of(Math.max(0, page - 1), Math.max(1, size));
+        return repository.findAll(pageable).getContent();
+    }
+
+    public List<ArticleVendu> search(String keyword, Integer noCategorie, int page, int size) {
+        String kw = keyword == null ? "" : keyword.trim();
+        Pageable pageable = PageRequest.of(Math.max(0, page - 1), Math.max(1, size));
+
+        if (noCategorie != null) {
+            return repository
+                    .findBynoCategorieAndNomArticleContainingIgnoreCase(noCategorie, kw, pageable)
+                    .getContent();
+        }
+        return repository
+                .findByNomArticleContainingIgnoreCase(kw, pageable)
+                .getContent();
     }
 
     public List<Categorie> findAllCategories() {
@@ -58,7 +78,7 @@ public class ArticleVenduService {
         return articleVenduDAO.trouvePseudoParNo(noArticle);
     }
 
-    public List<ArticleVendu> getArticles(int page, int size, String sortBy, String sortDir) {
-        return List.of();
+    public List<ArticleVendu> lstArticlesVendus() {
+        return articleVenduDAO.lstArticles();
     }
 }

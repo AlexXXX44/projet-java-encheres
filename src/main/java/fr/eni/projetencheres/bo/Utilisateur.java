@@ -1,18 +1,15 @@
 package fr.eni.projetencheres.bo;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import fr.eni.projetencheres.dal.UtilisateurDto;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Table;
 
 @Entity
 @Table(name = "UTILISATEURS")
-public class Utilisateur {
-	@jakarta.persistence.Id
+public class Utilisateur extends UtilisateurDto {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int noUtilisateur;

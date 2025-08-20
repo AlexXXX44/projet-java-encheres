@@ -1,9 +1,15 @@
 package fr.eni.projetencheres.bo;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+@Entity
+@Table(name="ARTICLES_VENDUS")
 public class ArticleVendu {
 
+	@Id
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private int noArticle;
 	private String nomArticle;
 	private String description;
@@ -14,8 +20,11 @@ public class ArticleVendu {
 	private int prixVente;
 
 	// relations d'association
-	private Utilisateur utilisateur;
-	private Categorie categorie;
+	@ManyToOne
+	@JoinColumn(name = "utilisateur_no_utilisateur")
+	private Utilisateur noUtilisateur;
+	@ManyToOne
+	private Categorie noCategorie;
 
 	public ArticleVendu() {
 	}
@@ -86,19 +95,27 @@ public class ArticleVendu {
 		this.prixVente = prixVente;
 	}
 
-	public Utilisateur getUtilisateur() {
-		return utilisateur;
+	public void setNoUtilisateur(Utilisateur noUtilisateur) {
+		this.noUtilisateur = noUtilisateur;
 	}
 
-	public void setUtilisateur(Utilisateur utilisateur) {
-		this.utilisateur = utilisateur;
+	public void setNoCategorie(Categorie noCategorie) {
+		this.noCategorie = noCategorie;
 	}
 
 	public Categorie getCategorie() {
-		return categorie;
+		return noCategorie;
 	}
 
-	public void setCategorie(Categorie categorie) {
-		this.categorie = categorie;
+	public Categorie getNoCategorie() {
+		return noCategorie;
+	}
+
+	public Utilisateur getNoUtilisateur() {
+		return noUtilisateur;
+	}
+
+	public void setCategorie(Categorie noCategorie) {
+		this.noCategorie = noCategorie;
 	}
 }

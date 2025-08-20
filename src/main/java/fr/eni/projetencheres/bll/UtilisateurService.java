@@ -8,6 +8,7 @@ import fr.eni.projetencheres.dal.UtilisateurDto;
 import fr.eni.projetencheres.dal.UtilisateurRepository;
 import fr.eni.projetencheres.exception.MetierException;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,17 +19,14 @@ import java.util.List;
 @Service
 public class UtilisateurService {
 
+	@Autowired
     private final UtilisateurRepository utilisateurRepository;
-    private UtilisateurDao utilisateurDAO;
+	@Autowired
+    private final UtilisateurDao utilisateurDAO;
+	@Autowired
     private final RoleRepository roleRepository;
+	@Autowired
     private final PasswordEncoder passwordEncoder;
-
-    public UtilisateurService(UtilisateurRepository utilisateurRepository,
-                              RoleRepository roleRepository) {
-        this.utilisateurRepository = utilisateurRepository;
-        this.roleRepository = roleRepository;
-        this.passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
     @Transactional
     public Utilisateur registerNewUser(UtilisateurDto dto) {
@@ -71,18 +69,11 @@ public class UtilisateurService {
 			throw new MetierException("Le mot de passe actuel n'est pas bon") ;
 		}
 	}
+
 	private void validateConfirmMdp(String confirmMdp) throws MetierException {
 		if (confirmMdp.isBlank()) {
 			throw new MetierException("Confirmation de mot de passe obligatoire") ;
 		}
-	}
-
-	public List<Utilisateur> findAll() {
-		return utilisateurDAO.findAll();
-	}
-
-	public Utilisateur findByPseudo(String pseudo) {
-		return utilisateurDAO.findByPseudo(pseudo);
 	}
 
 	@Transactional
@@ -125,17 +116,69 @@ public class UtilisateurService {
 		utilisateurDAO.modifierRole(u);
 	}
 
-	@Transactional
-	public Utilisateur ajouter(Utilisateur u, String confirmMdp) throws MetierException {
-		validateConfirmMdp(confirmMdp);
-		validatePseudo(u);
-		validateEmail(u);
-		u.setCredit(1000);
-		u.setAdministrateur(false);
-		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		String mpchiffrer = encoder.encode(u.getMotDePasse());
-		u.setMotDePasse(mpchiffrer);
-		utilisateurDAO.add(u);
-        return u;
-    }
+		public UtilisateurService(UtilisateurRepository utilisateurRepository, UtilisateurDao utilisateurDAO,
+                                  RoleRepository roleRepository,
+                                  PasswordEncoder passwordEncoder) {
+			this.utilisateurRepository = utilisateurRepository;
+            this.utilisateurDAO = utilisateurDAO;
+            this.roleRepository = roleRepository;
+			this.passwordEncoder = passwordEncoder;
+		}
+
+		public Utilisateur ajouter(UtilisateurDto dto, String confirmMdp) throws MetierException {
+			// 1️⃣ Vérification du mot de passe et confirmation
+			if (!dto.getMotDePasse().equals(confirmMdp)) {
+				throw new MetierException("Les mots de passe ne correspondent pas");
+			}
+
+			// 2️⃣ Vérification que le pseudo n’existe pas déjà
+			if (utilisateurRepository.existsByPseudo(dto.getPseudo())) {
+				throw new MetierException("Ce pseudo est déjà utilisé");
+			}
+
+			// 3️⃣ Création de l’utilisateur
+			Utilisateur utilisateur = new Utilisateur();
+			utilisateur.setPseudo(dto.getPseudo());
+			utilisateur.setEmail(dto.getEmail());
+			utilisateur.setNom(dto.getNom());
+			utilisateur.setPrenom(dto.getPrenom());
+			utilisateur.setTelephone(dto.getTelephone());
+			utilisateur.setRue(dto.getRue());
+			utilisateur.setCodePostal(dto.getCodePostal());
+			utilisateur.setVille(dto.getVille());
+
+			// 4️⃣ Encodage du mot de passe
+			utilisateur.setMotDePasse(passwordEncoder.encode(dto.getMotDePasse()));
+
+			// 5️⃣ Sauvegarde de l’utilisateur
+			Utilisateur saved = utilisateurRepository.save(utilisateur);
+
+			// 6️⃣ Ajout du rôle par défaut (ROLE_USER)
+			roleRepository.save(new Role(saved.getPseudo(), "ROLE_USER"));
+
+			return saved;
+		}
+
+		public Utilisateur findByPseudo(String pseudo) {
+			return utilisateurRepository.findByPseudo(pseudo)
+					.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+		}
+
+		public List<Utilisateur> findAll() {
+			return utilisateurRepository.findAll();
+		}
+
+		//	@Transactional
+//	public Utilisateur ajouter(@Valid UtilisateurDto u, String confirmMdp) throws MetierException {
+//		validateConfirmMdp(confirmMdp);
+//		validatePseudo(u);
+//		validateEmail(u);
+//		u.setCredit(1000);
+//		u.setAdministrateur(false);
+//		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//		String mpchiffrer = encoder.encode(u.getMotDePasse());
+//		u.setMotDePasse(mpchiffrer);
+//		utilisateurDAO.add(u);
+//        return u;
+//    }
 }
