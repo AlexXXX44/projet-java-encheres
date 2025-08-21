@@ -22,7 +22,7 @@ public class ArticleVendu {
 	// relations d'association
 	@ManyToOne
 	@JoinColumn(name = "utilisateur_no_utilisateur")
-	private Utilisateur noUtilisateur;
+	private Utilisateur utilisateur;
 	@ManyToOne
 	private Categorie noCategorie;
 
@@ -95,8 +95,8 @@ public class ArticleVendu {
 		this.prixVente = prixVente;
 	}
 
-	public void setNoUtilisateur(Utilisateur noUtilisateur) {
-		this.noUtilisateur = noUtilisateur;
+	public void setUtilisateur(Utilisateur noUtilisateur) {
+		this.utilisateur = noUtilisateur;
 	}
 
 	public void setNoCategorie(Categorie noCategorie) {
@@ -111,8 +111,8 @@ public class ArticleVendu {
 		return noCategorie;
 	}
 
-	public Utilisateur getNoUtilisateur() {
-		return noUtilisateur;
+	public Utilisateur getUtilisateur() {
+		return utilisateur;
 	}
 
 	public void setCategorie(Categorie noCategorie) {

@@ -39,7 +39,7 @@ public class EncheresController {
 //				System.out.println(u.getPseudo());
                 ArticleVendu a = articleVenduService.lstArticlesVendus().get(j);
 //				System.out.println(articleVenduService.trouvePseudoParNo(a.getNoArticle()));
-                a.setNoUtilisateur(u);
+                a.setUtilisateur(u);
 //				System.out.println(articleVenduService.trouveCategorieParNo(a.getNoArticle()));
                 for (Categorie c : lstCategories) {
                     if (articleVenduService.trouveCategorieParNo((Integer) a.getNoArticle()).equals(c.getLibelle())
