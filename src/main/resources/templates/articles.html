@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <title>Articles</title>
+</head>
+<body>
+<h1>Liste des Articles</h1>
+
+<!-- Formulaire de recherche -->
+<form th:action="@{/articles}" method="get">
+    <label>
+        <input type="text" name="keyword" placeholder="Rechercher..."
+               th:value="${keyword}"/>
+    </label>
+    <div th:if="${#lists.isEmpty(articles)}">
+        Aucun article disponible.
+    </div>
+
+    <ul th:if="${!#lists.isEmpty(articles)}">
+        <li th:each="article, iterStat : ${articles}">
+            <a th:href="@{/articles/{id}(id=${article.noArticle})}"
+               th:text="${article.nomArticle}">Titre</a>
+            <span> — </span>
+            <time th:text="${#temporals.format(article.dateDebutEncheres, 'dd/MM/yyyy')}">
+                01/01/2025
+            </time>
+            <span th:if="${iterStat.odd}">(impair)</span>
+        </li>
+    </ul>
+    <label>
+        <label>
+            <select class="form-select" name="noCategorie">
+                <option th:each="c : ${categories}"
+                        th:value="${c.noCategorie}"
+                        th:selected="${noCategorie == c.noCategorie}"
+                        th:text="${c.libelle}"></option>
+            </select>
+        </label>
+    </label>
+
+    <button type="submit">Filtrer</button>
+</form>
+
+<!-- Résultats -->
+<table border="1" style="margin-top:20px;">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Description</th>
+        <!--        <th>Catégorie</th>-->
+        <!--        <th>Prix de départ</th>-->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="a : ${articles}">
+        <td th:text="${a.nomArticle}"></td>
+        <td th:text="${a.description}"></td>
+        <!--        <td th:text="${a.categorie.nom}"></td>-->
+        <!--        <td th:text="${a.prixDepart}"></td>-->
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

@@ -12,30 +12,49 @@ public class Utilisateur extends UtilisateurDto {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "no_utilisateur")
 	private int noUtilisateur;
 
 	@Pattern(regexp = "[A-Za-z0-9]+", message = "Pseudo non valide")
+	@Column(name = "pseudo", nullable = false)
 	private String pseudo;
+
 	@NotBlank(message = "Le nom obligatoire")
+	@Column(name = "nom", nullable = false)
 	private String nom;
+
 	@NotBlank(message = "Le prénom obligatoire")
+	@Column(name = "prenom", nullable = false)
 	private String prenom;
+
 	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Email non valide")
+	@Column(name = "email", nullable = false)
 	private String email;
+
 	@Pattern(regexp = "^\\d{2}(\\.\\d{2}){4}$", message = "Téléphone non valide")
+	@Column(name = "telephone")
 	private String telephone;
 
-
 	@NotBlank(message = "La rue obligatoire")
+	@Column(name = "rue", nullable = false)
 	private String rue;
 
 	@NotBlank(message = "La ville obligatoire")
+	@Column(name = "ville", nullable = false)
 	private String ville;
+
 	@NotNull(message = "Le code postal est obligatoire")
+	@Column(name = "code_postal", nullable = false)
 	private int codePostal;
+
 	@NotBlank(message = "Le mot de passe obligatoire")
+	@Column(name = "mot_de_passe", nullable = false)
 	private String motDePasse;
+
+	@Column(name = "credit", nullable = false)
 	private int credit;
+
+	@Column(name = "administrateur", nullable = false)
 	private boolean administrateur;
 
 	/**

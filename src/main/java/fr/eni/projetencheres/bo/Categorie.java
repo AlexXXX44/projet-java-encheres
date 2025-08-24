@@ -8,7 +8,10 @@ public class Categorie {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name = "no_categorie")
 	private int noCategorie;
+
+	@Column(name = "libelle", nullable = false)
 	private String libelle;
 
 	/**

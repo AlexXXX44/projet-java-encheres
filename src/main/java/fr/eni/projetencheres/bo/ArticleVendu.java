@@ -10,20 +10,37 @@ public class ArticleVendu {
 
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
+	@Column(name = "no_article")
 	private int noArticle;
+
+	@Column(name = "nom_article")
 	private String nomArticle;
+
+	@Column(name = "description")
 	private String description;
+
+	@Column(name = "etat_vente")
 	private String etatVente;
+	@Column(name = "date_debut_encheres")
 	private LocalDate dateDebutEncheres;
+
+	@Column(name = "date_fin_encheres")
 	private LocalDate dateFinEncheres;
+
+	@Column(name = "mise_a_prix")
 	private int miseAPrix;
+
+	@Column(name = "prix_vente")
 	private int prixVente;
 
 	// relations d'association
-	@ManyToOne
-	@JoinColumn(name = "utilisateur_no_utilisateur")
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "utilisateur", referencedColumnName = "no_utilisateur", nullable = false)
 	private Utilisateur utilisateur;
-	@ManyToOne
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "no_categorie", referencedColumnName = "no_categorie", nullable = false)
 	private Categorie noCategorie;
 
 	public ArticleVendu() {

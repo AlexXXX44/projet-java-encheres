@@ -4,36 +4,62 @@ import fr.eni.projetencheres.bll.ArticleVenduService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
+import fr.eni.projetencheres.dal.ArticleVenduRepository;
+import fr.eni.projetencheres.dal.CategorieRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/articles")
 public class ArticleController {
 
-	@Autowired
-	private final ArticleVenduDAO articleVenduDAO;
-	@Autowired
-	private ArticleVenduService articleVenduService;
+    @Autowired
+    private ArticleVenduRepository articleRepo;
 
-	@GetMapping("/article/{id}")
-	public String afficherDetails(@PathVariable("id") int id, Model model) {
-		ArticleVendu article = articleVenduService.findById(id);
-		if (article == null) {
-			// redirection si article introuvable
-			return "redirect:/";
-		}
-		model.addAttribute("article", article);
-		return "article-details"; // nom du fichier HTML dans templates
-	}
+    @Autowired
+    private CategorieRepository categorieRepo;
+
+    @GetMapping
+    public String listerArticles(@RequestParam(required = false) String keyword,
+                                 @RequestParam(name = "noCategorie", required = false) Integer noCategorie,
+                                 Model model) {
+
+        if (keyword != null && keyword.isBlank()) {
+            keyword = null;
+        }
+
+        List<ArticleVendu> articles = articleRepo.search(keyword, noCategorie);
+        List<Categorie> categories = categorieRepo.findAll();
+
+        model.addAttribute("articles", articles);
+        model.addAttribute("categories", categories);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("noCategorie", noCategorie);
+
+        return "articles";
+    }
+
+    @Autowired
+    private final ArticleVenduDAO articleVenduDAO;
+    @Autowired
+    private ArticleVenduService articleVenduService;
+
+    @GetMapping("/article/{id}")
+    public String afficherDetails(@PathVariable("id") int id, Model model) {
+        ArticleVendu article = articleVenduService.findById(id);
+        if (article == null) {
+            // redirection si article introuvable
+            return "redirect:/";
+        }
+        model.addAttribute("article", article);
+        return "article-details"; // nom du fichier HTML dans templates
+    }
 
 //	@GetMapping("/article/{id}")
 //	public String afficherDetails(@PathVariable("id") int id, Model model) {
@@ -42,28 +68,28 @@ public class ArticleController {
 //		return "details"; // Thymeleaf view
 //	}
 
-	@GetMapping("/articles")
-	public String index(
-			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "5") int size,
-			@RequestParam(required = false) String categorie, Model model) {
+    @GetMapping("/articles")
+    public String index(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String categorie, Model model) {
 
-		model.addAttribute("currentPage", page);
-		model.addAttribute("size", size);
-		model.addAttribute("articles", articleVenduDAO.lstArticles());
-		model.addAttribute("categories", List.of(
-				new Categorie(1, "Informatique"),
-				new Categorie(2, "Ameublement"),
-				new Categorie(3, "Vêtements"),
-				new Categorie(4, "Sport & Loisirs")
-		));
-		return "index";
-	}
+        model.addAttribute("currentPage", page);
+        model.addAttribute("size", size);
+        model.addAttribute("articles", articleVenduDAO.lstArticles());
+        model.addAttribute("categories", List.of(
+                new Categorie(1, "Informatique"),
+                new Categorie(2, "Ameublement"),
+                new Categorie(3, "Vêtements"),
+                new Categorie(4, "Sport & Loisirs")
+        ));
+        return "index";
+    }
 
-		public ArticleController(ArticleVenduDAO articleVenduDAO, ArticleVenduService articleVenduService) {
-			this.articleVenduDAO = articleVenduDAO;
-			this.articleVenduService = articleVenduService;
-		}
+    public ArticleController(ArticleVenduDAO articleVenduDAO, ArticleVenduService articleVenduService) {
+        this.articleVenduDAO = articleVenduDAO;
+        this.articleVenduService = articleVenduService;
+    }
 
 //	public String index(
 //			@RequestParam(defaultValue = "1") int page,
@@ -73,7 +99,7 @@ public class ArticleController {
 //			List<Categorie> categories = articleVenduDAO.findAllCategories();
 //			model.addAttribute("categories", categories);
 
-			// Si catégorie choisie, on filtre
+    // Si catégorie choisie, on filtre
 //			List<ArticleVendu> articles;
 //			if (categorie != null && !categorie.isEmpty()) {
 //				articles = articleVenduDAO.findByCat(categorie);
@@ -88,72 +114,72 @@ public class ArticleController {
 //		}
 
 
-	@GetMapping("/test")
-	public String test(
-			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "5") int size,
-			@RequestParam(defaultValue = "date_fin_encheres") String sortBy,
-			@RequestParam(defaultValue = "asc") String sortDir,
-			Model model) {
+    @GetMapping("/test")
+    public String test(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "date_fin_encheres") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir,
+            Model model) {
 
-		List<ArticleVendu> articles = articleVenduService.getArticles(page, size, sortBy, sortDir);
+        List<ArticleVendu> articles = articleVenduService.getArticles(page, size, sortBy, sortDir);
 
-		model.addAttribute("articles", articles);
-		model.addAttribute("currentPage", page);
-		model.addAttribute("size", size);
+        model.addAttribute("articles", articles);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("size", size);
 
 //	List<ArticleVendu> articles = articleVenduDAO.findArticles(page, size, sortBy, sortDir);
 //		model.addAttribute("articles", articles);
-		// Ajoute aussi pagination info (page courante, taille, etc.) au modèle
+        // Ajoute aussi pagination info (page courante, taille, etc.) au modèle
 //		model.addAttribute("currentPage", page);
 //		model.addAttribute("pageSize", size);
 //		model.addAttribute("sortBy", sortBy);
 //		model.addAttribute("sortDir", sortDir);
 //
-		// Categories + autres attributs
+        // Categories + autres attributs
 
-		return "index";
-	}
+        return "index";
+    }
 
-	@GetMapping("/supprimer_article")
-	public String supprimerArticle(ArticleVendu nomArticle) {
-		articleVenduService.supprimerArticleVendu(nomArticle);
-		return "redirect:/logout";
-	}
+    @GetMapping("/supprimer_article")
+    public String supprimerArticle(ArticleVendu nomArticle) {
+        articleVenduService.supprimerArticleVendu(nomArticle);
+        return "redirect:/logout";
+    }
 
-	@GetMapping("/nouvelle_vente")
-	public String nouvelleVente(Model model){
-		List<Categorie> lstCategories = articleVenduService.lstCategories();
-		model.addAttribute("categories",lstCategories);
-		return "nouvelleVente";
-	}
+    @GetMapping("/nouvelle_vente")
+    public String nouvelleVente(Model model) {
+        List<Categorie> lstCategories = articleVenduService.lstCategories();
+        model.addAttribute("categories", lstCategories);
+        return "nouvelleVente";
+    }
 
-	@GetMapping("/modifier_article")
-	public String modifierArticle(Model model, int noArticle) {
-		ArticleVendu a = articleVenduService.trouveParNo(noArticle);
-		model.addAttribute("article", a);
-		return "modifArticle";
-	}
+    @GetMapping("/modifier_article")
+    public String modifierArticle(Model model, int noArticle) {
+        ArticleVendu a = articleVenduService.trouveParNo(noArticle);
+        model.addAttribute("article", a);
+        return "modifArticle";
+    }
 
-	@PostMapping("/enregistrer_article")
-	public String enregistrerarticle(@Valid ArticleVendu a, BindingResult br, Model model) {
+    @PostMapping("/enregistrer_article")
+    public String enregistrerarticle(@Valid ArticleVendu a, BindingResult br, Model model) {
 
-		if (br.hasErrors()) {
-			model.addAttribute("article", a);
-		} else {
-			articleVenduService.modifierArticleVendu(a);
-			System.out.println(a);
-			model.addAttribute("article", a);
-			return "/";
-		}
-		return null;
-	}
+        if (br.hasErrors()) {
+            model.addAttribute("article", a);
+        } else {
+            articleVenduService.modifierArticleVendu(a);
+            System.out.println(a);
+            model.addAttribute("article", a);
+            return "/";
+        }
+        return null;
+    }
 
-	/*
-	 * @PostMapping("/ajout") String ajout(@ModelAttribute("article") @Valid
-	 * ArticleVendu article, BindingResult br, Model model) throws MetierException {
-	 * String retour = "redirect:/"; if (br.hasErrors()) { retour = "creerArticle";
-	 * model.addAttribute("article", article); } else {
-	 * articleService.ajouterArticleVendu(article); } return retour; }
-	 */
+    /*
+     * @PostMapping("/ajout") String ajout(@ModelAttribute("article") @Valid
+     * ArticleVendu article, BindingResult br, Model model) throws MetierException {
+     * String retour = "redirect:/"; if (br.hasErrors()) { retour = "creerArticle";
+     * model.addAttribute("article", article); } else {
+     * articleService.ajouterArticleVendu(article); } return retour; }
+     */
 }

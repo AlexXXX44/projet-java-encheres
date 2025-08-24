@@ -1,15 +1,25 @@
 package fr.eni.projetencheres.bo;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "ENCHERES")
 public class Enchere {
 
 	private LocalDateTime dateEnchere;
 	private int montantEnchere;
 
 	// relations d'association
+	@ManyToOne
+	@JoinColumn(name = "no_utilisateur_no_utilisateur")
 	private Utilisateur noUtilisateur;
+	@ManyToOne
+	@JoinColumn(name = "no_article_no_article")
 	private ArticleVendu noArticle;
+    @Id
+    private Long id;
 
 	/**
 	 * constructeurs
@@ -65,4 +75,11 @@ public class Enchere {
 		this.noArticle = noArticle;
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getId() {
+		return id;
+	}
 }

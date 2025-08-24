@@ -132,7 +132,7 @@ public class UtilisateurService {
 			}
 
 			// 2️⃣ Vérification que le pseudo n’existe pas déjà
-			if (utilisateurRepository.existsByPseudo(dto.getPseudo())) {
+			if (utilisateurRepository.existsByPseudo((dto.getPseudo()))) {
 				throw new MetierException("Ce pseudo est déjà utilisé");
 			}
 
