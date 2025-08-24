@@ -6,40 +6,102 @@
 <body>
 <h1>Liste des Articles</h1>
 
+<div th:if="${#lists.isEmpty(articles)}">
+    Aucun article disponible.
+</div>
+
+<ul th:if="${!#lists.isEmpty(articles)}">
+    <li th:each="article, iterStat : ${articles}">
+        <a th:href="@{/articles/{id}(id=${article.noArticle})}"
+           th:text="${article.nomArticle}">Titre</a>
+        <span> — </span>
+        <time th:text="${#temporals.format(article.dateDebutEncheres, 'dd/MM/yyyy')}">
+            01/01/2025
+        </time>
+        <span th:if="${iterStat.odd}">(impair)</span>
+    </li>
+</ul>
+<label>
+    <select class="form-select" name="noCategorie">
+        <option th:each="c : ${categories}"
+                th:value="${c.noCategorie}"
+                th:selected="${noCategorie == c.noCategorie}"
+                th:text="${c.libelle}"></option>
+    </select>
+</label>
+
 <!-- Formulaire de recherche -->
 <form th:action="@{/articles}" method="get">
     <label>
         <input type="text" name="keyword" placeholder="Rechercher..."
                th:value="${keyword}"/>
     </label>
-    <div th:if="${#lists.isEmpty(articles)}">
-        Aucun article disponible.
-    </div>
 
-    <ul th:if="${!#lists.isEmpty(articles)}">
-        <li th:each="article, iterStat : ${articles}">
-            <a th:href="@{/articles/{id}(id=${article.noArticle})}"
-               th:text="${article.nomArticle}">Titre</a>
-            <span> — </span>
-            <time th:text="${#temporals.format(article.dateDebutEncheres, 'dd/MM/yyyy')}">
-                01/01/2025
-            </time>
-            <span th:if="${iterStat.odd}">(impair)</span>
-        </li>
-    </ul>
     <label>
-        <label>
-            <select class="form-select" name="noCategorie">
-                <option th:each="c : ${categories}"
-                        th:value="${c.noCategorie}"
-                        th:selected="${noCategorie == c.noCategorie}"
-                        th:text="${c.libelle}"></option>
-            </select>
-        </label>
+        <select name="noCategorie">
+            <option th:value th:selected="${noCategorie == null}">
+                -- Toutes les catégories --
+            </option>
+            <option th:each="c : ${categories}"
+                    th:value="${c.noCategorie}"
+                    th:text="${c.libelle}"
+                    th:selected="${noCategorie == c.noCategorie}">
+            </option>
+        </select>
     </label>
 
     <button type="submit">Filtrer</button>
 </form>
+
+<!-- Résultats -->
+<table border="1" style="margin-top:20px; width: 100%;">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Catégorie</th>
+        <th>Prix de départ</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="a : ${articles}">
+        <td th:text="${a.nomArticle}"></td>
+        <td th:text="${a.description}"></td>
+        <td th:text="${a.noCategorie.libelle}"></td>
+        <td th:text="${a.miseAPrix}"></td>
+        <td>
+            <!-- Formulaire enchère -->
+            <form th:action="@{/api/enchere/faire}" method="post">
+                <input type="hidden" name="objetId" th:value="${a.noArticle}"/>
+                <label>
+                    <input type="number" name="montant" placeholder="Montant"/>
+                </label>
+                <label>
+                    <input type="number" name="utilisateurId" placeholder="User ID"/>
+                </label>
+                <button type="submit">Enchérir</button>
+            </form>
+        </td>
+    </tr>
+    <!-- Affichage des enchères liées -->
+    <tr th:each="a : ${articles}">
+        <td colspan="5">
+            <b>Enchères pour "<span th:text="${a.nomArticle}"></span>" :</b>
+            <ul>
+                <li th:with="ench=${encheresParArticle[a.noArticle]}"
+                    th:each="e : ${ench}">
+                    <span th:text="${e.utilisateur.nom}">Nom</span> :
+                    <span th:text="${e.montantEnchere}">0</span> points
+                    <span th:if="${e}" style="color:green;">(GAGNANT)</span>
+                </li>
+                <li th:if="${#lists.isEmpty(encheresParArticle[a.noArticle])}">
+                    Pas encore d'enchères.
+                </li>
+            </ul>
+        </td>
+    </tr>
+</table>
 
 <!-- Résultats -->
 <table border="1" style="margin-top:20px;">
@@ -47,16 +109,45 @@
     <tr>
         <th>Nom</th>
         <th>Description</th>
-        <!--        <th>Catégorie</th>-->
-        <!--        <th>Prix de départ</th>-->
+        <th>Catégorie</th>
+        <th>Prix de départ</th>
+        <th>Action</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="a : ${articles}">
         <td th:text="${a.nomArticle}"></td>
         <td th:text="${a.description}"></td>
-        <!--        <td th:text="${a.categorie.nom}"></td>-->
-        <!--        <td th:text="${a.prixDepart}"></td>-->
+        <td th:text="${a.noCategorie.libelle}"></td>
+        <td th:text="${a.miseAPrix}"></td>
+        <td>
+            <!-- Formulaire enchère : désactivé tant que pas relié -->
+            <form th:action="@{/api/enchere/faire}" method="post">
+                <input type="hidden" name="objetId" th:value="${a.noArticle}"/>
+                <label>
+                    <input type="number" name="montant" placeholder="Montant"/>
+                </label>
+                <label>
+                    <input type="number" name="utilisateurId" placeholder="User ID"/>
+                </label>
+                <button type="submit">Enchérir</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+    <button type="submit">Filtrer</button>
+
+
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="a : ${articles}">
+        <td th:text="${a.nomArticle}"></td>
+        <td th:text="${a.description}"></td>
     </tr>
     </tbody>
 </table>

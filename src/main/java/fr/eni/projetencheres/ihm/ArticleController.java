@@ -3,9 +3,11 @@ package fr.eni.projetencheres.ihm;
 import fr.eni.projetencheres.bll.ArticleVenduService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
+import fr.eni.projetencheres.bo.Enchere;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
 import fr.eni.projetencheres.dal.ArticleVenduRepository;
 import fr.eni.projetencheres.dal.CategorieRepository;
+import fr.eni.projetencheres.dal.EnchereRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/articles")
@@ -25,22 +29,30 @@ public class ArticleController {
     @Autowired
     private CategorieRepository categorieRepo;
 
+    @Autowired
+    private EnchereRepository enchereRepo;
+
     @GetMapping
     public String listerArticles(@RequestParam(required = false) String keyword,
-                                 @RequestParam(name = "noCategorie", required = false) Integer noCategorie,
+                                 @RequestParam(required = false) Integer noCategorie,
                                  Model model) {
-
-        if (keyword != null && keyword.isBlank()) {
-            keyword = null;
-        }
-
         List<ArticleVendu> articles = articleRepo.search(keyword, noCategorie);
         List<Categorie> categories = categorieRepo.findAll();
+
+        // Charger les enchères existantes par article
+        Map<Long, List<Enchere>> encheresParArticle = new HashMap<>();
+        List<Enchere> ench = null;
+        for (ArticleVendu a : articles) {
+            ench = enchereRepo.findByArticleOrderByMontantEnchereDesc(a);
+            encheresParArticle.put((long) a.getNoArticle(), ench);
+        }
 
         model.addAttribute("articles", articles);
         model.addAttribute("categories", categories);
         model.addAttribute("keyword", keyword);
         model.addAttribute("noCategorie", noCategorie);
+        model.addAttribute("ench", ench);
+        model.addAttribute("encheresParArticle", encheresParArticle);
 
         return "articles";
     }

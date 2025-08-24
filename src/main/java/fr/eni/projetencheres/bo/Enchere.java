@@ -8,78 +8,71 @@ import java.time.LocalDateTime;
 @Table(name = "ENCHERES")
 public class Enchere {
 
-	private LocalDateTime dateEnchere;
-	private int montantEnchere;
-
-	// relations d'association
-	@ManyToOne
-	@JoinColumn(name = "no_utilisateur_no_utilisateur")
-	private Utilisateur noUtilisateur;
-	@ManyToOne
-	@JoinColumn(name = "no_article_no_article")
-	private ArticleVendu noArticle;
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
-	/**
-	 * constructeurs
-	 */
-	public Enchere() {
-	}
+    @Column(name = "date_enchere")
+    private LocalDateTime dateEnchere;
+    @Column(name = "montant_enchere")
+    private int montantEnchere;
 
-	public Enchere(LocalDateTime dateEnchere, int montantEnchere, Utilisateur noUtilisateur, ArticleVendu noArticle) {
+    // relations d'association
+    @ManyToOne
+    private Utilisateur utilisateur;
+    @ManyToOne
+    private ArticleVendu article;
 
-		this.dateEnchere = dateEnchere;
-		this.montantEnchere = montantEnchere;
-		this.noUtilisateur = noUtilisateur;
-		this.noArticle = noArticle;
-	}
+    /**
+     * constructeurs
+     */
+    public Enchere() {
+    }
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Enchere [").append(dateEnchere).append(", ").append(montantEnchere).append(", ")
-				.append(noUtilisateur).append(", ").append(noArticle).append("]");
-		return builder.toString();
-	}
+    public Enchere(LocalDateTime dateEnchere, int montantEnchere, Utilisateur utilisateur, ArticleVendu article) {
+        this.dateEnchere = dateEnchere;
+        this.montantEnchere = montantEnchere;
+        this.utilisateur = utilisateur;
+        this.article = article;
+    }
 
-	public LocalDateTime getDateEnchere() {
-		return dateEnchere;
-	}
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Enchere [").append(dateEnchere).append(", ").append(montantEnchere).append(", ")
+                .append(utilisateur).append(", ").append(article).append("]");
+        return builder.toString();
+    }
 
-	public void setDateEnchere(LocalDateTime dateEnchere) {
-		this.dateEnchere = dateEnchere;
-	}
+    public LocalDateTime getDateEnchere() {
+        return dateEnchere;
+    }
 
-	public int getMontantEnchere() {
-		return montantEnchere;
-	}
+    public void setDateEnchere(LocalDateTime dateEnchere) {
+        this.dateEnchere = dateEnchere;
+    }
 
-	public void setMontantEnchere(int montantEnchere) {
-		this.montantEnchere = montantEnchere;
-	}
+    public int getMontantEnchere() {
+        return montantEnchere;
+    }
 
-	public Utilisateur getNoUtilisateur() {
-		return noUtilisateur;
-	}
+    public void setMontantEnchere(int montantEnchere) {
+        this.montantEnchere = montantEnchere;
+    }
 
-	public void setNoUtilisateur(Utilisateur noUtilisateur) {
-		this.noUtilisateur = noUtilisateur;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public ArticleVendu getNoArticle() {
-		return noArticle;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setNoArticle(ArticleVendu noArticle) {
-		this.noArticle = noArticle;
-	}
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Long getId() {
-		return id;
-	}
+    public ArticleVendu getArticle() {
+        return article;
+    }
 }
