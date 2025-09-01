@@ -5,6 +5,12 @@
 </head>
 <body>
 <h1>Liste des Articles</h1>
+<div th:if="${message}" style="color:green;">
+    <p th:text="${message}"></p>
+</div>
+<div th:if="${error}" style="color:red;">
+    <p th:text="${error}"></p>
+</div>
 
 <div th:if="${#lists.isEmpty(articles)}">
     Aucun article disponible.
@@ -72,14 +78,16 @@
         <td th:text="${a.miseAPrix}"></td>
         <td>
             <!-- Formulaire enchère -->
-            <form th:action="@{/api/enchere/faire}" method="post">
-                <input type="hidden" name="objetId" th:value="${a.noArticle}"/>
+            <form th:action="@{/articles/enchere}" method="post">
+                <input type="hidden" name="noArticle" th:value="${a.noArticle}"/>
                 <label>
-                    <input type="number" name="montant" placeholder="Montant"/>
+                    <input type="number" name="montantEncheres" placeholder="Montant"/>
                 </label>
-                <label>
-                    <input type="number" name="utilisateurId" placeholder="User ID"/>
-                </label>
+                <input type="hidden" name="keyword" th:value="${keyword}"/>
+                <input type="hidden" name="noCategorie" th:value="${noCategorie}"/>
+                <!--                <label>-->
+<!--                    <input type="number" name="noUtilisateur" placeholder="User ID"/>-->
+<!--                </label>-->
                 <button type="submit">Enchérir</button>
             </form>
         </td>

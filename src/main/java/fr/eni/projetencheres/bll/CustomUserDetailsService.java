@@ -2,26 +2,40 @@ package fr.eni.projetencheres.bll;
 
 import fr.eni.projetencheres.bo.Utilisateur;
 import fr.eni.projetencheres.dal.UtilisateurRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-
-    private final UtilisateurRepository utilisateurRepository;
-
-    public CustomUserDetailsService(UtilisateurRepository utilisateurRepository) {
-        this.utilisateurRepository = utilisateurRepository;
-    }
+    @Autowired
+    private UtilisateurRepository utilisateurRepo;
 
     @Override
-    public UserDetails loadUserByUsername(String pseudo) throws UsernameNotFoundException {
-        Utilisateur utilisateur = utilisateurRepository.findByPseudo(pseudo)
-                .orElseThrow(() -> new UsernameNotFoundException("Pseudo non trouvé : " + pseudo));
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        String normalized = email == null ? null : email.trim();
+        if (normalized == null || normalized.isEmpty()) {
+            throw new UsernameNotFoundException("Identifiant manquant");
+        }
 
+        Utilisateur utilisateur = utilisateurRepo.findByEmail(normalized)
+                .orElseThrow(() -> new UsernameNotFoundException("Utilisateur non trouvé"));
+
+        return buildUserDetails(utilisateur);
+    }
+
+    public UserDetails loadUserByPseudo(String pseudo) throws UsernameNotFoundException {
+        Utilisateur utilisateur = utilisateurRepo.findByPseudo(pseudo);
+//                .orElseThrow(() -> new UsernameNotFoundException("Pseudo non trouvé : " + pseudo));
+        return utilisateur == null ? null : buildUserDetails(utilisateur);
+    }
+
+    private UserDetails buildUserDetails(Utilisateur utilisateur) {
         return User.builder()
                 .username(utilisateur.getPseudo()) // ⚡ on utilise bien le pseudo
                 .password(utilisateur.getMotDePasse())

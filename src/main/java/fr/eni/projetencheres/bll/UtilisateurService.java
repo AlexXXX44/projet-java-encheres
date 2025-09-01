@@ -160,8 +160,8 @@ public class UtilisateurService {
 		}
 
 		public Utilisateur findByPseudo(String pseudo) {
-			return utilisateurRepository.findByPseudo(pseudo)
-					.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+			return utilisateurRepository.findByPseudo(pseudo);
+//					.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 		}
 
 		public List<Utilisateur> findAll() {

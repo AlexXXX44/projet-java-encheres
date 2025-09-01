@@ -1,19 +1,23 @@
 package fr.eni.projetencheres.ihm;
 
 import fr.eni.projetencheres.bll.ArticleVenduService;
+import fr.eni.projetencheres.bll.EnchereService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Enchere;
+import fr.eni.projetencheres.bo.Utilisateur;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
 import fr.eni.projetencheres.dal.ArticleVenduRepository;
 import fr.eni.projetencheres.dal.CategorieRepository;
 import fr.eni.projetencheres.dal.EnchereRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +35,8 @@ public class ArticleController {
 
     @Autowired
     private EnchereRepository enchereRepo;
+    @Autowired
+    private EnchereService enchereService;
 
     @GetMapping
     public String listerArticles(@RequestParam(required = false) String keyword,
@@ -52,13 +58,40 @@ public class ArticleController {
         model.addAttribute("keyword", keyword);
         model.addAttribute("noCategorie", noCategorie);
         model.addAttribute("ench", ench);
+
         model.addAttribute("encheresParArticle", encheresParArticle);
 
         return "articles";
     }
 
+    // ✅ Nouvelle méthode pour enchérir
+    @PostMapping("/enchere")
+    public String faireEnchere(@AuthenticationPrincipal Utilisateur utilisateur,
+                               @RequestParam Integer noUtilisateur,
+                               @RequestParam Integer noArticle,
+                               @RequestParam int montantEnchere,
+                               @RequestParam(required = false) String keyword,
+                               @RequestParam(required = false) Integer noCategorie,
+                               RedirectAttributes redirectAttrs) {
+        try {
+            enchereService.faireEnchere(utilisateur.getNoUtilisateur(), noArticle, montantEnchere);
+            redirectAttrs.addFlashAttribute("message", "Enchère réussie !");
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", e.getMessage());
+        }
+
+        String url = "redirect:/articles";
+        if (keyword != null || noCategorie != null) {
+            url += "?";
+            if (keyword != null) url += "keyword=" + keyword + "&";
+            if (noCategorie != null) url += "categorieId=" + noCategorie;
+        }
+        return url;
+    }
+
     @Autowired
-    private final ArticleVenduDAO articleVenduDAO;
+    private ArticleVenduDAO articleVenduDAO;
+
     @Autowired
     private ArticleVenduService articleVenduService;
 
@@ -111,7 +144,7 @@ public class ArticleController {
 //			List<Categorie> categories = articleVenduDAO.findAllCategories();
 //			model.addAttribute("categories", categories);
 
-    // Si catégorie choisie, on filtre
+// Si catégorie choisie, on filtre
 //			List<ArticleVendu> articles;
 //			if (categorie != null && !categorie.isEmpty()) {
 //				articles = articleVenduDAO.findByCat(categorie);
