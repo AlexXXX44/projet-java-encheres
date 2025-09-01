@@ -19,21 +19,21 @@ import fr.eni.projetencheres.bo.Utilisateur;
 import fr.eni.projetencheres.exception.MetierException;
 import jakarta.validation.Valid;
 
-@Controller
+@Controller("/encheres")
 public class EncheresController {
 
-	@Autowired
-	private UtilisateurService utilisateurService;
+    @Autowired
+    private UtilisateurService utilisateurService;
 
-	@Autowired
-	private ArticleVenduService articleVenduService;
+    @Autowired
+    private ArticleVenduService articleVenduService;
 
-	@GetMapping("/encheres")
-	public String accueil(Model model) {
-		List<ArticleVendu> lstArticles = articleVenduService.lstArticlesVendus();
-		List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
-		List<Categorie> lstCategories = articleVenduService.lstCategories();
-		model.addAttribute("categories", lstCategories);
+    @GetMapping("/encheres")
+    public String accueil(Model model) {
+        List<ArticleVendu> lstArticles = articleVenduService.lstArticlesVendus();
+        List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
+        List<Categorie> lstCategories = articleVenduService.lstCategories();
+        model.addAttribute("categories", lstCategories);
         for (Utilisateur u : lstUtilisateurs) {
             for (int j = 0; j < lstArticles.size(); j++) {
 //				System.out.println(u.getPseudo());
@@ -53,103 +53,102 @@ public class EncheresController {
             }
         }
 
-		List<ArticleVendu> articles = articleVenduService.trouveParCat("Informatique");
+        List<ArticleVendu> articles = articleVenduService.trouveParCat("Informatique");
 // Affiche tous les articles
 //		for (ArticleVendu article : articles) {
 //			System.out.println(article);
 //		}
-		return "index";
-	}
+        return "index";
+    }
 
-	@GetMapping("/accueil_connecte")
-	public String connecter(Model model) {
+    @GetMapping("/accueil_connecte")
+    public String connecter(Model model) {
 //		List<Categorie> lstCategories = articleVenduService.lstCategories();
 //		model.addAttribute("categories", lstCategories);
-		return "listeEncheresConnecte";
-	}
+        return "listeEncheresConnecte";
+    }
 
-	@GetMapping("/creer_compte")
-	public String creerCompte(Model model) {
-		model.addAttribute("utilisateur", new Utilisateur());
-		return "inscription";
-	}
+    @GetMapping("/creer_compte")
+    public String creerCompte(Model model) {
+        model.addAttribute("utilisateur", new Utilisateur());
+        return "inscription";
+    }
 
-	@GetMapping("/profil")
-	public String profil(Model model) {
+    @GetMapping("/user_profil")
+    public String profilLieAuxEncheres(Model model) {
+        List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
+        for (int index = 0; index < lstUtilisateurs.size(); index++) {
+            Utilisateur u = utilisateurService.findAll().get(index);
+            if ((u.getPseudo()).equals("AA")) {
+                System.out.println(u.getPseudo());
+                model.addAttribute("utilisateur", u);
+            }
+        }
+        return "profilUtilisateur";
+    }
 
-		List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
-		for (int index = 0; index < lstUtilisateurs.size(); index++) {
-			Utilisateur u = utilisateurService.findAll().get(index);
-			if ((u.getPseudo()).equals("AA")) {
-				System.out.println(u.getPseudo());
-				model.addAttribute("utilisateur", u);
-			}
-		}
-		return "profilUtilisateur";
-	}
+    @GetMapping("/mon_profil")
+    public String monprofil(Model model, Principal principal) {
+        Utilisateur u = utilisateurService.findByPseudo(principal.getName());
+        System.out.println(u);
+        model.addAttribute("utilisateur", u);
+        return "monProfil";
+    }
 
-	@GetMapping("/mon_profil")
-	public String monprofil(Model model, Principal principal) {
-		Utilisateur u = utilisateurService.findByPseudo(principal.getName());
-		System.out.println(u);
-		model.addAttribute("utilisateur", u);
-		return "monProfil";
-	}
+    @GetMapping("/modifier_profil")
+    public String modifierProfil(Model model, Principal principal) {
+        Utilisateur u = utilisateurService.findByPseudo(principal.getName());
+        model.addAttribute("utilisateur", u);
+        return "modifProfil";
+    }
 
-	@GetMapping("/modifier_profil")
-	public String modifierProfil(Model model, Principal principal) {
-		Utilisateur u = utilisateurService.findByPseudo(principal.getName());
-		model.addAttribute("utilisateur", u);
-		return "modifProfil";
-	}
+    @PostMapping("/ajout")
+    String ajout(@ModelAttribute("utilisateur") @Valid Utilisateur utilisateur, BindingResult br, Model model,
+                 String confirmMdp) {
+        String retour = "redirect:/";
+        if (br.hasErrors()) {
+            retour = "inscription";
+            model.addAttribute("utilisateur", utilisateur);
+        } else {
+            try {
+                utilisateurService.ajouter(utilisateur, confirmMdp);
+            } catch (MetierException e) {
+                model.addAttribute("erreur", e.getMessage());
+                retour = "inscription";
+                model.addAttribute("utilisateur", utilisateur);
+            }
+        }
+        return retour;
+    }
 
-	@PostMapping("/ajout")
-	String ajout(@ModelAttribute("utilisateur") @Valid Utilisateur utilisateur, BindingResult br, Model model,
-			String confirmMdp) {
-		String retour = "redirect:/";
-		if (br.hasErrors()) {
-			retour = "inscription";
-			model.addAttribute("utilisateur", utilisateur);
-		} else {
-			try {
-				utilisateurService.ajouter(utilisateur, confirmMdp);
-			} catch (MetierException e) {
-				model.addAttribute("erreur", e.getMessage());
-				retour = "inscription";
-				model.addAttribute("utilisateur", utilisateur);
-			}
-		}
-		return retour;
-	}
+    @PostMapping("/enregistrer_profil")
+    public String enregistrerprofil(@ModelAttribute("utilisateur") @Valid Utilisateur u, BindingResult br,
+                                    String nouvMotDePasse, String confirmMdp, Model model, Principal principal) {
 
-	@PostMapping("/enregistrer_profil")
-	public String enregistrerprofil(@ModelAttribute("utilisateur") @Valid Utilisateur u, BindingResult br,
-			String nouvMotDePasse, String confirmMdp, Model model, Principal principal) {
+        Utilisateur utilisateur = utilisateurService.findByPseudo(principal.getName());
+        u.setNoUtilisateur(utilisateur.getNoUtilisateur());
 
-		Utilisateur utilisateur = utilisateurService.findByPseudo(principal.getName());
-		u.setNoUtilisateur(utilisateur.getNoUtilisateur());
+        String retour = "redirect:/logout";
 
-		String retour = "redirect:/logout";
+        if (br.hasErrors()) {
+            retour = "modifProfil";
+            model.addAttribute("utilisateur", u);
+        } else {
+            try {
+                utilisateurService.modifier(u, principal, nouvMotDePasse, confirmMdp);
+            } catch (MetierException e) {
+                model.addAttribute("erreur", e.getMessage());
+                retour = "modifProfil";
+                model.addAttribute("utilisateur", u);
+            }
+        }
+        return retour;
+    }
 
-		if (br.hasErrors()) {
-			retour = "modifProfil";
-			model.addAttribute("utilisateur", u);
-		} else {
-			try {
-				utilisateurService.modifier(u, principal, nouvMotDePasse, confirmMdp);
-			} catch (MetierException e) {
-				model.addAttribute("erreur", e.getMessage());
-				retour = "modifProfil";
-				model.addAttribute("utilisateur", u);
-			}
-		}
-		return retour;
-	}
-
-	@GetMapping("/supprimer")
-	public String supprimerProfil(Principal principal) {
-		utilisateurService.supprimer(principal.getName());
-		return "redirect:/logout";
-	}
+    @GetMapping("/supprimer")
+    public String supprimerProfil(Principal principal) {
+        utilisateurService.supprimer(principal.getName());
+        return "redirect:/logout";
+    }
 
 }

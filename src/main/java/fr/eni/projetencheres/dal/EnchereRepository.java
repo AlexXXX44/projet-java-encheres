@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface EnchereRepository extends JpaRepository<Enchere, Integer> {
     List<Enchere> findByArticleOrderByMontantEnchereDesc(ArticleVendu article);
+
+    List<Enchere> findByUtilisateur_NoUtilisateur(int noUtilisateur);
 }
