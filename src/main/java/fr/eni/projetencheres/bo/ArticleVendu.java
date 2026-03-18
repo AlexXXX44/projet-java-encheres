@@ -135,4 +135,9 @@ public class ArticleVendu {
 	public void setCategorie(Categorie noCategorie) {
 		this.noCategorie = noCategorie;
 	}
+
+    public void setVendeur(Utilisateur u) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setVendeur'");
+    }
 }

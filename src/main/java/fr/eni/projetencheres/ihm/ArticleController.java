@@ -65,29 +65,29 @@ public class ArticleController {
     }
 
     // ✅ Nouvelle méthode pour enchérir
-    @PostMapping("/enchere")
-    public String faireEnchere(@AuthenticationPrincipal Utilisateur utilisateur,
-                               @RequestParam Integer noUtilisateur,
-                               @RequestParam Integer noArticle,
-                               @RequestParam int montantEnchere,
-                               @RequestParam(required = false) String keyword,
-                               @RequestParam(required = false) Integer noCategorie,
-                               RedirectAttributes redirectAttrs) {
-        try {
-            enchereService.faireEnchere(utilisateur.getNoUtilisateur(), noArticle, montantEnchere);
-            redirectAttrs.addFlashAttribute("message", "Enchère réussie !");
-        } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("error", e.getMessage());
-        }
+    //@PostMapping("/enchere")
+    //public String faireEnchere(@AuthenticationPrincipal Utilisateur utilisateur,
+    //                           @RequestParam Integer noUtilisateur,
+    //                           @RequestParam Integer noArticle,
+    //                           @RequestParam int montantEnchere,
+    //                           @RequestParam(required = false) String keyword,
+    //                           @RequestParam(required = false) Integer noCategorie,
+    //                           RedirectAttributes redirectAttrs) {
+    //    try {
+    //        enchereService.faireEnchere(utilisateur.getNoUtilisateur(), noArticle, montantEnchere);
+    //        redirectAttrs.addFlashAttribute("message", "Enchère réussie !");
+    //    } catch (Exception e) {
+    //        redirectAttrs.addFlashAttribute("error", e.getMessage());
+    //    }
 
-        String url = "redirect:/articles";
-        if (keyword != null || noCategorie != null) {
-            url += "?";
-            if (keyword != null) url += "keyword=" + keyword + "&";
-            if (noCategorie != null) url += "categorieId=" + noCategorie;
-        }
-        return url;
-    }
+    //    String url = "redirect:/articles";
+    //    if (keyword != null || noCategorie != null) {
+    //        url += "?";
+    //        if (keyword != null) url += "keyword=" + keyword + "&";
+    //        if (noCategorie != null) url += "categorieId=" + noCategorie;
+    //    }
+    //    return url;
+    //}
 
     @Autowired
     private ArticleVenduDAO articleVenduDAO;
