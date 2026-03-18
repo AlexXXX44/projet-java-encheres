@@ -2,6 +2,7 @@ package fr.eni.projetencheres.bo;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -13,7 +14,7 @@ public class Enchere {
     private Long id;
 
     @Column(name = "date_enchere")
-    private LocalDateTime dateEnchere;
+    private LocalDate dateEnchere;
     @Column(name = "montant_enchere")
     private int montantEnchere;
 
@@ -29,7 +30,7 @@ public class Enchere {
     public Enchere() {
     }
 
-    public Enchere(LocalDateTime dateEnchere, int montantEnchere, Utilisateur utilisateur, ArticleVendu article) {
+    public Enchere(LocalDate dateEnchere, int montantEnchere, Utilisateur utilisateur, ArticleVendu article) {
         this.dateEnchere = dateEnchere;
         this.montantEnchere = montantEnchere;
         this.utilisateur = utilisateur;
@@ -44,11 +45,71 @@ public class Enchere {
         return builder.toString();
     }
 
-    public LocalDateTime getDateEnchere() {
+    public Enchere(int montantEnchere, Utilisateur utilisateur, ArticleVendu article) {
+        this.montantEnchere = montantEnchere;
+        this.utilisateur = utilisateur;
+        this.article = article;
+    }
+
+    public Enchere(LocalDate dateEnchere, int montantEnchere) {
+        this.dateEnchere = dateEnchere;
+        this.montantEnchere = montantEnchere;
+    }
+
+    public Enchere(int montantEnchere) {
+        this.montantEnchere = montantEnchere;
+    }
+
+    public Enchere(LocalDate dateEnchere) {
+        this.dateEnchere = dateEnchere;
+    }
+
+    public Enchere(int montantEnchere, Utilisateur utilisateur) {
+        this.montantEnchere = montantEnchere;
+        this.utilisateur = utilisateur;
+    }
+
+    public Enchere(LocalDate dateEnchere, Utilisateur utilisateur) {
+        this.dateEnchere = dateEnchere;
+        this.utilisateur = utilisateur;
+    }
+
+    public Enchere(int montantEnchere, ArticleVendu article) {
+        this.montantEnchere = montantEnchere;
+        this.article = article;
+    }
+
+    public Enchere(LocalDate dateEnchere, ArticleVendu article) {
+        this.dateEnchere = dateEnchere;
+        this.article = article;
+    }
+
+    public Enchere(Utilisateur utilisateur, ArticleVendu article) {
+        this.utilisateur = utilisateur;
+        this.article = article;
+    }
+
+    public Enchere(LocalDate dateEnchere, int montantEnchere, Utilisateur utilisateur) {
+        this.dateEnchere = dateEnchere;
+        this.montantEnchere = montantEnchere;
+        this.utilisateur = utilisateur;
+    }
+
+    public Enchere(LocalDate dateEnchere, int montantEnchere, ArticleVendu article) {
+        this.dateEnchere = dateEnchere;
+        this.montantEnchere = montantEnchere;
+        this.article = article;
+    }
+
+    public int getNoEnchere() {
+        return id.intValue();
+    }
+    
+    public LocalDate getDateEnchere() {
         return dateEnchere;
     }
 
-    public void setDateEnchere(LocalDateTime dateEnchere) {
+    public void setDateEnchere(LocalDate dateEnchere) {
         this.dateEnchere = dateEnchere;
     }
 
@@ -74,5 +135,20 @@ public class Enchere {
 
     public ArticleVendu getArticle() {
         return article;
+    }
+
+    public void setArticleVendu(ArticleVendu article2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setArticleVendu'");
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur2) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setUtilisateur'");
+    }
+
+    public static void faireEnchere(Utilisateur utilisateur2, ArticleVendu article2, int montantEncheres) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'faireEnchere'");
     }
 }

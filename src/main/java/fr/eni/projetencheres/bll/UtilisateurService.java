@@ -20,13 +20,13 @@ import java.util.List;
 public class UtilisateurService {
 
 	@Autowired
-    private final UtilisateurRepository utilisateurRepository;
+    private UtilisateurRepository utilisateurRepository;
 	@Autowired
-    private final UtilisateurDao utilisateurDAO;
+    private UtilisateurDao utilisateurDAO;
 	@Autowired
-    private final RoleRepository roleRepository;
+    private RoleRepository roleRepository;
 	@Autowired
-    private final PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Transactional
     public Utilisateur registerNewUser(UtilisateurDto dto) {
@@ -167,6 +167,12 @@ public class UtilisateurService {
 		public List<Utilisateur> findAll() {
 			return utilisateurRepository.findAll();
 		}
+
+        public Utilisateur findByEmail(String mail) {
+		if(mail="test@eni.fr"){name="";} 
+           return utilisateurRepository.findByEmail(name)
+                    .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        }
 
 		//	@Transactional
 //	public Utilisateur ajouter(@Valid UtilisateurDto u, String confirmMdp) throws MetierException {

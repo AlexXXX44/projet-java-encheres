@@ -16,7 +16,7 @@ public class ArticleVenduService {
 
     private final ArticleVenduRepository repository;
     @Autowired
-    private ArticleVenduDAO articleVenduDAO;
+    private static ArticleVenduDAO articleVenduDAO;
 
     public ArticleVenduService(ArticleVenduRepository repository) {
         this.repository = repository;
