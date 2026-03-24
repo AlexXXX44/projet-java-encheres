@@ -4,12 +4,14 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Enchere;
 import fr.eni.projetencheres.bo.Utilisateur;
+import fr.eni.projetencheres.dal.UtilisateurRepository;
 import fr.eni.projetencheres.dal.EnchereRepository;
 
 @Service
@@ -17,9 +19,18 @@ import fr.eni.projetencheres.dal.EnchereRepository;
 public class EnchereService {
     
     private EnchereRepository enchereRepository;
+    private UtilisateurRepository utilisateurRepository;
+
+    @Autowired
+    public EnchereService(UtilisateurRepository utilisateurRepository,
+        EnchereRepository enchereRepository) {
+        this.utilisateurRepository = utilisateurRepository;
+        this.enchereRepository = enchereRepository;
+    }
     
     public void faireEnchere(Utilisateur utilisateur, ArticleVendu article, int montant) {
 
+        System.out.println(this.enchereRepository.findTopByArticleOrderByMontantEnchereDesc(article));
     // 🔎 1. Récupérer la meilleure enchère actuelle
     Optional<Enchere> meilleure = (Optional<Enchere>) enchereRepository
             .findTopByArticleOrderByMontantEnchereDesc(article);
@@ -32,6 +43,11 @@ public class EnchereService {
         throw new RuntimeException("Montant insuffisant !");
     }
 
+    utilisateur = utilisateurRepository.findByEmail("abaille@eni.fr");
+    if (utilisateur == null) {
+        throw new RuntimeException("Utilisateur introuvable !");
+    }
+    int credit = utilisateur.getCredit();
     // ❌ pas assez de crédits
     if (utilisateur.getCredit() < montant) {
         throw new RuntimeException("Crédits insuffisants !");
@@ -55,10 +71,5 @@ public class EnchereService {
     enchere.setDateEnchere(LocalDate.now());
 
     enchereRepository.save(enchere);
-    }
-
-    public void faireEnchere(int noUtilisateur, Integer noArticle, int montantEnchere) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'faireEnchere'");
     }
 }

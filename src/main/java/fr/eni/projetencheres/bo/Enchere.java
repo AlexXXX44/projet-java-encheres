@@ -146,9 +146,4 @@ public class Enchere {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setUtilisateur'");
     }
-
-    public static void faireEnchere(Utilisateur utilisateur2, ArticleVendu article2, int montantEncheres) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'faireEnchere'");
-    }
 }

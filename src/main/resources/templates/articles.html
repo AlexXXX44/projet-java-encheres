@@ -78,7 +78,7 @@
         <td th:text="${a.miseAPrix}"></td>
         <td>
             <!-- Formulaire enchère -->
-            <form th:action="@{/articles/enchere}" method="post">
+            <form th:action="@{/encheres/article}" method="post">
                 <input type="hidden" name="noArticle" th:value="${a.noArticle}"/>
                 <label>
                     <input type="number" name="montantEncheres" placeholder="Montant"/>

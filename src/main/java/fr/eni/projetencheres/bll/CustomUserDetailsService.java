@@ -26,9 +26,9 @@ public UserDetails loadUserByUsername(String email) throws UsernameNotFoundExcep
 
 String password = new BCryptPasswordEncoder().encode("1234");
 
-if ("test@eni.fr".equals(normalized)) {
+if ("abaille@eni.fr".equals(normalized)) {
     return User.builder()
-        .username("test@eni.fr")
+        .username("abaille@eni.fr")
         .password(password)
         .roles("USER")
         .build();
