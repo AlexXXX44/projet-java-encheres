@@ -1,8 +1,12 @@
 package fr.eni.projetencheres.dal;
 
 import fr.eni.projetencheres.bo.ArticleVendu;
+import fr.eni.projetencheres.bo.Categorie;
+
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,6 +27,7 @@ public interface ArticleVenduRepository extends JpaRepository<ArticleVendu, Inte
                               @Param("noCategorie") Integer noCategorie);
 
     // autres méthodes inchangées
+    List<ArticleVendu> findByNoCategorie_Libelle(Integer noCategorie, PageRequest pageRequest);
 
     Page<ArticleVendu> findByNomArticleContainingIgnoreCase(String nomArticle, Pageable pageable);
 
@@ -30,4 +35,6 @@ public interface ArticleVenduRepository extends JpaRepository<ArticleVendu, Inte
     Page<ArticleVendu> findBynoCategorieAndNomArticleContainingIgnoreCase(
             Integer noCategorie, String nomArticle, Pageable pageable
     );
+
+    Slice<ArticleVendu> findByNoCategorie_NoCategorie(Integer noCategorie, PageRequest of);
 }

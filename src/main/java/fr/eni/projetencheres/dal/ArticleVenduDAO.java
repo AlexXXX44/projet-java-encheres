@@ -4,30 +4,20 @@ import java.util.List;
 
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ArticleVenduDAO {
-
-	void add(ArticleVendu a);
-
-	void modifier(ArticleVendu a);
+public interface ArticleVenduDAO extends JpaRepository<ArticleVendu, Integer> {
 
 	void delete(ArticleVendu nomArticle);
 
 	ArticleVendu findById(int noArticle);
 
-	List<ArticleVendu> findByCat(String libelle);
-
-	String trouvePseudoParNo(int no);
-
-	String trouveCategorieParNo(int no);
-
-	List<ArticleVendu> lstArticles();
-
-	List<Categorie> findAllCategories();
-
-	List<ArticleVendu> findArticles(int page, int size, String sortBy, String sortDir);
+	Page<ArticleVendu> findByNoCategorie_NoCategorie(Integer noCategorie, Pageable pageable);
 }
 
 

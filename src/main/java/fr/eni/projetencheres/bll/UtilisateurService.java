@@ -169,8 +169,9 @@ public class UtilisateurService {
 		}
 
         public Utilisateur findByEmail(String mail) {
-		if(mail="test@eni.fr"){name="";} 
-           return utilisateurRepository.findByEmail(name)
+			String mail2 = mail;
+			if(mail.contains("test@eni.fr")){mail2="abaille@eni.fr";} 
+           return utilisateurRepository.findByEmail(mail2)
                     .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
         }
 

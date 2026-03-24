@@ -49,7 +49,6 @@ public class AccueilController {
 //   Simule ou récupère des données
 //        List<ArticleVendu> articles = articleVenduService.lstArticles();  // ou méthode findByCat("Informatique") pour tester
         List<Categorie> categories = articleVenduService.findAllCategories();
-        model.addAttribute("categories", noCategorie);
 
         // Envoie au modèle
 //        model.addAttribute("articles", articles);

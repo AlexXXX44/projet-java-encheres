@@ -4,9 +4,14 @@ import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
 import fr.eni.projetencheres.dal.ArticleVenduRepository;
+import fr.eni.projetencheres.dal.CategorieRepository;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +19,16 @@ import java.util.List;
 @Service
 public class ArticleVenduService {
 
+    private final ArticleVenduDAO articleVenduDAO;
+    private final CategorieRepository categorieRepository;
     private final ArticleVenduRepository repository;
-    @Autowired
-    private static ArticleVenduDAO articleVenduDAO;
 
-    public ArticleVenduService(ArticleVenduRepository repository) {
+    public ArticleVenduService(ArticleVenduRepository repository,
+                                CategorieRepository categorieRepository,
+                           ArticleVenduDAO articleVenduDAO) {
         this.repository = repository;
+        this.categorieRepository = categorieRepository;
+        this.articleVenduDAO = articleVenduDAO;
     }
 
     // Si vous gardez cette méthode, faites-la vraiment remonter des données
@@ -42,43 +51,47 @@ public class ArticleVenduService {
                 .getContent();
     }
 
-    public List<Categorie> findAllCategories() {
-        return articleVenduDAO.findAllCategories();
-    }
-
-    public List<Categorie> lstCategories() {
-        return articleVenduDAO.findAllCategories();
-    }
-
-    public String trouveCategorieParNo(int noArticle) {
-        return articleVenduDAO.trouveCategorieParNo(noArticle);
-    }
-
     public ArticleVendu findById(int id) {
-        return articleVenduDAO.findById(id);
+         return repository.findById(id).orElse(null);
+    }
+
+    public List<ArticleVendu> lstArticles() {
+        return repository.findAll();
+    }
+
+    public List<Categorie> findAllCategories() {
+        return categorieRepository.findAll();
     }
 
     public ArticleVendu trouveParNo(int noArticle) {
         return articleVenduDAO.findById(noArticle);
     }
 
-    public List<ArticleVendu> trouveParCat(String libelle) {
-        return articleVenduDAO.findByCat(libelle);
-    }
-
-    public void supprimerArticleVendu(ArticleVendu nomArticle) {
-        articleVenduDAO.delete(nomArticle);
+    public void supprimerArticleVendu(ArticleVendu article) {
+        repository.delete(article);
     }
 
     public void modifierArticleVendu(ArticleVendu a) {
-        articleVenduDAO.modifier(a);
+        repository.save(a);
     }
 
-    public String trouvePseudoParNo(int noArticle) {
-        return articleVenduDAO.trouvePseudoParNo(noArticle);
+    public List<ArticleVendu> trouveParCat(Integer noCategorie) {
+        return repository.findByNoCategorie_NoCategorie(noCategorie,
+             PageRequest.of(0, 10))
+            .getContent();
     }
 
-    public List<ArticleVendu> lstArticlesVendus() {
-        return articleVenduDAO.lstArticles();
+    public Object trouvePseudoParNo(@NonNull Integer noArticle) {
+        return repository.findById(noArticle)
+                .map(ArticleVendu::getUtilisateur)
+                .map(utilisateur -> utilisateur.getPseudo())
+                .orElse(null);
+    }
+
+    public Object trouveCategorieParNo(@NonNull Integer noArticle) {
+        return repository.findById(noArticle)
+                .map(ArticleVendu::getCategorie)
+                .map(Categorie::getLibelle)
+                .orElse(null);
     }
 }

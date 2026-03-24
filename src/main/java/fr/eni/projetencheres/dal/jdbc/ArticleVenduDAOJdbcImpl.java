@@ -195,7 +195,13 @@ import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Utilisateur;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
+
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuery;
 import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -204,6 +210,8 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 @Repository
 public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
@@ -214,7 +222,6 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public ArticleVendu findById(int noArticle) {
         String sql = "SELECT a.no_article, a.nom_article, a.description, a.date_fin_encheres, " +
                 "a.prix_initial, c.libelle AS categorie, u.pseudo " +
@@ -237,7 +244,6 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
     }
 
 
-    @Override
     public List<ArticleVendu> lstArticles() {
         String sql = """
         SELECT a.no_article, a.nom_article, a.description, a.etat_vente,
@@ -254,7 +260,6 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
     }
 
 
-    @Override
     public List<Categorie> findAllCategories() {
         String sql = "SELECT no_categorie, libelle FROM categories";
         return jdbcTemplate.query(sql, new CategorieRowMapper());
@@ -377,7 +382,6 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
 //        return articles;
 //    }
 
-    @Override
     public List<ArticleVendu> findArticles(int page, int size, String sortBy, String sortDir) {
         // Sécurité pour éviter les injections SQL dans sortBy / sortDir
         if (!sortBy.matches("^[a-zA-Z_]+$")) {
@@ -397,31 +401,212 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
     }
 
     // ⚠️ Les autres méthodes de ArticleVenduDAO sont à implémenter aussi
-    @Override
     public void add(ArticleVendu a) {}
 
-    @Override
     public void modifier(ArticleVendu a) {}
 
-    @Override
-    public void delete(ArticleVendu a) {}
-
-    @Override
-    public List<ArticleVendu> findByCat(String libelle) {
+    public List<ArticleVendu> findBynoCategorie(String libelle) {
         return List.of();
     }
 
-    @Override
     public String trouvePseudoParNo(int no) {
         return "";
     }
 
-    @Override
     public String trouveCategorieParNo(int no) {
         return "";
     }
 
     private final static String FIND_ALL_CATEGORIES = "SELECT no_categorie, libelle FROM categories";
+
+    @Override
+    public void flush() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'flush'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> S saveAndFlush(S entity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveAndFlush'");
+    }
+
+
+    @Override
+    public void delete(ArticleVendu nomArticle) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
+
+    
+    @Override
+    public Page<ArticleVendu> findByNoCategorie_NoCategorie(Integer noCategorie, Pageable pageable) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findByNoCategorie_NoCategorie'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> List<S> saveAllAndFlush(Iterable<S> entities) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveAllAndFlush'");
+    }
+
+    @Override
+    public void deleteAllInBatch(Iterable<ArticleVendu> entities) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteAllInBatch'");
+    }
+
+    @Override
+    public void deleteAllByIdInBatch(Iterable<Integer> ids) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteAllByIdInBatch'");
+    }
+
+    @Override
+    public void deleteAllInBatch() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteAllInBatch'");
+    }
+
+    @Override
+    public ArticleVendu getOne(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getOne'");
+    }
+
+    @Override
+    public ArticleVendu getById(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getById'");
+    }
+
+    @Override
+    public ArticleVendu getReferenceById(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getReferenceById'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> List<S> findAll(Example<S> example) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> List<S> findAll(Example<S> example, Sort sort) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> List<S> saveAll(Iterable<S> entities) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveAll'");
+    }
+
+    @Override
+    public List<ArticleVendu> findAll() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Override
+    public List<ArticleVendu> findAllById(Iterable<Integer> ids) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAllById'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> S save(S entity) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    }
+
+    @Override
+    public Optional<ArticleVendu> findById(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+    }
+
+    @Override
+    public boolean existsById(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'existsById'");
+    }
+
+    @Override
+    public long count() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'count'");
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+    }
+
+    @Override
+    public void deleteAllById(Iterable<? extends Integer> ids) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteAllById'");
+    }
+
+    @Override
+    public void deleteAll(Iterable<? extends ArticleVendu> entities) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteAll'");
+    }
+
+    @Override
+    public void deleteAll() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteAll'");
+    }
+
+    @Override
+    public List<ArticleVendu> findAll(Sort sort) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Override
+    public Page<ArticleVendu> findAll(Pageable pageable) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> Optional<S> findOne(Example<S> example) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findOne'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> Page<S> findAll(Example<S> example, Pageable pageable) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> long count(Example<S> example) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'count'");
+    }
+
+    @Override
+    public <S extends ArticleVendu> boolean exists(Example<S> example) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'exists'");
+    }
+
+    @Override
+    public <S extends ArticleVendu, R> R findBy(Example<S> example,
+            Function<FetchableFluentQuery<S>, R> queryFunction) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'findBy'");
+    }
 
 //    @Override
 //    public List<Categorie> findAllCategories() {

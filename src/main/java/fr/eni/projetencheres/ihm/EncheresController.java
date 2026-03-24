@@ -33,17 +33,14 @@ public class EncheresController {
 
     @GetMapping("/encheres")
     public String accueil(Model model) {
-        List<ArticleVendu> lstArticles = articleVenduService.lstArticlesVendus();
+        List<ArticleVendu> lstArticles = articleVenduService.lstArticles();
         List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
-        List<Categorie> lstCategories = articleVenduService.lstCategories();
+        List<Categorie> lstCategories = articleVenduService.findAllCategories();
         model.addAttribute("categories", lstCategories);
         for (Utilisateur u : lstUtilisateurs) {
             for (int j = 0; j < lstArticles.size(); j++) {
-//				System.out.println(u.getPseudo());
-                ArticleVendu a = articleVenduService.lstArticlesVendus().get(j);
-//				System.out.println(articleVenduService.trouvePseudoParNo(a.getNoArticle()));
+                ArticleVendu a = articleVenduService.lstArticles().get(j);
                 a.setUtilisateur(u);
-//				System.out.println(articleVenduService.trouveCategorieParNo(a.getNoArticle()));
                 for (Categorie c : lstCategories) {
                     if (articleVenduService.trouveCategorieParNo((Integer) a.getNoArticle()).equals(c.getLibelle())
                             && articleVenduService.trouvePseudoParNo((Integer) a.getNoArticle()).equals(u.getPseudo())) {
@@ -56,11 +53,11 @@ public class EncheresController {
             }
         }
 
-        List<ArticleVendu> articles = articleVenduService.trouveParCat("Informatique");
+        List<ArticleVendu> articles = articleVenduService.trouveParCat(1);
 // Affiche tous les articles
-//		for (ArticleVendu article : articles) {
-//			System.out.println(article);
-//		}
+		for (ArticleVendu article : articles) {
+			System.out.println(article);
+		}
         return "index";
     }
 

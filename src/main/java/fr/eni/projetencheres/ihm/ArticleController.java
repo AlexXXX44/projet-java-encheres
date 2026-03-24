@@ -89,11 +89,7 @@ public class ArticleController {
     //    return url;
     //}
 
-    @Autowired
-    private ArticleVenduDAO articleVenduDAO;
-
-    @Autowired
-    private ArticleVenduService articleVenduService;
+    private final ArticleVenduService articleVenduService;
 
     @GetMapping("/article/{id}")
     public String afficherDetails(@PathVariable("id") int id, Model model) {
@@ -121,7 +117,7 @@ public class ArticleController {
 
         model.addAttribute("currentPage", page);
         model.addAttribute("size", size);
-        model.addAttribute("articles", articleVenduDAO.lstArticles());
+        model.addAttribute("articles", articleVenduService.lstArticles());
         model.addAttribute("categories", List.of(
                 new Categorie(1, "Informatique"),
                 new Categorie(2, "Ameublement"),
@@ -131,8 +127,7 @@ public class ArticleController {
         return "index";
     }
 
-    public ArticleController(ArticleVenduDAO articleVenduDAO, ArticleVenduService articleVenduService) {
-        this.articleVenduDAO = articleVenduDAO;
+    public ArticleController(ArticleVenduService articleVenduService) {
         this.articleVenduService = articleVenduService;
     }
 
@@ -173,7 +168,7 @@ public class ArticleController {
         model.addAttribute("currentPage", page);
         model.addAttribute("size", size);
 
-//	List<ArticleVendu> articles = articleVenduDAO.findArticles(page, size, sortBy, sortDir);
+//	List<ArticleVendu> articles = repository.findArticles(page, size, sortBy, sortDir);
 //		model.addAttribute("articles", articles);
         // Ajoute aussi pagination info (page courante, taille, etc.) au modèle
 //		model.addAttribute("currentPage", page);
@@ -194,7 +189,7 @@ public class ArticleController {
 
     @GetMapping("/nouvelle_vente")
     public String nouvelleVente(Model model) {
-        List<Categorie> lstCategories = articleVenduService.lstCategories();
+        List<Categorie> lstCategories = articleVenduService.findAllCategories();
         model.addAttribute("categories", lstCategories);
         return "nouvelleVente";
     }
