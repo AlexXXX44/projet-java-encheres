@@ -2,6 +2,7 @@ package fr.eni.projetencheres.ihm;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import fr.eni.projetencheres.bll.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import fr.eni.projetencheres.bll.EnchereService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Utilisateur;
+import fr.eni.projetencheres.dal.UtilisateurRepository;
 
 @Controller
 @RequestMapping("/encheres")
@@ -66,18 +68,17 @@ public String faireEnchere(@RequestParam int noArticle,
                            Principal principal,
                            RedirectAttributes redirectAttributes) {
 
-    //try {
-
-        Utilisateur utilisateur = utilisateurService.findByPseudo(principal.getName());
-        ArticleVendu article = articleVenduService.findById(noArticle);
+    try {
+        Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
+        utilisateur = utilisateurService.findByEmailOrThrow(principal.getName());
     
+        ArticleVendu article = articleVenduService.findById(noArticle);
         enchereService.faireEnchere(utilisateur, article, montantEncheres);
-
         redirectAttributes.addFlashAttribute("message", "Enchère réussie !");
-    //} catch (Exception e) {
-    //    redirectAttributes.addFlashAttribute("error", e.getMessage());
-    //    return "redirect:/articles/" + noArticle; // Redirige vers la page de l'article en cas d'erreur
-    //}
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("error", e.getMessage());
+        return "redirect:/articles/" + noArticle; // Redirige vers la page de l'article en cas d'erreur
+    }
 
     return "redirect:/articles";
 }

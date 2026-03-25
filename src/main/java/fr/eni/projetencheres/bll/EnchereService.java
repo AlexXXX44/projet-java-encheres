@@ -27,10 +27,18 @@ public class EnchereService {
         this.utilisateurRepository = utilisateurRepository;
         this.enchereRepository = enchereRepository;
     }
-    
+ 
     public void faireEnchere(Utilisateur utilisateur, ArticleVendu article, int montant) {
 
-        System.out.println(this.enchereRepository.findTopByArticleOrderByMontantEnchereDesc(article));
+    if (utilisateur == null) {
+        throw new IllegalArgumentException("Utilisateur ne doit pas être null");
+    }
+
+    if (article == null) {
+        throw new IllegalArgumentException("Article ne doit pas être null");
+    }
+
+    System.out.println(this.enchereRepository.findTopByArticleOrderByMontantEnchereDesc(article));
     // 🔎 1. Récupérer la meilleure enchère actuelle
     Optional<Enchere> meilleure = (Optional<Enchere>) enchereRepository
             .findTopByArticleOrderByMontantEnchereDesc(article);

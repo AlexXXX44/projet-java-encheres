@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UtilisateurService {
@@ -159,19 +160,29 @@ public class UtilisateurService {
 			return saved;
 		}
 
-		public Utilisateur findByPseudo(String pseudo) {
-			return utilisateurRepository.findByPseudo(pseudo);
-//					.orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+		public Utilisateur findByPseudoOrThrow(String pseudo) {
+			Utilisateur user = utilisateurRepository.findByPseudo(pseudo);
+			if (user == null) {
+				throw new RuntimeException("Utilisateur non trouvé : " + pseudo);
+			}
+			return user;
 		}
+
+        public Utilisateur findByEmailOrThrow(String email) {
+			Utilisateur user = utilisateurRepository.findByEmail(email);
+			if (user == null) {
+				throw new RuntimeException("Utilisateur non trouvé : " + email);
+			}
+			return user;
+        }
 
 		public List<Utilisateur> findAll() {
 			return utilisateurRepository.findAll();
 		}
 
-        public Utilisateur findByEmail(String mail) {
-			 
-           return utilisateurRepository.findByEmail(mail)
-                    .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+        public Utilisateur findByEmail(String name) {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
         }
 
 		//	@Transactional
