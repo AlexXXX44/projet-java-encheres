@@ -39,7 +39,7 @@ System.out.println("🔥 DataInitializer exécuté !");
             }
             final String emailCible = "abaille@eni.fr";
             // Si absent, on insère un utilisateur de démo avec des valeurs conformes aux contraintes Bean Validation
-            if (userRepo.findByEmail(emailCible) != null
+            if (userRepo.findByEmail(emailCible) == null
             //    .isEmpty()
             ){
                 Utilisateur u = new Utilisateur();

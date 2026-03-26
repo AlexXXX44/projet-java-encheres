@@ -83,7 +83,7 @@ public class ArticleVenduService {
 
     public Object trouvePseudoParNo(@NonNull Integer noArticle) {
         return repository.findById(noArticle)
-                .map(ArticleVendu::getUtilisateur)
+                .map(ArticleVendu::getVendeur)
                 .map(utilisateur -> utilisateur.getPseudo())
                 .orElse(null);
     }

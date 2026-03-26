@@ -37,7 +37,7 @@ public class ArticleVendu {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "utilisateur", referencedColumnName = "no_utilisateur", nullable = false)
-	private Utilisateur utilisateur;
+	private Utilisateur vendeur;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "no_categorie", referencedColumnName = "no_categorie", nullable = false)
@@ -112,10 +112,6 @@ public class ArticleVendu {
 		this.prixVente = prixVente;
 	}
 
-	public void setUtilisateur(Utilisateur noUtilisateur) {
-		this.utilisateur = noUtilisateur;
-	}
-
 	public void setNoCategorie(Categorie noCategorie) {
 		this.noCategorie = noCategorie;
 	}
@@ -128,15 +124,15 @@ public class ArticleVendu {
 		return noCategorie;
 	}
 
-	public Utilisateur getUtilisateur() {
-		return utilisateur;
-	}
-
 	public void setCategorie(Categorie noCategorie) {
 		this.noCategorie = noCategorie;
 	}
 
+	public Utilisateur getVendeur() {
+		return vendeur;
+	}
+
     public void setVendeur(Utilisateur u) {
-            this.utilisateur = u;
+            this.vendeur = u;
 	   }
 }

@@ -5,20 +5,15 @@ import fr.eni.projetencheres.bll.EnchereService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Enchere;
-import fr.eni.projetencheres.bo.Utilisateur;
-import fr.eni.projetencheres.dal.ArticleVenduDAO;
 import fr.eni.projetencheres.dal.ArticleVenduRepository;
 import fr.eni.projetencheres.dal.CategorieRepository;
 import fr.eni.projetencheres.dal.EnchereRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +30,6 @@ public class ArticleController {
 
     @Autowired
     private EnchereRepository enchereRepo;
-    @Autowired
-    private EnchereService enchereService;
-
     @GetMapping
     public String listerArticles(@RequestParam(required = false) String keyword,
                                  @RequestParam(required = false) Integer noCategorie,
@@ -91,7 +83,7 @@ public class ArticleController {
 
     private final ArticleVenduService articleVenduService;
 
-    @GetMapping("/article/{id}")
+    @GetMapping("/{id}")
     public String afficherDetails(@PathVariable("id") int id, Model model) {
         ArticleVendu article = articleVenduService.findById(id);
         if (article == null) {

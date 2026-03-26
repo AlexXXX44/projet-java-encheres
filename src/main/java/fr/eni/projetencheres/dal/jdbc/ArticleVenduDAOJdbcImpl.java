@@ -238,7 +238,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
             article.setDateFinEncheres(rs.getDate("date_fin_encheres").toLocalDate());
             article.setMiseAPrix(rs.getInt("mise_a_prix"));
             article.getCategorie().setLibelle(rs.getString("no_categorie")); // il faut avoir cet attribut ou un setter
-            article.getUtilisateur().setPseudo(rs.getString("pseudo")); // idem, à prévoir dans ton BO
+            article.getVendeur().setPseudo(rs.getString("pseudo"));
             return article;
         });
     }
@@ -300,7 +300,7 @@ public class ArticleVenduDAOJdbcImpl implements ArticleVenduDAO {
             Utilisateur u = new Utilisateur();
             u.setNoUtilisateur(rs.getInt("no_utilisateur"));
             u.setPseudo(rs.getString("pseudo_vendeur")); // alias SQL
-            a.setUtilisateur(u);
+            a.setVendeur(u);
 
             // ✅ Associer catégorie
             Categorie c = new Categorie();
