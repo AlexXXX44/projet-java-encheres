@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UtilisateurService {
@@ -37,6 +36,8 @@ public class UtilisateurService {
         u.setMotDePasse(passwordEncoder.encode(dto.getMotDePasse()));
         u.setEmail(dto.getEmail());
         u.setCredit(100);
+		String tel = u.getTelephone().replaceAll("\\D", "");
+		u.setTelephone(tel);
         utilisateurRepository.save(u);
 
         // Sauvegarde du rôle

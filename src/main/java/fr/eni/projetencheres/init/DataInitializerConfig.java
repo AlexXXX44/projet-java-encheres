@@ -49,8 +49,8 @@ System.out.println("🔥 DataInitializer exécuté !");
                 u.setNom("Baille");
                 u.setPrenom("Alex");
                 u.setEmail(emailCible);
-                // Téléphone au format 10 chiffres (sans espaces)
-                u.setTelephone("0102030405");
+                String tel = "01.02.03.04.05".replaceAll("\\D", "");
+                u.setTelephone(tel);
                 // Adresse/Ville plausibles
                 u.setRue("10 Rue des Fleurs");
                 u.setVille("Nantes");
@@ -61,7 +61,12 @@ System.out.println("🔥 DataInitializer exécuté !");
                 u.setCredit(0);
                 u.setAdministrateur(false);
 
-                userRepo.save(u);
+                try {
+                    System.out.println("Telephone = " + u.getTelephone());
+                    userRepo.save(u);
+                } catch (Exception e) {
+                    System.err.println("Erreur lors de la sauvegarde de l'utilisateur: " + e.getMessage());
+                }
 
             // 📦 Article
             ArticleVendu article = new ArticleVendu();

@@ -31,6 +31,8 @@ public class UtilisateurController {
         u.setEmail(email);
         u.setMotDePasse(passwordEncoder.encode(motDePasse));
         u.setCredit(100); // bonus initial
+        String tel = u.getTelephone().replaceAll("\\D", "");
+        u.setTelephone(tel);
         utilisateurRepo.save(u);
         return "redirect:/login";
     }

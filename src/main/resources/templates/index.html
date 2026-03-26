@@ -108,6 +108,10 @@
                         <a th:href="@{'/articles/' + ${article.noArticle}}"
                             class="btn btn-outline-primary btn-sm">Voir détails</a>
                     </td>
+                    <td>
+                        <a th:href="@{'/encheres/article?noArticle=' + ${article.noArticle}}"
+                            class="btn btn-outline-primary btn-sm">Enchérir</a>
+                    </td>
                 </div>
             </div>
         </div>

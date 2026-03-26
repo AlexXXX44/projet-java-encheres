@@ -36,7 +36,7 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
 	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
-	@Pattern(regexp = "^\\d{2}(\\.\\d{2}){4}$", message = "Téléphone non valide")
+	@Pattern(regexp = "0[1-9][0-9]{8}", message = "Téléphone non valide")
 	@Column(name = "telephone")
 	private String telephone;
 
@@ -73,15 +73,6 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
 	@Override public boolean isCredentialsNonExpired() { return true; }
 	@Override public boolean isEnabled() { return true; }
 
-	@Override
-	public String getPassword() {
-		return "";
-	}
-
-	@Override
-	public String getUsername() {
-		return "";
-	}
 
 	/**
 	 * constructeurs
@@ -210,11 +201,23 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
 	}
 
 	public boolean isAdmin() {
-		return false;
+		return this.administrateur;
 	}
 
 	public int getNoUtilisateur() {
         return noUtilisateur;
     }
+
+	@Override
+	public String getPassword() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+	}
+
+	@Override
+	public String getUsername() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
+	}
 }
 

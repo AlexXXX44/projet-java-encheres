@@ -24,8 +24,8 @@ public class EncheresSecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/", true)
-                        .loginPage("/login")
+                        .defaultSuccessUrl("/articles", true)
+                        //.loginPage("/login")
                         .permitAll()
                 )
                 .logout(logout -> logout
