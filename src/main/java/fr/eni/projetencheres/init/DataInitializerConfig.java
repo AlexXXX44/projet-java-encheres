@@ -49,8 +49,8 @@ System.out.println("🔥 DataInitializer exécuté !");
                 u.setNom("Baille");
                 u.setPrenom("Alex");
                 u.setEmail(emailCible);
-                // Téléphone au format 10 chiffres (sans points/espaces si votre @Pattern l'exige)
-                u.setTelephone("0102030405");
+                // Téléphone au format 10 chiffres (sans espaces si votre @Pattern l'exige)
+                u.setTelephone("01.02.03.04.05");
                 // Adresse/Ville plausibles
                 u.setRue("10 Rue des Fleurs");
                 u.setVille("Nantes");

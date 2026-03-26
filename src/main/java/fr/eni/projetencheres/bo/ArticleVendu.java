@@ -137,7 +137,6 @@ public class ArticleVendu {
 	}
 
     public void setVendeur(Utilisateur u) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setVendeur'");
-    }
+            this.utilisateur = u;
+	   }
 }

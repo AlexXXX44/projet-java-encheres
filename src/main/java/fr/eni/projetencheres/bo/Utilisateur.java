@@ -33,7 +33,7 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
 	private String prenom;
 
 	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@(.+)$", message = "Email non valide")
-	@Column(name = "email", nullable = false)
+	@Column(name = "email", nullable = false, unique = true)
 	private String email;
 
 	@Pattern(regexp = "^\\d{2}(\\.\\d{2}){4}$", message = "Téléphone non valide")

@@ -181,8 +181,7 @@ public class UtilisateurService {
 		}
 
         public Utilisateur findByEmail(String name) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'findByEmail'");
+			return utilisateurRepository.findByEmail(name);
         }
 
 		//	@Transactional
