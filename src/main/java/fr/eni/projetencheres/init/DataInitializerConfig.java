@@ -44,13 +44,13 @@ System.out.println("🔥 DataInitializer exécuté !");
             ){
                 Utilisateur u = new Utilisateur();
                 // Pseudo alphanumérique (3-20), sans caractères spéciaux ni espaces
-                u.setPseudo("abaille44");
+                u.setPseudo("alex44");
                 // Nom/Prénom alphabétiques usuels
                 u.setNom("Baille");
                 u.setPrenom("Alex");
                 u.setEmail(emailCible);
-                // Téléphone au format 10 chiffres (sans espaces si votre @Pattern l'exige)
-                u.setTelephone("01.02.03.04.05");
+                // Téléphone au format 10 chiffres (sans espaces)
+                u.setTelephone("0102030405");
                 // Adresse/Ville plausibles
                 u.setRue("10 Rue des Fleurs");
                 u.setVille("Nantes");

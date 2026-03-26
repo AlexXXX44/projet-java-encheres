@@ -2,8 +2,6 @@ package fr.eni.projetencheres.ihm;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
-
 import fr.eni.projetencheres.bll.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +17,6 @@ import fr.eni.projetencheres.bll.EnchereService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Utilisateur;
-import fr.eni.projetencheres.dal.UtilisateurRepository;
 
 @Controller
 @RequestMapping("/encheres")
@@ -34,7 +31,7 @@ public class EncheresController {
     @Autowired
     private EnchereService enchereService;
 
-    @GetMapping("/encheres")
+    @GetMapping("/")
     public String accueil(Model model) {
         List<ArticleVendu> lstArticles = articleVenduService.lstArticles();
         List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
@@ -62,11 +59,11 @@ public class EncheresController {
         return "index";
     }
 
-@PostMapping("/article")
-public String faireEnchere(@RequestParam int noArticle,
-                           @RequestParam int montantEncheres,
-                           Principal principal,
-                           RedirectAttributes redirectAttributes) {
+    @PostMapping("/article")
+    public String faireEnchere(@RequestParam int noArticle,
+                            @RequestParam int montantEncheres,
+                            Principal principal,
+                            RedirectAttributes redirectAttributes) {
 
     //try {
         Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
