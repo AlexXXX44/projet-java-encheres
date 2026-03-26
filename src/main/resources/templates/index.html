@@ -97,8 +97,8 @@
                         <li>Prix : <strong th:text="${article.prixVente + ' €'}">0 €</strong></li>
                         <li>Fin : <span th:text="${article.dateFinEncheres}">date</span></li>
                         <li>Catégorie : <span th:text="${article.noCategorie}">cat</span></li>
-                        <li>Vendeur : <span th:text="${article.utilisateur?.pseudo ?: '—'}">pseudo</span></li>
-                        <li>Vendeur : <span th:text="${article.Utilisateur}">pseudo</span></li>
+                        <li>Vendeur : <span th:text="${article.vendeur?.pseudo ?: '—'}">pseudo</span></li>
+                        <li>Vendeur : <span th:text="${article.vendeur}">pseudo</span></li>
                     </ul>
                 </div>
 
