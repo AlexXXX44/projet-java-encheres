@@ -137,13 +137,11 @@ public class Enchere {
         return article;
     }
 
-    public void setArticleVendu(ArticleVendu article2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setArticleVendu'");
+    public void setArticleVendu(ArticleVendu article) {
+        this.article = article;
     }
 
-    public void setUtilisateur(Utilisateur utilisateur2) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setUtilisateur'");
-    }
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }    
 }

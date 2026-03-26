@@ -105,10 +105,9 @@
                 <div class="card-footer text-center">
                     <td th:text="${article.miseAPrix} + ' €'"></td>
                     <td>
-                        <a th:href="@{'/article/' + ${article.noArticle}}">Voir détails</a>
+                        <a th:href="@{'/articles/' + ${article.noArticle}}"
+                            class="btn btn-outline-primary btn-sm">Voir détails</a>
                     </td>
-                    <a th:href="@{'/article/' + ${article.noArticle}}" class="btn btn-outline-primary btn-sm">Voir
-                        détails</a>
                 </div>
             </div>
         </div>
