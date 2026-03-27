@@ -7,6 +7,7 @@ import fr.eni.projetencheres.dal.ArticleVenduRepository;
 import fr.eni.projetencheres.dal.CategorieRepository;
 import fr.eni.projetencheres.dal.UtilisateurRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.ConstraintViolationException;
 
 import java.time.LocalDate;
 
@@ -15,14 +16,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-@Configuration
+//@Configuration
 public class DataInitializerConfig {
     @PostConstruct
     public void test() {
     System.out.println("🔥 Classe DataInitializer chargée !");
     }
 
-    @Bean
+    //@Bean
     CommandLineRunner initData(UtilisateurRepository userRepo,
                                CategorieRepository catRepo,
                                ArticleVenduRepository articleRepo) {
@@ -63,7 +64,15 @@ System.out.println("🔥 DataInitializer exécuté !");
 
                 try {
                     System.out.println("Telephone = " + u.getTelephone());
-                    userRepo.save(u);
+                    try {
+                        userRepo.save(u);
+                    } catch (ConstraintViolationException e) {
+                        e.getConstraintViolations().forEach(v -> {
+                            System.out.println("Champ: " + v.getPropertyPath());
+                            System.out.println("Erreur: " + v.getMessage());
+                            System.out.println("Valeur: " + v.getInvalidValue());
+                        });
+                    }
                 } catch (Exception e) {
                     System.err.println("Erreur lors de la sauvegarde de l'utilisateur: " + e.getMessage());
                 }

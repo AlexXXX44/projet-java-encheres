@@ -109,8 +109,17 @@
                             class="btn btn-outline-primary btn-sm">Voir détails</a>
                     </td>
                     <td>
-                        <a th:href="@{'/encheres/article?noArticle=' + ${article.noArticle}}"
-                            class="btn btn-outline-primary btn-sm">Enchérir</a>
+        <!-- Formulaire enchère -->
+                    <form th:action="@{/encheres/article}" method="post">
+                        <input type="hidden" name="noArticle" th:value="${a.noArticle}"/>
+                        <label>
+                            <input type="number" name="montantEncheres" placeholder="Montant"/>
+                        </label>
+                        <input type="hidden" name="keyword" th:value="${keyword}"/>
+                        <input type="hidden" name="noCategorie" th:value="${noCategorie}"/>
+                        <!--    <input type="number" name="noUtilisateur" placeholder="User ID"/>-->
+                        <button type="submit">Enchérir</button>
+                    </form>
                     </td>
                 </div>
             </div>
