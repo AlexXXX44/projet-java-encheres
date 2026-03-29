@@ -1,7 +1,6 @@
 package fr.eni.projetencheres.ihm;
 
 import fr.eni.projetencheres.bll.ArticleVenduService;
-import fr.eni.projetencheres.bll.EnchereService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bo.Enchere;
@@ -57,30 +56,6 @@ public class ArticleController {
     }
 
     // ✅ Nouvelle méthode pour enchérir
-    //@PostMapping("/enchere")
-    //public String faireEnchere(@AuthenticationPrincipal Utilisateur utilisateur,
-    //                           @RequestParam Integer noUtilisateur,
-    //                           @RequestParam Integer noArticle,
-    //                           @RequestParam int montantEnchere,
-    //                           @RequestParam(required = false) String keyword,
-    //                           @RequestParam(required = false) Integer noCategorie,
-    //                           RedirectAttributes redirectAttrs) {
-    //    try {
-    //        enchereService.faireEnchere(utilisateur.getNoUtilisateur(), noArticle, montantEnchere);
-    //        redirectAttrs.addFlashAttribute("message", "Enchère réussie !");
-    //    } catch (Exception e) {
-    //        redirectAttrs.addFlashAttribute("error", e.getMessage());
-    //    }
-
-    //    String url = "redirect:/articles";
-    //    if (keyword != null || noCategorie != null) {
-    //        url += "?";
-    //        if (keyword != null) url += "keyword=" + keyword + "&";
-    //        if (noCategorie != null) url += "categorieId=" + noCategorie;
-    //    }
-    //    return url;
-    //}
-
     private final ArticleVenduService articleVenduService;
 
     @GetMapping("/{id}")
@@ -93,13 +68,6 @@ public class ArticleController {
         model.addAttribute("article", article);
         return "article-details"; // nom du fichier HTML dans templates
     }
-
-//	@GetMapping("/article/{id}")
-//	public String afficherDetails(@PathVariable("id") int id, Model model) {
-//		ArticleVendu article = articleVenduService.getArticleById(id);
-//		model.addAttribute("article", article);
-//		return "details"; // Thymeleaf view
-//	}
 
     @GetMapping("/articles")
     public String index(
@@ -123,29 +91,6 @@ public class ArticleController {
         this.articleVenduService = articleVenduService;
     }
 
-//	public String index(
-//			@RequestParam(defaultValue = "1") int page,
-//			@RequestParam(defaultValue = "5") int size,
-//			@RequestParam(required = false) String categorie, Model model) {
-//			 Récupère toutes les catégories
-//			List<Categorie> categories = articleVenduDAO.findAllCategories();
-//			model.addAttribute("categories", categories);
-
-// Si catégorie choisie, on filtre
-//			List<ArticleVendu> articles;
-//			if (categorie != null && !categorie.isEmpty()) {
-//				articles = articleVenduDAO.findByCat(categorie);
-//			} else {
-//				articles = articleVenduDAO.lstArticles();
-//			}
-//			model.addAttribute("articles", articles);
-//			model.addAttribute("currentPage", page);
-//			model.addAttribute("size", size);
-//
-//			return "index";
-//		}
-
-
     @GetMapping("/test")
     public String test(
             @RequestParam(defaultValue = "1") int page,
@@ -160,14 +105,6 @@ public class ArticleController {
         model.addAttribute("currentPage", page);
         model.addAttribute("size", size);
 
-//	List<ArticleVendu> articles = repository.findArticles(page, size, sortBy, sortDir);
-//		model.addAttribute("articles", articles);
-        // Ajoute aussi pagination info (page courante, taille, etc.) au modèle
-//		model.addAttribute("currentPage", page);
-//		model.addAttribute("pageSize", size);
-//		model.addAttribute("sortBy", sortBy);
-//		model.addAttribute("sortDir", sortDir);
-//
         // Categories + autres attributs
 
         return "index";
@@ -200,18 +137,9 @@ public class ArticleController {
             model.addAttribute("article", a);
         } else {
             articleVenduService.modifierArticleVendu(a);
-             ln(a);
             model.addAttribute("article", a);
             return "/";
         }
         return null;
     }
-
-    /*
-     * @PostMapping("/ajout") String ajout(@ModelAttribute("article") @Valid
-     * ArticleVendu article, BindingResult br, Model model) throws MetierException {
-     * String retour = "redirect:/"; if (br.hasErrors()) { retour = "creerArticle";
-     * model.addAttribute("article", article); } else {
-     * articleService.ajouterArticleVendu(article); } return retour; }
-     */
 }

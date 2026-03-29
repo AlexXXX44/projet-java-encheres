@@ -38,7 +38,6 @@ public class EnchereService {
         throw new IllegalArgumentException("Article ne doit pas être null");
     }
 
-     ln(this.enchereRepository.findTopByArticleOrderByMontantEnchereDesc(article));
     // 🔎 1. Récupérer la meilleure enchère actuelle
     Optional<Enchere> meilleure = (Optional<Enchere>) enchereRepository
             .findTopByArticleOrderByMontantEnchereDesc(article);

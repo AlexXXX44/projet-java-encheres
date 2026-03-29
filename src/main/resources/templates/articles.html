@@ -101,9 +101,9 @@
                     <span th:text="${e.montantEnchere}">0</span> points
                     <span th:if="${e}" style="color:green;">(GAGNANT)</span>
                 </li>
-                <li th:if="${#lists.isEmpty(encheresParArticle[a.noArticle])}">
+                <!-- <li th:if="${#lists.isEmpty(encheresParArticle[a.noArticle])}">
                     Pas encore d'enchères.
-                </li>
+                </li> -->
             </ul>
         </td>
     </tr>
