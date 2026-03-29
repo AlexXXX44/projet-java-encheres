@@ -29,6 +29,8 @@ public class ArticleController {
 
     @Autowired
     private EnchereRepository enchereRepo;
+    private ArticleVenduService articleVenduService;
+
     @GetMapping
     public String listerArticles(@RequestParam(required = false) String keyword,
                                  @RequestParam(required = false) Integer noCategorie,
@@ -55,11 +57,8 @@ public class ArticleController {
         return "articles";
     }
 
-    // ✅ Nouvelle méthode pour enchérir
-    private final ArticleVenduService articleVenduService;
-
     @GetMapping("/{id}")
-    public String afficherDetails(@PathVariable("id") int id, Model model) {
+    public String afficherDetails(@PathVariable int id, Model model) {
         ArticleVendu article = articleVenduService.findById(id);
         if (article == null) {
             // redirection si article introuvable

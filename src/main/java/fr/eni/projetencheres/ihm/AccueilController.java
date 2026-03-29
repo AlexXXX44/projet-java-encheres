@@ -1,6 +1,5 @@
 package fr.eni.projetencheres.ihm;
 
-import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.bll.ArticleVenduService;
 import org.springframework.stereotype.Controller;
@@ -23,8 +22,8 @@ public class AccueilController {
     public String index(
             @RequestParam(defaultValue = "1") int currentPage,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(name = "keyword", defaultValue = "") String keyword,
-            @RequestParam(name = "noCategorie", required = false) Integer noCategorie,
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(required = false) Integer noCategorie,
             Model model) {
 
         var articles = articleVenduService.search(keyword, noCategorie, currentPage, size);

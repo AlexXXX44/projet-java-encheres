@@ -5,12 +5,8 @@ import fr.eni.projetencheres.bo.Categorie;
 import fr.eni.projetencheres.dal.ArticleVenduDAO;
 import fr.eni.projetencheres.dal.ArticleVenduRepository;
 import fr.eni.projetencheres.dal.CategorieRepository;
-import jakarta.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 

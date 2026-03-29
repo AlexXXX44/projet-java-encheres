@@ -1,7 +1,5 @@
 package fr.eni.projetencheres.config.security;
 
-import fr.eni.projetencheres.bll.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,8 +22,8 @@ public class EncheresSecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/articles", true)
-                        //.loginPage("/login")
+                        .defaultSuccessUrl("/", false)
+                        .loginPage("/login")
                         .permitAll()
                 )
                 .logout(logout -> logout
