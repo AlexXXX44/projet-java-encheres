@@ -42,8 +42,8 @@ public class EncheresController {
                 ArticleVendu a = articleVenduService.lstArticles().get(j);
                 a.setVendeur(u);
                 for (Categorie c : lstCategories) {
-                    if (articleVenduService.trouveCategorieParNo((Integer) a.getNoArticle()).equals(c.getLibelle())
-                            && articleVenduService.trouvePseudoParNo((Integer) a.getNoArticle()).equals(u.getPseudo())) {
+                    if (articleVenduService.trouveCategorieParNo(a.getNoArticle()).equals(c.getLibelle())
+                            && articleVenduService.trouvePseudoParNo(a.getNoArticle()).equals(u.getPseudo())) {
                         a.setCategorie(c);
                         model.addAttribute("articleVendu", a);
                     }

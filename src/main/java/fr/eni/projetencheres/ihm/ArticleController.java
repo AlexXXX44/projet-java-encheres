@@ -37,11 +37,11 @@ public class ArticleController {
         List<Categorie> categories = categorieRepo.findAll();
 
         // Charger les enchères existantes par article
-        Map<Long, List<Enchere>> encheresParArticle = new HashMap<>();
+        Map<Integer, List<Enchere>> encheresParArticle = new HashMap<>();
         List<Enchere> ench = null;
         for (ArticleVendu a : articles) {
             ench = enchereRepo.findByArticleOrderByMontantEnchereDesc(a);
-            encheresParArticle.put((long) a.getNoArticle(), ench);
+            encheresParArticle.put(a.getNoArticle(), ench);
         }
 
         model.addAttribute("articles", articles);
