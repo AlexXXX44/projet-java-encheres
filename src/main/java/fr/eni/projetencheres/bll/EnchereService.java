@@ -1,10 +1,9 @@
 package fr.eni.projetencheres.bll;
 
 import java.time.LocalDate;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,68 +14,83 @@ import fr.eni.projetencheres.dal.UtilisateurRepository;
 import fr.eni.projetencheres.dal.EnchereRepository;
 
 @Service
-@Transactional
 public class EnchereService {
     
     private EnchereRepository enchereRepository;
     private UtilisateurRepository utilisateurRepository;
 
-    @Autowired
     public EnchereService(UtilisateurRepository utilisateurRepository,
         EnchereRepository enchereRepository) {
         this.utilisateurRepository = utilisateurRepository;
         this.enchereRepository = enchereRepository;
     }
  
+    @Transactional
     public void faireEnchere(Utilisateur utilisateur, ArticleVendu article, int montant) {
 
-    if (utilisateur == null) {
-        throw new IllegalArgumentException("Utilisateur ne doit pas être null");
-    }
+        if (utilisateur == null) {
+            throw new IllegalArgumentException("Utilisateur ne doit pas être null");
+        }
 
-    if (article == null) {
-        throw new IllegalArgumentException("Article ne doit pas être null");
-    }
+        if (article == null) {
+            throw new IllegalArgumentException("Article ne doit pas être null");
+        }
 
-    // 🔎 1. Récupérer la meilleure enchère actuelle
-    Optional<Enchere> meilleure = (Optional<Enchere>) enchereRepository
+        //int prixActuel = meilleure.map(Enchere::getMontantEnchere)
+        //                          .orElse(article.getMiseAPrix());    
+
+        // 1. Vérifier montant minimum
+        int prixActuel = getPrixActuel(article);
+
+        if (montant <= prixActuel) {
+            throw new RuntimeException("Montant trop bas");
+        }
+
+        // 2. Vérifier crédit
+        if (utilisateur.getCredit() < montant) {
+            throw new RuntimeException("Crédit insuffisant");
+        }
+            
+        // 🔎 3. Récupérer la meilleure enchère actuelle
+        Enchere meilleure = (Enchere) enchereRepository
+                .findTopByArticleOrderByMontantEnchereDesc(article);
+
+        // 4. Rembourser ancien enchérisseur
+        if (meilleure != null) {
+            Utilisateur ancien = meilleure.getUtilisateur();
+
+            ancien.setCredit(ancien.getCredit() + meilleure.getMontantEnchere());
+            utilisateurRepository.save(ancien);
+        }
+
+        // 5. Déduire crédit nouveau
+        utilisateur.setCredit(utilisateur.getCredit() - montant);
+        utilisateurRepository.save(utilisateur);
+
+        // 6. Créer enchère
+        Enchere enchere = new Enchere();
+        enchere.setArticleVendu(article);
+        enchere.setUtilisateur(utilisateur);
+        enchere.setMontantEnchere(montant);
+        enchere.setDateEnchere(LocalDate.now());
+
+        enchereRepository.save(enchere);
+
+        if (meilleure != null && meilleure.getUtilisateur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+            throw new RuntimeException("Vous êtes déjà le meilleur enchérisseur");
+        }
+
+        if (meilleure != null && meilleure.getUtilisateur().getNoUtilisateur() == utilisateur.getNoUtilisateur()) {
+            throw new RuntimeException("Vous êtes déjà le meilleur enchérisseur");
+        }
+}
+
+    public int getPrixActuel(ArticleVendu article) {
+        Enchere meilleure = (Enchere) enchereRepository
             .findTopByArticleOrderByMontantEnchereDesc(article);
 
-    int prixActuel = meilleure.map(Enchere::getMontantEnchere)
-                              .orElse(article.getMiseAPrix());
-
-    // ❌ montant insuffisant
-    if (montant <= prixActuel) {
-        throw new RuntimeException("Montant insuffisant !");
-    }
-
-    utilisateur = utilisateurRepository.findByEmail("abaille@eni.fr");
-    if (utilisateur == null) {
-        throw new RuntimeException("Utilisateur introuvable !");
-    }
-    int credit = utilisateur.getCredit();
-    // ❌ pas assez de crédits
-    if (utilisateur.getCredit() < montant) {
-        throw new RuntimeException("Crédits insuffisants !");
-    }
-
-    // 🔁 rembourser ancien meilleur enchérisseur
-    if (meilleure.isPresent()) {
-        Enchere ancienne = meilleure.get();
-        Utilisateur ancienUser = ancienne.getUtilisateur();
-        ancienUser.setCredit(ancienUser.getCredit() + ancienne.getMontantEnchere());
-    }
-
-    // 💸 débiter le nouvel utilisateur
-    utilisateur.setCredit(utilisateur.getCredit() - montant);
-
-    // 💾 enregistrer enchère
-    Enchere enchere = new Enchere();
-    enchere.setArticleVendu(article);
-    enchere.setUtilisateur(utilisateur);
-    enchere.setMontantEnchere(montant);
-    enchere.setDateEnchere(LocalDate.now());
-
-    enchereRepository.save(enchere);
+        return (meilleure != null) 
+         ? meilleure.getMontantEnchere()
+         : article.getMiseAPrix();
     }
 }

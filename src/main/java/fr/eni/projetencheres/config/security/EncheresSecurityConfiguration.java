@@ -23,7 +23,7 @@ public class EncheresSecurityConfiguration {
                 )
                 .formLogin(form -> form
                         .defaultSuccessUrl("/", false)
-                        .loginPage("/login")
+                        //.loginPage("/login")
                         .permitAll()
                 )
                 .logout(logout -> logout

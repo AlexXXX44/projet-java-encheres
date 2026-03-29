@@ -16,5 +16,5 @@ public interface EnchereRepository extends JpaRepository<Enchere, Integer> {
 
     List<Enchere> findByArticleOrderByMontantEnchereDesc(ArticleVendu a);
 
-    java.util.Optional<Enchere> findTopByArticleOrderByMontantEnchereDesc(ArticleVendu article);
+    Enchere findTopByArticleOrderByMontantEnchereDesc(ArticleVendu article);
 }
