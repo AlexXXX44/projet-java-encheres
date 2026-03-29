@@ -52,10 +52,7 @@ public class EncheresController {
         }
 
         List<ArticleVendu> articles = articleVenduService.trouveParCat(1);
-        // Affiche tous les articles
-		for (ArticleVendu article : articles) {
-			System.out.println(article);
-		}
+        model.addAttribute("articles", articles);
         return "index";
     }
 
@@ -65,17 +62,17 @@ public class EncheresController {
                             Principal principal,
                             RedirectAttributes redirectAttributes) {
 
-    //try {
+    try {
         Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
         utilisateur = utilisateurService.findByEmailOrThrow(principal.getName());
     
         ArticleVendu article = articleVenduService.findById(noArticle);
         enchereService.faireEnchere(utilisateur, article, montantEncheres);
         redirectAttributes.addFlashAttribute("message", "Enchère réussie !");
-    //} catch (Exception e) {
-    //    redirectAttributes.addFlashAttribute("error", e.getMessage());
-    //    return "redirect:/articles/" + noArticle; // Redirige vers la page de l'article en cas d'erreur
-    //}
+    } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("error", e.getMessage());
+        return "redirect:/articles/" + noArticle; // Redirige vers la page de l'article en cas d'erreur
+    }
 
     return "redirect:/articles";
 }

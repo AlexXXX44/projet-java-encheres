@@ -29,7 +29,6 @@ public class ContexteController {
 			utilisateurEnSession.setPseudo(null);
 			utilisateurEnSession.setAdministrateur(false);
 		}
-		System.out.println(utilisateurEnSession);
 		return null;
 	}
 }

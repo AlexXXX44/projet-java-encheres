@@ -200,7 +200,7 @@ public class ArticleController {
             model.addAttribute("article", a);
         } else {
             articleVenduService.modifierArticleVendu(a);
-            System.out.println(a);
+             ln(a);
             model.addAttribute("article", a);
             return "/";
         }

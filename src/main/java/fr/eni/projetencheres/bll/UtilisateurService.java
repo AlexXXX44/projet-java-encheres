@@ -64,8 +64,8 @@ public class UtilisateurService {
 
 		Utilisateur utilisateur = utilisateurDAO.findByPseudo(principal.getName());
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		System.out.println(u.getMotDePasse());
-		System.out.println(encoder.matches(u.getMotDePasse(), utilisateur.getMotDePasse()));
+		 ln(u.getMotDePasse());
+		 ln(encoder.matches(u.getMotDePasse(), utilisateur.getMotDePasse()));
 
 		if (encoder.matches(u.getMotDePasse(), utilisateur.getMotDePasse()) == false) {
 			throw new MetierException("Le mot de passe actuel n'est pas bon") ;
@@ -94,10 +94,10 @@ public class UtilisateurService {
 		}
 
 		if (u.getMotDePasse().equals(nouvMotDePasse) || nouvMotDePasse.isBlank()){
-			System.out.println(" mp idem");
+			 ln(" mp idem");
 			u.setMotDePasse(u.getMotDePasse());
 		}else {
-			System.out.println(" mp différent");
+			 ln(" mp différent");
 			u.setMotDePasse(nouvMotDePasse);
 		}
 
@@ -111,7 +111,7 @@ public class UtilisateurService {
 		}
 
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		System.out.println(u.getMotDePasse());
+		 ln(u.getMotDePasse());
 		String mpchiffrer = encoder.encode(u.getMotDePasse());
 		u.setMotDePasse(mpchiffrer);
 		utilisateurDAO.modifierUtilisateur(u);
