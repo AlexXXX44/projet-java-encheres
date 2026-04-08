@@ -16,18 +16,12 @@ import jakarta.validation.ConstraintViolationException;
 
 public class DataInitializerConfig {
 
-    @PostConstruct
-    public void test() {
-         ln("🔥 Classe DataInitializer chargée !");
-    }
-
     //@Bean
     CommandLineRunner initData(UtilisateurRepository userRepo,
                                CategorieRepository catRepo,
                                ArticleVenduRepository articleRepo) {
 
         return args -> {
-             ln("🔥 DataInitializer exécuté !");
 
             // 📂 Catégorie
             Categorie cat = catRepo.findByLibelle("Informatique");
@@ -67,17 +61,11 @@ public class DataInitializerConfig {
                 u.setAdministrateur(false);
 
                 try {
-                     ln("📞 Telephone AVANT SAVE = " + u.getTelephone());
 
                     userRepo.save(u);
 
-                     ln("✅ Utilisateur créé !");
-
                 } catch (ConstraintViolationException e) {
                     e.getConstraintViolations().forEach(v -> {
-                         ln("❌ Champ: " + v.getPropertyPath());
-                         ln("❌ Erreur: " + v.getMessage());
-                         ln("❌ Valeur: " + v.getInvalidValue());
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -93,11 +81,7 @@ public class DataInitializerConfig {
                 article.setDateDebutEncheres(LocalDate.now());
                 article.setDateFinEncheres(LocalDate.now().plusDays(7));
 
-                articleRepo.save(article);
-
-                 ln("✅ Article créé !");
-            } else {
-                 ln("ℹ️ Utilisateur déjà existant");
+                articleRepo.save(article);                 
             }
         };
     }

@@ -43,9 +43,6 @@ public class ArticleVendu {
 	@JoinColumn(name = "no_categorie", referencedColumnName = "no_categorie", nullable = false)
 	private Categorie noCategorie;
 
-	public ArticleVendu() {
-	}
-
 	// Getters / Setters requis par Thymeleaf (JavaBean)
 
 	public int getNoArticle() {

@@ -2,56 +2,69 @@ package fr.eni.projetencheres.ihm;
 
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
+import fr.eni.projetencheres.bo.Enchere;
+import fr.eni.projetencheres.dal.CategorieRepository;
+import fr.eni.projetencheres.dal.EnchereRepository;
 import fr.eni.projetencheres.bll.ArticleVenduService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class AccueilController {
 
     private final ArticleVenduService articleVenduService;
 
-    public AccueilController(ArticleVenduService articleVenduService) {
+    private CategorieRepository categorieRepo;
+
+    private EnchereRepository enchereRepo;
+    public AccueilController(ArticleVenduService articleVenduService,
+                            CategorieRepository categorieRepo,
+                            EnchereRepository enchereRepo
+    ) {
         this.articleVenduService = articleVenduService;
+        this.categorieRepo = categorieRepo;
+        this.enchereRepo = enchereRepo;
     }
 
     @GetMapping("/")
     public String index(
             @RequestParam(defaultValue = "1") int currentPage,
             @RequestParam(defaultValue = "5") int size,
-            @RequestParam(name = "keyword", defaultValue = "") String keyword,
-            @RequestParam(name = "noCategorie", required = false) Integer noCategorie,
+            @RequestParam(defaultValue = "") String keyword,
+            @RequestParam(required = false) Integer noCategorie,
             Model model) {
 
-        var articles = articleVenduService.search(keyword, noCategorie, currentPage, size);
+        //List<ArticleVendu> articles = articleVenduService.search(keyword, noCategorie, currentPage, size);
 
         model.addAttribute("currentPage", currentPage);
         model.addAttribute("size", size);
+                model.addAttribute("keyword", keyword);
+
+        //List<Categorie> categories = articleVenduService.findAllCategories();
+
+        List<ArticleVendu> articles = articleVenduService.lstArticles();
+        List<Categorie> categories = categorieRepo.findAll();
+
+        // 🔥 AJOUT IMPORTANT
+        Map<Integer, List<Enchere>> encheresParArticle = new HashMap<>();
+
+        for (ArticleVendu a : articles) {
+            List<Enchere> ench = enchereRepo.findByArticleOrderByMontantEnchereDesc(a);
+            encheresParArticle.put(a.getNoArticle(), ench);
+        }
+
         model.addAttribute("articles", articles);
-        model.addAttribute("keyword", keyword);
+        model.addAttribute("categories", categories);
+        model.addAttribute("encheresParArticle", encheresParArticle);
 
-
-//    ✅ 1. Catégories fictives
-//        List<Categorie> categories = new ArrayList<>();
-
-        // ✅ 2. Utilisateurs fictifs
-//        Utilisateur u1 = new Utilisateur();
-//        u1.setPseudo("Jean75");
-//        Utilisateur u2 = new Utilisateur();
-//        u2.setPseudo("Claire92");
-
-        // ✅ 3. Articles fictifs
-//        List<ArticleVendu> articles = new ArrayList<>();
-//   Simule ou récupère des données
-//        List<ArticleVendu> articles = articleVenduService.lstArticles();  // ou méthode findByCat("Informatique") pour tester
-        List<Categorie> categories = articleVenduService.findAllCategories();
-
-        // Envoie au modèle
-//        model.addAttribute("articles", articles);
+            // Envoie au modèle
+        
 //         ✅ 4. Injection dans le modèle
         model.addAttribute("categories", categories);
 //        model.addAttribute("articles", articles);

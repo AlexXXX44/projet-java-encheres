@@ -40,7 +40,23 @@
 
 <main class="container">
     <h2 class="mb-4">Liste des enchères</h2>
+          <div th:each="a : ${articles}" class="col-md-4 mb-4">
+            <ul>
+                <li th:each="e : ${encheresParArticle.get(a.noArticle)}">
+                    <span th:text="${e.utilisateur.nom}"></span> :
+                    <span th:text="${e.montantEnchere}"></span> points 
+                     <!-- 🟢 GAGNANT = première enchère (tri DESC) -->
+                    <span th:if="${e == encheresParArticle.get(a.noArticle)[0]}"
+                        style="color:green;">
+                        (GAGNANT)
+                    </span>                
+                </li>
 
+                <li th:if="${#lists.isEmpty(encheresParArticle.get(a.noArticle))}">
+                    Pas encore d'enchères.
+                </li>
+            </ul>
+        </div>
     <!-- Formulaire de recherche (GET) -->
     <form method="get" action="/" class="row g-3 mb-4">
         <div class="col-md-6">
@@ -83,29 +99,28 @@
         </form>
 
         </tr>
-        <div th:each="article : ${articles}" class="col-md-4 mb-4">
+        <div th:each="a : ${articles}" class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm">
-                <img th:src="${'/img/logo_site.jpg'}" class="card-img-top" th:alt="${article.nomArticle}"/>
+                <img th:src="${'/img/logo_site.jpg'}" class="card-img-top" th:alt="${a.nomArticle}"/>
                 <!--                <img th:src="${article.imageUrl != null ? article.imageUrl : '/img/logo_site.jpg'}"-->
                 <!--                     class="card-img-top" th:alt="${article.nomArticle}" />-->
 
                 <div class="card-body d-flex flex-column">
-                    <h5 class="card-title" th:text="${article.nomArticle}">Nom</h5>
-                    <p class="card-text" th:text="${article.description}">Description</p>
+                    <h5 class="card-title" th:text="${a.nomArticle}">Nom</h5>
+                    <p class="card-text" th:text="${a.description}">Description</p>
 
                     <ul class="list-unstyled mt-auto">
-                        <li>Prix : <strong th:text="${article.prixVente + ' €'}">0 €</strong></li>
-                        <li>Fin : <span th:text="${article.dateFinEncheres}">date</span></li>
-                        <li>Catégorie : <span th:text="${article.noCategorie}">cat</span></li>
-                        <li>Vendeur : <span th:text="${article.vendeur?.pseudo ?: '—'}">pseudo</span></li>
-                        <li>Vendeur : <span th:text="${article.vendeur}">pseudo</span></li>
+                        <li>Prix : <strong th:text="${a.prixVente + ' €'}">0 €</strong></li>
+                        <li>Fin : <span th:text="${a.dateFinEncheres}">date</span></li>
+                        <li>Catégorie : <span th:text="${a.noCategorie}">cat</span></li>
+                        <li>Vendeur : <span th:text="${a.vendeur?.pseudo ?: '—'}">pseudo</span></li>
                     </ul>
                 </div>
 
                 <div class="card-footer text-center">
-                    <td th:text="${article.miseAPrix} + ' €'"></td>
+                    <td th:text="${a.miseAPrix} + ' €'"></td>
                     <td>
-                        <a th:href="@{'/articles/' + ${article.noArticle}}"
+                        <a th:href="@{'/articles/' + ${a.noArticle}}"
                             class="btn btn-outline-primary btn-sm">Voir détails</a>
                     </td>
                     <td>
@@ -125,13 +140,62 @@
             </div>
         </div>
     </div>
-    <!--    <div class="pagination">-->
-    <!--        <a th:href="@{/(page=${currentPage - 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir})}"-->
-    <!--           th:if="${currentPage > 1}">Précédent</a>-->
-    <!--        <span>Page <span th:text="${currentPage}"></span></span>-->
-    <!--        <a th:href="@{/(page=${currentPage + 1}, size=${pageSize}, sortBy=${sortBy}, sortDir=${sortDir})}"-->
-    <!--           th:if="${articles.size() == pageSize}">Suivant</a>-->
-    <!--    </div>-->
+
+    <h1>Liste des Articles</h1>
+    <div th:if="${message}" style="color:green;">
+        <p th:text="${message}"></p>
+    </div>
+    <div th:if="${error}" style="color:red;">
+        <p th:text="${error}"></p>
+    </div>
+
+    <div th:if="${#lists.isEmpty(articles)}">
+        Aucun article disponible.
+    </div>
+
+    <ul th:if="${!#lists.isEmpty(articles)}">
+        <li th:each="article, iterStat : ${articles}">
+            <a th:href="@{/articles/{id}(id=${article.noArticle})}"
+            th:text="${article.nomArticle}">Titre</a>
+            <span> — </span>
+            <time th:text="${#temporals.format(article.dateDebutEncheres, 'dd/MM/yyyy')}">
+                01/01/2025
+            </time>
+            <span th:if="${iterStat.odd}">(impair)</span>
+        </li>
+    </ul>
+    <label>
+        <select class="form-select" name="noCategorie">
+            <option th:each="c : ${categories}"
+                    th:value="${c.noCategorie}"
+                    th:selected="${noCategorie == c.noCategorie}"
+                    th:text="${c.libelle}"></option>
+        </select>
+    </label>
+
+    <!-- Formulaire de recherche -->
+    <form th:action="@{/articles}" method="get">
+        <label>
+            <input type="text" name="keyword" placeholder="Rechercher..."
+                th:value="${keyword}"/>
+        </label>
+
+        <label>
+            <select name="noCategorie">
+                <option th:value th:selected="${noCategorie == null}">
+                    -- Toutes les catégories --
+                </option>
+                <option th:each="c : ${categories}"
+                        th:value="${c.noCategorie}"
+                        th:text="${c.libelle}"
+                        th:selected="${noCategorie == c.noCategorie}">
+                </option>
+            </select>
+        </label>
+
+        <button type="submit">Filtrer</button>
+    </form>
+
     <div>
         <a th:href="@{/(page=${currentPage - 1}, size=${size})}" th:if="${currentPage > 1}">Précédent</a>
         <span>Page [[${currentPage}]]</span>

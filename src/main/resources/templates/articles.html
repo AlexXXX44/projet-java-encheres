@@ -59,6 +59,8 @@
     <button type="submit">Filtrer</button>
 </form>
 
+<a href="/">Retour à l'accueil</a>
+
 <!-- Résultats -->
 <table border="1" style="margin-top:20px; width: 100%;">
     <thead>
@@ -85,7 +87,6 @@
                 </label>
                 <input type="hidden" name="keyword" th:value="${keyword}"/>
                 <input type="hidden" name="noCategorie" th:value="${noCategorie}"/>
-                <!--    <input type="number" name="noUtilisateur" placeholder="User ID"/>-->
                 <button type="submit">Enchérir</button>
             </form>
         </td>
@@ -101,15 +102,15 @@
                     <span th:text="${e.montantEnchere}">0</span> points
                     <span th:if="${e}" style="color:green;">(GAGNANT)</span>
                 </li>
-                <li th:if="${#lists.isEmpty(encheresParArticle[a.noArticle])}">
+                <!-- <li th:if="${#lists.isEmpty(encheresParArticle[a.noArticle])}">
                     Pas encore d'enchères.
-                </li>
+                </li> -->
             </ul>
         </td>
     </tr>
 </table>
 
-<!-- Résultats -->
+<!-- Résultats 
 <table border="1" style="margin-top:20px;">
     <thead>
     <tr>
@@ -126,9 +127,9 @@
         <td th:text="${a.description}"></td>
         <td th:text="${a.noCategorie.libelle}"></td>
         <td th:text="${a.miseAPrix}"></td>
-        <td>
+        <td>-->
             <!-- Formulaire enchère : désactivé tant que pas relié -->
-            <form th:action="@{/api/enchere/faire}" method="post">
+            <!--<form th:action="@{/api/enchere/faire}" method="post">
                 <input type="hidden" name="objetId" th:value="${a.noArticle}"/>
                 <label>
                     <input type="number" name="montant" placeholder="Montant"/>
@@ -140,22 +141,7 @@
             </form>
         </td>
     </tr>
-    </tbody>
-    <button type="submit">Filtrer</button>
-
-
-    <thead>
-    <tr>
-        <th>Nom</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="a : ${articles}">
-        <td th:text="${a.nomArticle}"></td>
-        <td th:text="${a.description}"></td>
-    </tr>
-    </tbody>
+    </tbody>-->
 </table>
 </body>
 </html>
