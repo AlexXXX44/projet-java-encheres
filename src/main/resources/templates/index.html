@@ -40,7 +40,23 @@
 
 <main class="container">
     <h2 class="mb-4">Liste des enchères</h2>
+          <div th:each="a : ${articles}" class="col-md-4 mb-4">
+            <ul>
+                <li th:each="e : ${encheresParArticle.get(a.noArticle)}">
+                    <span th:text="${e.utilisateur.nom}"></span> :
+                    <span th:text="${e.montantEnchere}"></span> points 
+                     <!-- 🟢 GAGNANT = première enchère (tri DESC) -->
+                    <span th:if="${e == encheresParArticle.get(a.noArticle)[0]}"
+                        style="color:green;">
+                        (GAGNANT)
+                    </span>                
+                </li>
 
+                <li th:if="${#lists.isEmpty(encheresParArticle.get(a.noArticle))}">
+                    Pas encore d'enchères.
+                </li>
+            </ul>
+        </div>
     <!-- Formulaire de recherche (GET) -->
     <form method="get" action="/" class="row g-3 mb-4">
         <div class="col-md-6">

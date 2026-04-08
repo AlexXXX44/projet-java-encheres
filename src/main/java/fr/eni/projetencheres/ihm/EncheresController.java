@@ -1,7 +1,10 @@
 package fr.eni.projetencheres.ihm;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import fr.eni.projetencheres.bll.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,7 +19,10 @@ import fr.eni.projetencheres.bll.ArticleVenduService;
 import fr.eni.projetencheres.bll.EnchereService;
 import fr.eni.projetencheres.bo.ArticleVendu;
 import fr.eni.projetencheres.bo.Categorie;
+import fr.eni.projetencheres.bo.Enchere;
 import fr.eni.projetencheres.bo.Utilisateur;
+import fr.eni.projetencheres.dal.CategorieRepository;
+import fr.eni.projetencheres.dal.EnchereRepository;
 
 @Controller
 @RequestMapping("/encheres")
@@ -31,10 +37,32 @@ public class EncheresController {
     @Autowired
     private EnchereService enchereService;
 
-    @GetMapping("/")
-    public String accueil(Model model) {
-        List<ArticleVendu> lstArticles = articleVenduService.lstArticles();
+    @Autowired
+    private CategorieRepository categorieRepo;
+
+    @Autowired
+    private EnchereRepository enchereRepo;
+
+   @GetMapping("/")
+    public String index(Model model) {
+
+        List<ArticleVendu> articles = articleVenduService.lstArticles();
+        List<Categorie> categories = categorieRepo.findAll();
+
+        // 🔥 AJOUT IMPORTANT
+        Map<Integer, List<Enchere>> encheresParArticle = new HashMap<>();
+
+        for (ArticleVendu a : articles) {
+            List<Enchere> ench = enchereRepo.findByArticleOrderByMontantEnchereDesc(a);
+            encheresParArticle.put(a.getNoArticle(), ench);
+        }
+        
+        model.addAttribute("categories", categories);
+        model.addAttribute("encheresParArticle", encheresParArticle);
+
         List<Utilisateur> lstUtilisateurs = utilisateurService.findAll();
+        List<ArticleVendu> lstArticles = articleVenduService.lstArticles();
+
         List<Categorie> lstCategories = articleVenduService.findAllCategories();
         model.addAttribute("categories", lstCategories);
         for (Utilisateur u : lstUtilisateurs) {
@@ -51,7 +79,7 @@ public class EncheresController {
             }
         }
 
-        List<ArticleVendu> articles = articleVenduService.trouveParCat(1);
+        //List<ArticleVendu> articles = articleVenduService.trouveParCat(1);
         model.addAttribute("articles", articles);
         return "index";
     }
@@ -62,19 +90,20 @@ public class EncheresController {
                             Principal principal,
                             RedirectAttributes redirectAttributes) {
 
-    try {
+    //try {
+    //    Exception e = null;
+    //    redirectAttributes.addFlashAttribute("error", e.getMessage());
+    //    return "redirect:/articles/" + noArticle; // Redirige vers la page de l'article en cas d'erreur
+    //} catch (Exception e) {
         Utilisateur utilisateur = utilisateurService.findByEmail(principal.getName());
         utilisateur = utilisateurService.findByEmailOrThrow(principal.getName());
     
         ArticleVendu article = articleVenduService.findById(noArticle);
         enchereService.faireEnchere(utilisateur, article, montantEncheres);
         redirectAttributes.addFlashAttribute("message", "Enchère réussie !");
-    } catch (Exception e) {
-        redirectAttributes.addFlashAttribute("error", e.getMessage());
-        return "redirect:/articles/" + noArticle; // Redirige vers la page de l'article en cas d'erreur
-    }
+    //}
 
-    return "redirect:/articles";
+    return "redirect:/";
 }
 
 }

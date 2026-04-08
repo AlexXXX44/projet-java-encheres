@@ -36,9 +36,6 @@ public class EnchereService {
             throw new IllegalArgumentException("Article ne doit pas être null");
         }
 
-        //int prixActuel = meilleure.map(Enchere::getMontantEnchere)
-        //                          .orElse(article.getMiseAPrix());    
-
         // 1. Vérifier montant minimum
         int prixActuel = getPrixActuel(article);
 
