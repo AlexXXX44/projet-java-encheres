@@ -36,6 +36,10 @@ public class EnchereService {
             throw new IllegalArgumentException("Article ne doit pas être null");
         }
 
+        if(article.getDateFinEncheres().isBefore(LocalDateTime.now().toLocalDate())) {
+            throw new RuntimeException("Enchères terminées");
+        }
+
         // 1. Vérifier montant minimum
         int prixActuel = getPrixActuel(article);
 

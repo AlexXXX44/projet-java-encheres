@@ -17,7 +17,7 @@
         <img src="">
     </div>
     <div>
-        <form>
+        <form th:action="@{/articles/enregistrer}" method="post">
             <div>
                 <label for="article">Article :</label>
                 <input type="text" id="article" name="article">
@@ -30,7 +30,9 @@
                 <label for="categorie" >Catégorie</label>
                 <select name="categorie" id="categorie" >
                     <option value="toutes">Toutes</option>
-                    <option th:each="categorie : ${categories}" th:text="${categorie.libelle}"></option>
+                    <option th:each="categorie : ${categories}"
+                            th:value="${categorie.noCategorie}"
+                            th:text="${categorie.libelle}"></option>
                 </select>
             </div>
             <div>
