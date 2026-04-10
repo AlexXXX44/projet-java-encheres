@@ -12,7 +12,6 @@ import fr.eni.projetencheres.dal.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -144,8 +143,8 @@ public class ArticleController {
             @RequestParam String nomArticle,
             @RequestParam String description,
             @RequestParam int miseAPrix,
-            @RequestParam String dateDebutEncheres,
-            @RequestParam String dateFinEncheres,
+            @RequestParam LocalDate dateDebutEncheres,
+            @RequestParam LocalDate dateFinEncheres,
             @RequestParam int noCategorie,
             Principal principal,
             RedirectAttributes redirectAttributes) {
@@ -162,8 +161,8 @@ public class ArticleController {
             article.setNomArticle(nomArticle);
             article.setDescription(description);
             article.setMiseAPrix(miseAPrix);
-            article.setDateDebutEncheres(LocalDate.parse(dateDebutEncheres));
-            article.setDateFinEncheres(LocalDate.parse(dateFinEncheres));
+            article.setDateDebutEncheres(dateDebutEncheres);
+            article.setDateFinEncheres(dateFinEncheres);
             article.setVendeur(utilisateur);
             article.setNoCategorie(categorie);
             article.setEtatVente("EN_COURS");
