@@ -17,10 +17,10 @@
         <img src="">
     </div>
     <div>
-        <form th:action="@{/articles/enregistrer}" method="post">
+        <form th:action="@{/articles/enregistrer_article}" method="post">
             <div>
-                <label for="article">Article :</label>
-                <input type="text" id="article" name="article">
+                <label for="nomArticle">Article :</label>
+                <input type="text" id="nomArticle" name="nomArticle">
             </div>
             <div>
                 <label for="description">Description :</label>
@@ -36,7 +36,10 @@
                 </select>
             </div>
             <div>
-                <label for="photo">Photo de l'article</label>
+                <label for="miseAPrix">MiseAPrix :</label>
+                <input type="text" id="miseAPrix" name="miseAPrix">
+            </div>
+            <div>
                 <button id="photo">Télécharger</button>
             </div>
             <div>

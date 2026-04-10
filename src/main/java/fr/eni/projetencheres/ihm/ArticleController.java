@@ -9,7 +9,6 @@ import fr.eni.projetencheres.dal.ArticleVenduRepository;
 import fr.eni.projetencheres.dal.CategorieRepository;
 import fr.eni.projetencheres.dal.EnchereRepository;
 import fr.eni.projetencheres.dal.UtilisateurRepository;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
