@@ -10,9 +10,7 @@
         <a href="/accueil_connecte">ENI-Enchères</a>
     </h1>
     <nav>
-        <a href="">Enchères</a>
-        <a href="/nouvelle_vente">Vendre un article</a>
-        <a href="/mon_profil">Mon profil</a>
+        <a href="">Enchères</a>        <a href="/mon_profil">Mon profil</a>
         <div sec:authorize="isAuthenticated()">
             <div sec:authentication="name"></div>
             <div sec:authentication="principal.authorities"></div>
@@ -29,6 +27,8 @@
     <form>
         <span>
         <div>
+        <a href="/nouvelle_vente">Vendre un article</a>
+
             <p> Filtres :</p>
             <input type="search" name="recherche" placeholder="Le nom de l'article contient" title="Saisissez votre recherche">
         </div>

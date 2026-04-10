@@ -1,9 +1,6 @@
 package fr.eni.projetencheres.dal;
 
-import java.util.List;
-
 import fr.eni.projetencheres.bo.ArticleVendu;
-import fr.eni.projetencheres.bo.Categorie;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

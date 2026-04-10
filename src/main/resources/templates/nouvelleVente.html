@@ -17,33 +17,38 @@
         <img src="">
     </div>
     <div>
-        <form>
+        <form th:action="@{/articles/enregistrer_article}" method="post">
             <div>
-                <label for="article">Article :</label>
-                <input type="text" id="article" name="article">
+                <label for="nomArticle">Article :</label>
+                <input type="text" id="nomArticle" name="nomArticle">
             </div>
             <div>
                 <label for="description">Description :</label>
                 <input type="text" id="description" name="description">
             </div>
             <div>
-                <label for="categorie" >Catégorie</label>
-                <select name="categorie" id="categorie" >
+                <label for="noCategorie" >Catégorie</label>
+                <select name="noCategorie" id="noCategorie" >
                     <option value="toutes">Toutes</option>
-                    <option th:each="categorie : ${categories}" th:text="${categorie.libelle}"></option>
+                    <option th:each="categorie : ${categories}"
+                            th:value="${categorie.noCategorie}"
+                            th:text="${categorie.libelle}"></option>
                 </select>
             </div>
             <div>
-                <label for="photo">Photo de l'article</label>
+                <label for="miseAPrix">MiseAPrix :</label>
+                <input type="number" id="miseAPrix" name="miseAPrix">
+            </div>
+            <div>
                 <button id="photo">Télécharger</button>
             </div>
             <div>
-                <label for="debut">Début de l'enchère :</label>
-                <input type="date" id="debut" name="debut">
+                <label for="dateDebutEncheres">Début de l'enchère :</label>
+                <input type="date" id="dateDebutEncheres" name="dateDebutEncheres">
             </div>
             <div>
-                <label for="fin">Fin de l'enchère :</label>
-                <input type="date" id="fin" name="fin">
+                <label for="dateFinEncheres">Fin de l'enchère :</label>
+                <input type="date" id="dateFinEncheres" name="dateFinEncheres">
             </div>
             <div>
                 Retrait
@@ -54,7 +59,7 @@
             </div>
             <div>
                 <label for="codePostal">Code Postal :</label>
-                <input type="text" id="codePostal" name="codePostal">
+                <input type="number" id="codePostal" name="codePostal">
             </div>
             <div>
                 <label for="ville">Ville :</label>

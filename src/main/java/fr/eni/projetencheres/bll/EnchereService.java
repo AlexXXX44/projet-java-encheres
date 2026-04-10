@@ -2,7 +2,6 @@ package fr.eni.projetencheres.bll;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +33,10 @@ public class EnchereService {
 
         if (article == null) {
             throw new IllegalArgumentException("Article ne doit pas être null");
+        }
+
+        if(article.getDateFinEncheres().isBefore(LocalDateTime.now().toLocalDate())) {
+            throw new RuntimeException("Enchères terminées");
         }
 
         // 1. Vérifier montant minimum

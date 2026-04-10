@@ -30,6 +30,7 @@
                 <span sec:authentication="name"></span>
                 <a href="/logout" class="btn btn-danger btn-sm ms-2">Se déconnecter</a>
             </span>
+            <a href="/articles/nouvelle_vente">Nouvelle vente</a>
 
                 <span sec:authorize="!isAuthenticated()">
                 <a href="/login" class="btn btn-success btn-sm">Se connecter</a>
@@ -52,9 +53,9 @@
                     </span>                
                 </li>
 
-                <li th:if="${#lists.isEmpty(encheresParArticle.get(a.noArticle))}">
+                <!-- <li th:if="${#lists.isEmpty(encheresParArticle.get(a.noArticle))}">
                     Pas encore d'enchères.
-                </li>
+                </li> -->
             </ul>
         </div>
     <!-- Formulaire de recherche (GET) -->
@@ -110,6 +111,10 @@
                     <p class="card-text" th:text="${a.description}">Description</p>
 
                     <ul class="list-unstyled mt-auto">
+                        <span th:if="${a.etatVente == 'VENDUE'}" style="color:green">Vendu</span>
+                        <span th:if="${a.etatVente == 'EN_COURS'}" style="color:blue">En cours</span>
+                        <span th:if="${a.etatVente == 'TERMINÉ SANS VENTE'}" style="color:orange">Terminé sans vente</span>
+
                         <li>Prix : <strong th:text="${a.prixVente + ' €'}">0 €</strong></li>
                         <li>Fin : <span th:text="${a.dateFinEncheres}">date</span></li>
                         <li>Catégorie : <span th:text="${a.noCategorie}">cat</span></li>

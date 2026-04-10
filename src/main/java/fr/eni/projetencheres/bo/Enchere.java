@@ -3,10 +3,12 @@ package fr.eni.projetencheres.bo;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Entity
 @Table(name = "ENCHERES")
+@EnableScheduling
 public class Enchere {
 
     @Id
@@ -26,9 +28,7 @@ public class Enchere {
 
     /**
      * constructeurs
-     */
-    public Enchere() {
-    }
+     */  
 
     public Enchere(LocalDate dateEnchere, int montantEnchere, Utilisateur utilisateur, ArticleVendu article) {
         this.dateEnchere = dateEnchere;
@@ -99,6 +99,10 @@ public class Enchere {
         this.dateEnchere = dateEnchere;
         this.montantEnchere = montantEnchere;
         this.article = article;
+    }
+
+    public Enchere() {
+        //TODO Auto-generated constructor stub
     }
 
     public int getNoEnchere() {

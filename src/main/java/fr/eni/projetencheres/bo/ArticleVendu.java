@@ -21,6 +21,7 @@ public class ArticleVendu {
 
 	@Column(name = "etat_vente")
 	private String etatVente;
+	//EN_COURS
 	@Column(name = "date_debut_encheres")
 	private LocalDate dateDebutEncheres;
 

@@ -4,6 +4,7 @@
     <title>Articles</title>
 </head>
 <body>
+    <a href="/articles/nouvelle_vente">Ajouter un nouvel article</a>
 <h1>Liste des Articles</h1>
 <div th:if="${message}" style="color:green;">
     <p th:text="${message}"></p>
@@ -111,37 +112,7 @@
 </table>
 
 <!-- Résultats 
-<table border="1" style="margin-top:20px;">
-    <thead>
-    <tr>
-        <th>Nom</th>
-        <th>Description</th>
-        <th>Catégorie</th>
-        <th>Prix de départ</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="a : ${articles}">
-        <td th:text="${a.nomArticle}"></td>
-        <td th:text="${a.description}"></td>
-        <td th:text="${a.noCategorie.libelle}"></td>
-        <td th:text="${a.miseAPrix}"></td>
-        <td>-->
-            <!-- Formulaire enchère : désactivé tant que pas relié -->
-            <!--<form th:action="@{/api/enchere/faire}" method="post">
-                <input type="hidden" name="objetId" th:value="${a.noArticle}"/>
-                <label>
-                    <input type="number" name="montant" placeholder="Montant"/>
-                </label>
-                <label>
-                    <input type="number" name="utilisateurId" placeholder="User ID"/>
-                </label>
-                <button type="submit">Enchérir</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>-->
+-->
 </table>
 </body>
 </html>
