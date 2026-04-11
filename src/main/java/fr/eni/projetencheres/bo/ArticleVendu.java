@@ -1,6 +1,9 @@
 package fr.eni.projetencheres.bo;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -14,22 +17,28 @@ public class ArticleVendu {
 	private int noArticle;
 
 	@Column(name = "nom_article")
+	@NotBlank(message = "Nom obligatoire")
 	private String nomArticle;
 
 	@Column(name = "description")
+	@NotBlank(message = "Description obligatoire")
 	private String description;
 
+	//EN_COURS, TERMINEE, NON_DEMARREE
 	@Column(name = "etat_vente")
 	private String etatVente;
-	//EN_COURS
+
+	@Column(name = "mise_a_prix")
+	@Min(value = 1, message = "Prix minimum 1")
+	private int miseAPrix;
+
 	@Column(name = "date_debut_encheres")
+	@NotNull(message = "Date début obligatoire")
 	private LocalDate dateDebutEncheres;
 
 	@Column(name = "date_fin_encheres")
+	@NotNull(message = "Date fin obligatoire")
 	private LocalDate dateFinEncheres;
-
-	@Column(name = "mise_a_prix")
-	private int miseAPrix;
 
 	@Column(name = "prix_vente")
 	private int prixVente;

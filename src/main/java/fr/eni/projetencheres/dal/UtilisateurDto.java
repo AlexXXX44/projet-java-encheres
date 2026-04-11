@@ -13,6 +13,9 @@ public class UtilisateurDto {
     private int codePostal;
 
     // getters et setters
+    public int getNoUtilisateur() {
+        return noUtilisateur;
+    }
 
     public String getTelephone() {
         return telephone;

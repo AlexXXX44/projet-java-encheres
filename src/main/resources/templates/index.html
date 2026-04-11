@@ -25,13 +25,15 @@
                 </th:block>
             </nav>
         </h1>
+            <a hidden th:href="@{/profil}" class="btn btn-outline-light btn-sm me-2">Mon Profil</a>
+            <a hidden th:href="@{/encheres/mes_encheres}" class="btn btn-outline-light btn-sm me-2">Mes Enchères</a>
+
+            <a hidden th:href="@{/articles/nouvelle_vente}" class="btn btn-outline-light btn-sm me-2">Nouvelle Vente</a>
 
                 <span sec:authorize="isAuthenticated()" class="me-2">
                 <span sec:authentication="name"></span>
                 <a href="/logout" class="btn btn-danger btn-sm ms-2">Se déconnecter</a>
             </span>
-            <a href="/articles/nouvelle_vente">Nouvelle vente</a>
-
                 <span sec:authorize="!isAuthenticated()">
                 <a href="/login" class="btn btn-success btn-sm">Se connecter</a>
             </span>

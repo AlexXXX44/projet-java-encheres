@@ -149,10 +149,6 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
 	}
 
 	public void setTelephone(String telephone) {
-
-    // 🔥 TRACE LA SOURCE
-    	new Exception("TRACE setTelephone").printStackTrace();
-
     	this.telephone = telephone;
 	}
 

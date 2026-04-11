@@ -11,14 +11,16 @@
     </h1>
 </header>
 <main th:object="${utilisateur}">
-    <p >Pseudo : <span th:text="*{pseudo}"></span></p>
-    <p>Nom : <span th:text="*{nom}"></span></p>
-    <p>Prénom : <span th:text="*{prenom}"></span></p>
-    <p>Email : <span th:text="*{email}"></span></p>
-    <p>Téléphone : <span th:text="*{telephone}"></span></p>
-    <p>Rue : <span th:text="*{rue}"></span></p>
-    <p>Code Postal : <span th:text="*{codePostal}"></span></p>
-    <p>Ville : <span th:text="*{ville}"></span></p>
+    <h2>Mon profil</h2>
+
+<p>Pseudo : <span th:text="${utilisateur.pseudo}"></span></p>
+<p>Nom : <span th:text="${utilisateur.nom}"></span></p>
+<p>Prénom : <span th:text="${utilisateur.prenom}"></span></p>
+<p>Email : <span th:text="${utilisateur.email}"></span></p>
+<p>Téléphone : <span th:text="${utilisateur.telephone}"></span></p>
+<p>Ville : <span th:text="${utilisateur.ville}"></span></p>
+
+<a href="/profil/edit">Modifier mon profil</a>
 </main>
 <footer>
     <p>&copy; ENI - Tous droits réservés</p>

@@ -9,9 +9,12 @@ import fr.eni.projetencheres.dal.ArticleVenduRepository;
 import fr.eni.projetencheres.dal.CategorieRepository;
 import fr.eni.projetencheres.dal.EnchereRepository;
 import fr.eni.projetencheres.dal.UtilisateurRepository;
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -124,12 +127,10 @@ public class ArticleController {
 
     @GetMapping("/nouvelle_vente")
     public String nouvelleVente(Model model) {
-        List<Categorie> lstCategories = articleVenduService.findAllCategories();
-        //model.addAttribute("categories", lstCategories);
-
+        model.addAttribute("article", new ArticleVendu());
         model.addAttribute("categories", categorieRepo.findAll());
         return "nouvelleVente";
-}
+    }
 
     @GetMapping("/modifier_article")
     public String modifierArticle(Model model, int noArticle) {
@@ -138,42 +139,30 @@ public class ArticleController {
         return "modifArticle";
     }
 
-    @PostMapping("/enregistrer_article")
-    public String enregistrerArticle(
-            @RequestParam String nomArticle,
-            @RequestParam String description,
-            @RequestParam int miseAPrix,
-            @RequestParam LocalDate dateDebutEncheres,
-            @RequestParam LocalDate dateFinEncheres,
-            @RequestParam int noCategorie,
-            Principal principal,
-            RedirectAttributes redirectAttributes) {
+        @PostMapping("/enregistrer_article")
+        public String enregistrerArticle(
+                @Valid @ModelAttribute("article") ArticleVendu article,
+                BindingResult bindingResult,
+                Principal principal,
+                Model model, RedirectAttributes redirectAttributes) {
 
-        try {
-            // 👤 utilisateur connecté
+            if (bindingResult.hasErrors()) {
+                model.addAttribute("categories", categorieRepo.findAll());
+                return "nouvelleVente";
+            }
+
+        try{
             Utilisateur utilisateur = utilisateurRepo.findByEmail(principal.getName());
-
-            // 📂 catégorie
-            Categorie categorie = categorieRepo.findById(noCategorie).orElse(null);
-
-            // 📦 création article
-            ArticleVendu article = new ArticleVendu();
-            article.setNomArticle(nomArticle);
-            article.setDescription(description);
-            article.setMiseAPrix(miseAPrix);
-            article.setDateDebutEncheres(dateDebutEncheres);
-            article.setDateFinEncheres(dateFinEncheres);
             article.setVendeur(utilisateur);
-            article.setNoCategorie(categorie);
             article.setEtatVente("EN_COURS");
 
             articleRepo.save(article);
-
-            redirectAttributes.addFlashAttribute("message", "Article créé !");
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
+
+            return "redirect:/articles";
         }
 
-        return "redirect:/articles"; // 🔥 redirection vers liste
+        return "redirect:/"; // 🔥 redirection vers liste accueil
     }
 }
