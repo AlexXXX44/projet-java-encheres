@@ -88,11 +88,25 @@
     <span>
         <img src="/img/logo_site.jpg"></br>
         <div th:object="${articleVendu}"></div>
-        <div>
-				<span><u th:text="${'articleVendu.nomArticle'}">Nom de l'article</u></span>
-				<p th:text="${'Prix'}">Prix de l'article</p>
-				<p th:text="${'DateFinEnchère'}">Date fin enchère</p>
-				<p>nomVendeur :<a href="/profil">AA</a></p>
+        <div th:each="e : ${mesEncheres}">
+            
+            <span>
+                <u th:text="${e.article.nomArticle}">Nom</u>
+            </span>
+
+            <p>
+                Prix : <span th:text="${e.montantEnchere}"></span>
+            </p>
+
+            <p>
+                Fin : <span th:text="${#temporals.format(e.article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
+            </p>
+
+            <p>
+                Vendeur :
+                <a href="/profil" th:text="${e.article.vendeur.pseudo}"></a>
+            </p>
+
         </div>
     </span>
 </main>

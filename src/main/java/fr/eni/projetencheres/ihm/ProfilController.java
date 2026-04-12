@@ -72,6 +72,16 @@ public class ProfilController {
     @GetMapping("/encheres")
     public String mesEncheres(@AuthenticationPrincipal Utilisateur utilisateur, Model model) {
 
+        List<Enchere> mesEncheres =
+                enchereRepo.findByUtilisateur_NoUtilisateur(utilisateur.getNoUtilisateur());
+
+        model.addAttribute("mesEncheres", mesEncheres);
+
+        return "listeEncheresConnecte"; // 🔥 ICI
+    }
+
+    @GetMapping("/encheres/gagnees")
+    public String mesEncheresGagnees(@AuthenticationPrincipal Utilisateur utilisateur, Model model) {
         List<Enchere> mesEncheres = enchereRepo
                 .findByUtilisateur_NoUtilisateur(utilisateur.getNoUtilisateur());
 
@@ -86,12 +96,10 @@ public class ProfilController {
                                     ? nouvelle
                                     : existante);
         }
-    //  return "profil"; // ou "listeEncheresConnecte"
 
-            model.addAttribute("utilisateur", utilisateur);
-            model.addAttribute("mesEncheres", mesEncheres);
-            model.addAttribute("mesEncheresGagnees", meilleuresEncheres.values());
-
-            return "listeEncheresConnecte";
-        }
+        model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute("mesEncheres", mesEncheres);
+        model.addAttribute("mesEncheresGagnees", meilleuresEncheres.values());
+        return "profil";
+    }
 }
