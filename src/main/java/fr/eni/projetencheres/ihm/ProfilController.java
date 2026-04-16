@@ -62,7 +62,7 @@ public class ProfilController {
         return "redirect:/profil";
     }
 
-    @GetMapping("/utilisateur")
+    @GetMapping("")
     public String afficherProfil(Principal principal, Model model) {    
         Utilisateur utilisateur = utilisateurRepo.findByEmail(principal.getName());
         model.addAttribute("utilisateur", utilisateur);

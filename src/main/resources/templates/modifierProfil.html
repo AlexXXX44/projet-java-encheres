@@ -126,7 +126,7 @@
 <main>
     <h2>Mon profil</h2>
     <p th:if="${message}" style="color:green;" th:text="${message}"></p>
-    <form id="inscription-form" th:object="${utilisateur}" method="post" action="/enregistrer_profil">
+    <form id="inscription-form" th:object="${utilisateur}" method="post" action="/register">
         <span>
             <div>
                 <label for="pseudo">Pseudo :</label>
