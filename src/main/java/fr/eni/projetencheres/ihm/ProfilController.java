@@ -35,7 +35,7 @@ public class ProfilController {
 
         model.addAttribute("utilisateur", utilisateur);
 
-        return "monProfil";
+        return "modifierProfil";
     }
 
     @PostMapping("/register")
@@ -62,7 +62,7 @@ public class ProfilController {
         return "redirect:/profil";
     }
 
-    @GetMapping
+    @GetMapping("/utilisateur")
     public String afficherProfil(Principal principal, Model model) {    
         Utilisateur utilisateur = utilisateurRepo.findByEmail(principal.getName());
         model.addAttribute("utilisateur", utilisateur);
@@ -100,6 +100,6 @@ public class ProfilController {
         model.addAttribute("utilisateur", utilisateur);
         model.addAttribute("mesEncheres", mesEncheres);
         model.addAttribute("mesEncheresGagnees", meilleuresEncheres.values());
-        return "profil";
+        return "monProfil";
     }
 }

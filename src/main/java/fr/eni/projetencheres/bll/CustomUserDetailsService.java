@@ -31,10 +31,12 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Utilisateur non trouvé : " + email);
         }
 
-        return User.builder()
-                .username(utilisateur.getEmail()) // ✔ cohérent
-                .password(utilisateur.getMotDePasse()) // ✔ mot de passe DB
-                .roles(utilisateur.getAdministrateur() ? "ADMIN" : "USER")
-                .build();
+        return utilisateur;
+        
+            //User.builder()
+            //    .username(utilisateur.getEmail())
+            //    .password(utilisateur.getMotDePasse())
+            //    .roles(utilisateur.getAdministrateur() ? "ADMIN" : "USER")
+            //    .build();
     }
 }

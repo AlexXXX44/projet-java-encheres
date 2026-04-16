@@ -3,27 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <title>Profil utilisateur</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            width: 70%;
+            margin: 30px auto;
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .info {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            text-decoration: none;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
 </head>
+
 <body>
+
 <header>
     <h1>
-        <a href="/accueil_connecte">ENI-Enchères</a>
+        <a href="/articles">ENI-Enchères</a>
     </h1>
 </header>
-<main th:object="${utilisateur}">
-    <h2>Mon profil</h2>
 
-<p>Pseudo : <span th:text="${utilisateur.pseudo}"></span></p>
-<p>Nom : <span th:text="${utilisateur.nom}"></span></p>
-<p>Prénom : <span th:text="${utilisateur.prenom}"></span></p>
-<p>Email : <span th:text="${utilisateur.email}"></span></p>
-<p>Téléphone : <span th:text="${utilisateur.telephone}"></span></p>
-<p>Ville : <span th:text="${utilisateur.ville}"></span></p>
+<main>
 
-<a href="/profil/edit">Modifier mon profil</a>
+    <div class="card">
+        <h2>Mon profil</h2>
+
+        <div class="info">
+            <span class="label">Pseudo :</span>
+            <span th:text="${utilisateur.pseudo}"></span>
+        </div>
+
+        <div class="info">
+            <span class="label">Nom :</span>
+            <span th:text="${utilisateur.nom}"></span>
+        </div>
+
+        <div class="info">
+            <span class="label">Prénom :</span>
+            <span th:text="${utilisateur.prenom}"></span>
+        </div>
+
+        <div class="info">
+            <span class="label">Email :</span>
+            <span th:text="${utilisateur.email}"></span>
+        </div>
+
+        <div class="info">
+            <span class="label">Téléphone :</span>
+            <span th:text="${utilisateur.telephone}"></span>
+        </div>
+
+        <div class="info">
+            <span class="label">Ville :</span>
+            <span th:text="${utilisateur.ville}"></span>
+        </div>
+
+        <a class="btn" href="/profil/edit">Modifier mon profil</a>
+        <a class="btn btn-secondary" href="/articles">← Retour</a>
+    </div>
+
 </main>
+
 <footer>
     <p>&copy; ENI - Tous droits réservés</p>
 </footer>
+
 </body>
 </html>

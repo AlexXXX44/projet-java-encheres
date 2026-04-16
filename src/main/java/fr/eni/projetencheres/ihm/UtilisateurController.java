@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.ui.Model;
+import jakarta.validation.Valid;
 
 import fr.eni.projetencheres.bo.Utilisateur;
 import fr.eni.projetencheres.dal.UtilisateurRepository;
@@ -16,27 +18,33 @@ import fr.eni.projetencheres.dal.UtilisateurRepository;
 public class UtilisateurController {
 
     @Autowired
-    private UtilisateurRepository utilisateurRepo;
+    private UtilisateurService utilisateurSService;
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+    
     @GetMapping("/register")
-    public String showRegisterForm() {
-        return "inscription";
+    public String showRegisterForm(Model model) {
+        model.addAttribute("utilisateur", new Utilisateur());
+        return "creerUser"; // ⚠️ cohérent avec ton template
     }
 
-    @PostMapping("/register")
-    public String register(@RequestParam String nom,
-                           @RequestParam String email,
-                           @RequestParam String motDePasse) {
-        Utilisateur u = new Utilisateur();
-        u.setNom(nom);
-        u.setEmail(email);
-        u.setMotDePasse(passwordEncoder.encode(motDePasse));
-        u.setCredit(100); // bonus initial
-        String tel = u.getTelephone().replaceAll("\\D", "");
-        u.setTelephone(tel);
-        utilisateurRepo.save(u);
+    @PostMapping("/ajout")
+    public String creerUtilisateur(@Valid Utilisateur utilisateur,
+                                   BindingResult result,
+                                   Model model) {
+
+        if (result.hasErrors()) {
+            return "creerUser";
+        }
+
+    // Encodage mot de passe
+        utilisateur.setMotDePasse(passwordEncoder.encode(utilisateur.getMotDePasse()));
+
+    // Bonus initial
+        utilisateur.setCredit(100);
+
+        utilisateurService.save(utilisateur);
+
         return "redirect:/login";
     }
 

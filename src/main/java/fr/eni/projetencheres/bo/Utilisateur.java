@@ -107,13 +107,8 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
 		return builder.toString();
 	}
 
-
 	public void setNoUtilisateur(int noUtilisateur) {
 		this.noUtilisateur = noUtilisateur;
-	}
-
-	public String getPseudo() {
-		return pseudo;
 	}
 
 	public void setPseudo(String pseudo) {
@@ -134,10 +129,6 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
 
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
-	}
-
-	public String getEmail() {
-		return email;
 	}
 
 	public void setEmail(String email) {
@@ -175,11 +166,7 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
 	public void setCodePostal(int codePostal) {
 		this.codePostal = codePostal;
 	}
-
-	public String getMotDePasse() {
-		return motDePasse;
-	}
-
+	
 	public void setMotDePasse(String motDePasse) {
 		this.motDePasse = motDePasse;
 	}
@@ -209,15 +196,12 @@ public class Utilisateur extends UtilisateurDto implements UserDetails {
     }
 
 	@Override
-	public String getPassword() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getPassword'");
+	public String getUsername() {
+		return this.email;
 	}
 
 	@Override
-	public String getUsername() {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'getUsername'");
+	public String getPassword() {
+		return this.motDePasse;
 	}
 }
-

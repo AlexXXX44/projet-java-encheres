@@ -3,12 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <title>Modifier compte</title>
-    <style>
-        .error{
-            color: red;
-            font-style: italic;
-        }
-    </style>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+    }
+
+    header {
+        background-color: #2c3e50;
+        color: white;
+        padding: 15px;
+        text-align: center;
+    }
+
+    header a {
+        color: white;
+        text-decoration: none;
+    }
+
+    main {
+        width: 70%;
+        margin: 30px auto;
+    }
+
+    h2 {
+        color: #2c3e50;
+    }
+
+    form {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    form div {
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    input:focus {
+        border-color: #3498db;
+        outline: none;
+    }
+
+    .commentaire {
+        font-size: 12px;
+        color: #777;
+        margin-top: 3px;
+    }
+
+    .error {
+        color: #e74c3c;
+        font-size: 13px;
+        font-style: italic;
+    }
+
+    .btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .btn-save {
+        background-color: #2ecc71;
+    }
+
+    .btn-delete {
+        background-color: #e74c3c;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+
+    .section-title {
+        margin-top: 25px;
+        font-size: 18px;
+        color: #34495e;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 5px;
+    }
+
+    #infosSupp {
+        margin-top: 20px;
+        padding-top: 10px;
+        border-top: 1px solid #ddd;
+    }
+
+    footer {
+        text-align: center;
+        padding: 15px;
+        background: #2c3e50;
+        color: white;
+        margin-top: 40px;
+    }
+</style>
 </head>
 <body>
 <header>
@@ -19,7 +125,7 @@
 
 <main>
     <h2>Mon profil</h2>
-    <p class="error" th:text = "${erreur}"></p>
+    <p th:if="${message}" style="color:green;" th:text="${message}"></p>
     <form id="inscription-form" th:object="${utilisateur}" method="post" action="/enregistrer_profil">
         <span>
             <div>
@@ -63,7 +169,8 @@
             </div>
         </span>
 
-        <span>
+        <h3 class="section-title">Informations complémentaires</h3>
+        <span id="infosSupp" class="infoSupp" style="display: none">
             <div>
                 <label for="nom">Nom :</label>
                 <input type="text" id="nom" name="nom" th:value="*{nom}">
@@ -99,14 +206,13 @@
         </span>
 
         <div>
-            <button type="submit">Enregister</button>
+            <button type="submit" class="btn btn-save">💾 Enregistrer</button>
         </div>
     </form>
     <div>
-        <a href="/supprimer"><button type="button">Supprimer mon compte</button></a>
+        <a href="/supprimer"><button type="button" class="btn btn-delete">❌ Supprimer mon compte</button></a>
     </div>
-    <script src="/js/modifProfil.js"></script>
-</main>
+    <a href="/profil" class="btn" style="background:#3498db;">← Retour profil</a></main>
 <footer>
     <p>&copy; ENI - Tous droits réservés</p>
 </footer>

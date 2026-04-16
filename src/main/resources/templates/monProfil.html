@@ -3,70 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <title>Mon Profil</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        main {
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th, table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #ecf0f1;
+        }
+
+        .gagnant {
+            color: green;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-top: 10px;
+            text-decoration: none;
+            background-color: #3498db;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c;
+        }
+
+        form input {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+        }
+
+        form button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #2c3e50;
+            color: white;
+            margin-top: 30px;
+        }
+    </style>
 </head>
+
 <body>
-<h1>Profil de <span th:text="${utilisateur.nom}"></span></h1>
 
-<p><strong>Email :</strong> <span th:text="${utilisateur.email}"></span></p>
-<p><strong>Points disponibles :</strong> <span th:text="${utilisateur.credit}"></span></p>
+<header>
+    <h1>Mon Profil</h1>
+</header>
 
-<hr/>
+<main>
 
-<h2>Mes enchères</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Article</th>
-        <th>Montant</th>
-        <th>Date</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="e : ${mesEncheres}">
-        <td th:text="${e.article.nom}"></td>
-        <td th:text="${e.montant}"></td>
-        <td th:text="${#temporals.format(e.dateEnchere, 'dd/MM/yyyy HH:mm')}"></td>
-    </tr>
-    </tbody>
-</table>
+    <!-- 🧑 Infos utilisateur -->
+    <div class="card">
+        <h2 th:text="'Profil de ' + ${utilisateur.nom}"></h2>
 
-<hr/>
+        <p><strong>Email :</strong> <span th:text="${utilisateur.email}"></span></p>
+        <p><strong>Crédits :</strong> <span th:text="${utilisateur.credit}"></span></p>
+    </div>
 
-<h2>Mes enchères gagnées</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>Article</th>
-        <th>Montant</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="e : ${mesEncheresGagnees}">
-        <td th:text="${e.article.nom}"></td>
-        <td th:text="${e.montant}"></td>
-    </tr>
-    </tbody>
-</table>
+    <!-- 💰 Mes enchères -->
+    <div class="card">
+        <h2>Mes enchères</h2>
 
-<hr/>
+        <table>
+            <thead>
+            <tr>
+                <th>Article</th>
+                <th>Montant</th>
+                <th>Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${mesEncheres}">
+                <td th:text="${e.article.nomArticle}"></td>
+                <td th:text="${e.montantEnchere}"></td>
+                <td th:text="${#temporals.format(e.dateEnchere, 'dd/MM/yyyy HH:mm')}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-<p><a th:href="@{/articles}">Retour aux articles</a></p>
-<p><a th:href="@{/logout}">Se déconnecter</a></p>
+    <!-- 🥇 Enchères gagnées -->
+    <div class="card">
+        <h2>Mes enchères gagnées</h2>
 
-<form th:action="@{/profil/edit}" th:object="${utilisateur}" method="post">
+        <table>
+            <thead>
+            <tr>
+                <th>Article</th>
+                <th>Montant</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="e : ${mesEncheresGagnees}">
+                <td th:text="${e.article.nomArticle}"></td>
+                <td>
+                    <span th:text="${e.montantEnchere}"></span>
+                    <span class="gagnant">(GAGNÉ)</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <input type="text" th:field="*{nom}" placeholder="Nom"/>
-    <input type="text" th:field="*{prenom}" placeholder="Prénom"/>
-    <input type="text" th:field="*{telephone}" placeholder="Téléphone"/>
-    <input type="text" th:field="*{rue}" placeholder="Rue"/>
-    <input type="text" th:field="*{ville}" placeholder="Ville"/>
-    <input type="number" th:field="*{codePostal}" placeholder="Code postal"/>
+    <!-- ✏️ Modification profil 
+    <div class="card">
+        <h2>Modifier mon profil</h2>
 
-    <button type="submit">Enregistrer</button>
-</form>
+        <form th:action="@{/profil/edit}" th:object="${utilisateur}" method="post">
+
+            <input type="text" th:field="*{nom}" placeholder="Nom"/>
+            <input type="text" th:field="*{prenom}" placeholder="Prénom"/>
+            <input type="text" th:field="*{telephone}" placeholder="Téléphone"/>
+            <input type="text" th:field="*{rue}" placeholder="Rue"/>
+            <input type="text" th:field="*{ville}" placeholder="Ville"/>
+            <input type="number" th:field="*{codePostal}" placeholder="Code postal"/>
+
+            <button type="submit">Enregistrer</button>
+        </form>
+    </div>-->
+
+    <!-- 🔗 Navigation -->
+    <a class="btn" th:href="@{/articles}">← Retour aux articles</a>
+    <a class="btn btn-danger" th:href="@{/logout}">Se déconnecter</a>
+
 </main>
+
 <footer>
     <p>&copy; ENI - Tous droits réservés</p>
 </footer>
+
 </body>
 </html>

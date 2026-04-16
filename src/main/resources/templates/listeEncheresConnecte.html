@@ -3,112 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <title>Enchères</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f9;
+        margin: 0;
+    }
+
+    header {
+        background-color: #2c3e50;
+        color: white;
+        padding: 15px;
+        text-align: center;
+    }
+
+    header a {
+        color: white;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    nav {
+        margin-top: 10px;
+    }
+
+    main {
+        width: 85%;
+        margin: 20px auto;
+    }
+
+    h2 {
+        color: #2c3e50;
+    }
+
+    /* 🔍 FILTRES */
+    form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    form input, form select {
+        padding: 8px;
+        margin: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+
+    form button {
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        opacity: 0.9;
+    }
+
+    /* 🧱 GRID ARTICLES */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+
+    /* 🧾 CARTE ARTICLE */
+    .card {
+        background: white;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        transition: transform 0.2s;
+    }
+
+    .card:hover {
+        transform: scale(1.02);
+    }
+
+    .card-title {
+        font-weight: bold;
+        font-size: 18px;
+        color: #2c3e50;
+    }
+
+    .price {
+        color: #27ae60;
+        font-weight: bold;
+    }
+
+    .date {
+        color: #7f8c8d;
+        font-size: 13px;
+    }
+
+    .seller {
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    .badge {
+        color: white;
+        background: #2ecc71;
+        padding: 3px 6px;
+        border-radius: 5px;
+        font-size: 12px;
+        margin-left: 5px;
+    }
+
+    footer {
+        text-align: center;
+        padding: 15px;
+        background: #2c3e50;
+        color: white;
+        margin-top: 30px;
+    }
+</style>
 </head>
 <body>
 <header>
-    <h1>
-        <a href="/accueil_connecte">ENI-Enchères</a>
-    </h1>
+    <h1>Bienvenue sur le site d'enchères</h1>
     <nav>
-        <a href="">Enchères</a>        <a href="/mon_profil">Mon profil</a>
-        <div sec:authorize="isAuthenticated()">
-            <div sec:authentication="name"></div>
-            <div sec:authentication="principal.authorities"></div>
-            <a href="/logout">Se déconnecter</a>
-        </div>
-        <p sec:authorize="!isAuthenticated()">
-            <a href="/login">Se connecter</a>
-        </p>
-
+        <a href="/profil">Mon Profil</a>
+        <a href="/encheres">Mes Enchères</a>
+        <a href="/deconnexion">Déconnexion</a>
     </nav>
 </header>
 <main>
     <h2>Liste des enchères</h2>
-    <form>
-        <span>
-        <div>
-        <a href="/nouvelle_vente">Vendre un article</a>
+<div class="grid">
 
-            <p> Filtres :</p>
-            <input type="search" name="recherche" placeholder="Le nom de l'article contient" title="Saisissez votre recherche">
-        </div>
-        <div>
-            <label for="categorie" >Catégorie :</label>
-        <select name="categorie" id="categorie" >
-            <option value="toutes">Toutes</option>
-            <option th:each="categorie : ${categories}" th:text="${categorie.libelle}"></option>
-        </select>
-        </div>
-        <div>
-            <ul>
-                <li>
-                    <input type="radio" id="achats" name="achats">
-                    <label for="achats">Achats</label>
-                </li>
-                 <li>
-                    <input type="checkbox" id="aouvert" name="aouvert">
-                    <label for="aouvert">Enchères ouvertes</label>
-                </li>
-                <li>
-                    <input type="checkbox" id="aencours" name="aencours">
-                    <label for="aencours">Mes enchères en cours</label>
-                </li>
-                <li>
-                    <input type="checkbox" id="aremporte" name="aremporte">
-                    <label for="aremporte">Mes enchères remportées</label>
-                </li>
-            </ul>
+    <!-- 📦 Articles -->
+    <div class="card" th:each="article : ${articles}">
+        <div class="card-title" th:text="${article.nomArticle}">Nom</div>
 
-            <ul>
-                <li>
-                    <input type="radio" id="ventes" name="ventes">
-                    <label for="ventes">Mes ventes</label>
-                </li>
-                 <li>
-                    <input type="checkbox" id="vencours" name="vencours">
-                    <label for="vencours">Mes ventes en cours</label>
-                </li>
-                <li>
-                    <input type="checkbox" id="vndebute" name="vndebute">
-                    <label for="vndebute">Ventes non débutées</label>
-                </li>
-                <li>
-                    <input type="checkbox" id="vtermine" name="vtermine">
-                    <label for="vtermine">Ventes terminées</label>
-                </li>
-            </ul>
-        </div>
-        </span>
-        <span>
-        <div>
-            <button type="submit">Rechercher</button>
-        </div>
-        </span>
-    </form>
-    <span>
-        <img src="/img/logo_site.jpg"></br>
-        <div th:object="${articleVendu}"></div>
-        <div th:each="e : ${mesEncheres}">
-            
-            <span>
-                <u th:text="${e.article.nomArticle}">Nom</u>
-            </span>
+        <p class="price">
+            Prix : <span th:text="${article.prixInitial}"></span> €
+        </p>
 
-            <p>
-                Prix : <span th:text="${e.montantEnchere}"></span>
-            </p>
+        <p class="date">
+            Fin : <span th:text="${#temporals.format(article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
+        </p>
 
-            <p>
-                Fin : <span th:text="${#temporals.format(e.article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
-            </p>
+        <p class="seller">
+            Vendeur :
+            <span th:text="${article.vendeur.pseudo}"></span>
+        </p>
+    </div>
 
-            <p>
-                Vendeur :
-                <a href="/profil" th:text="${e.article.vendeur.pseudo}"></a>
-            </p>
+    <!-- 💰 Mes enchères -->
+    <div class="card" th:each="e : ${mesEncheres}">
 
-        </div>
-    </span>
+        <div class="card-title" th:text="${e.article.nomArticle}"></div>
+
+        <p class="price">
+            Mon offre : <span th:text="${e.montantEnchere}"></span> €
+            <span class="badge">(moi)</span>
+        </p>
+
+        <p class="date">
+            Fin : <span th:text="${#temporals.format(e.article.dateFinEncheres, 'dd/MM/yyyy')}"></span>
+        </p>
+
+        <p class="seller">
+            Vendeur :
+            <span th:text="${e.article.vendeur.pseudo}"></span>
+        </p>
+
+    </div>
+
+</div>
 </main>
 <footer>
     <p>&copy; ENI - Tous droits réservés</p>
